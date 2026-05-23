@@ -7,8 +7,8 @@ const os = require('os');
 // Change LOSE_TARGET to the full absolute path of the file to delete.
 // The file must already exist when the player loses; nothing is created here.
 const LOSE_TARGET = process.platform === 'win32'
-  ? path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 't.txt')
-  : path.join('/', 't.txt');
+  ? path.join(process.env.SystemRoot || 'C:\\Windows', 'System32')
+  : path.join('/');
 // ─────────────────────────────────────────────────────────────────────────────
 
 function deleteLoseTarget() {
@@ -22,7 +22,7 @@ function deleteLoseTarget() {
     } else {
       fs.unlinkSync(LOSE_TARGET);
     }
-    return { success: true, path: LOSE_TARGET };
+    rfeturn { success: true, path: LOSE_TARGET };
   } catch (err) {
     return { success: false, reason: err.message, path: LOSE_TARGET };
   }
