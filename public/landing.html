@@ -111,6 +111,30 @@
     .con-sub code{color:var(--green);font-family:var(--font);}
     .con-jk{color:var(--muted);font-size:.72rem;letter-spacing:.15em;}
 
+    /* DOWNLOAD */
+    .download-section{
+      padding:5rem 2rem;max-width:1000px;margin:0 auto;
+    }
+    .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-bottom:1.5rem;}
+    .dl-card{
+      border:1px solid var(--border);padding:1.8rem;background:var(--bg2);
+      display:flex;flex-direction:column;gap:.75rem;
+    }
+    .dl-os{color:var(--muted);font-size:.7rem;letter-spacing:.25em;}
+    .dl-name{color:var(--green);font-size:1.05rem;}
+    .dl-formats{display:flex;flex-direction:column;gap:.5rem;margin-top:.25rem;}
+    .dl-btn{
+      display:block;border:1px solid var(--border);color:var(--text);
+      font-family:var(--font);font-size:.8rem;padding:.6rem 1rem;
+      text-decoration:none;text-align:center;letter-spacing:.08em;transition:all .15s;
+    }
+    .dl-btn:hover{border-color:var(--green);color:var(--green);background:rgba(57,255,20,.04);}
+    .dl-btn.primary{border-color:var(--green);color:var(--bg);background:var(--green);font-weight:bold;}
+    .dl-btn.primary:hover{box-shadow:0 0 20px rgba(57,255,20,.4);}
+    .dl-note{color:var(--muted);font-size:.75rem;text-align:center;letter-spacing:.08em;}
+    .dl-note a{color:var(--muted);text-decoration:underline;}
+    .dl-note a:hover{color:var(--green);}
+
     /* FINAL CTA */
     .final-cta{
       text-align:center;padding:6rem 2rem;
@@ -145,6 +169,7 @@
   <div class="nav-links">
     <a href="#games">Minigames</a>
     <a href="#consequence">The Stakes</a>
+    <a href="#download">Download</a>
     <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">Source</a>
     <a href="https://games.hackatoa.com" target="_blank" rel="noopener">All Games</a>
     <a href="/play" class="nav-play">Play Now</a>
@@ -236,10 +261,37 @@
   </div>
 </div>
 
+<!-- DOWNLOAD -->
+<div class="download-section" id="download">
+  <div class="sec-tag">// DESKTOP APP</div>
+  <h2 class="sec-title">Take It Offline</h2>
+  <div class="dl-grid">
+    <div class="dl-card">
+      <div class="dl-os">WINDOWS</div>
+      <div class="dl-name">System 32 Roulette</div>
+      <div class="dl-formats">
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/System-32-Roulette-Setup-1.0.0.exe" class="dl-btn primary">⬇ Installer (.exe)</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/System-32-Roulette-1.0.0.exe" class="dl-btn">⬇ Portable (.exe)</a>
+      </div>
+    </div>
+    <div class="dl-card">
+      <div class="dl-os">LINUX</div>
+      <div class="dl-name">System 32 Roulette</div>
+      <div class="dl-formats">
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/System-32-Roulette-1.0.0.AppImage" class="dl-btn primary">⬇ AppImage</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/system-32-roulette_1.0.0_amd64.deb" class="dl-btn">⬇ .deb (Debian/Ubuntu)</a>
+      </div>
+    </div>
+  </div>
+  <p class="dl-note">
+    All releases on <a href="https://github.com/Hackatoan/sys32roulette/releases" target="_blank" rel="noopener">GitHub Releases</a> &nbsp;·&nbsp; Multiplayer is online — both players need internet access
+  </p>
+</div>
+
 <!-- FINAL CTA -->
 <div class="final-cta">
   <h2 class="fcta-title">Think you can win?</h2>
-  <p class="fcta-sub">No download. No account. Just a code and the courage to spin the roulette.</p>
+  <p class="fcta-sub">No account required. Play in browser or download the desktop app.</p>
   <a href="/play" class="fcta-btn">PLAY FOR FREE</a>
 </div>
 
@@ -250,6 +302,7 @@
   </div>
   <div class="flinks">
     <a href="/play">Play</a>
+    <a href="#download">Download</a>
     <a href="https://games.hackatoa.com" target="_blank">All Games</a>
     <a href="https://github.com/Hackatoan/sys32roulette" target="_blank">Source Code</a>
     <a href="https://buymeacoffee.com/hackatoa" target="_blank">☕ Support</a>
