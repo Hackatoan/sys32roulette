@@ -72,6 +72,22 @@ function startMinigame(room) {
     payload.showDuration = 3500;
     room.gameData.grid = grid;
     room.gameData.answers = {};
+    clearTimeout(room.timer);
+    room.timer = setTimeout(() => {
+      if (room.gameData.finished) return;
+      room.gameData.finished = true;
+      room.players.forEach(pid => {
+        if (!room.gameData.answers[pid]) room.gameData.answers[pid] = new Array(grid.length).fill(0);
+      });
+      const memScores = {};
+      room.players.forEach(pid => {
+        const ans = room.gameData.answers[pid];
+        memScores[pid] = grid.reduce((s, v, i) => s + (v === (ans[i] || 0) ? 1 : 0), 0);
+      });
+      const [a, b] = room.players;
+      const winner = memScores[a] > memScores[b] ? a : memScores[b] > memScores[a] ? b : null;
+      endMinigame(room, winner, { memScores });
+    }, 30000);
   }
 
   io.to(room.id).emit('minigame-start', payload);
@@ -227,3 +243,4 @@ io.on('connection', socket => {
 });
 
 server.listen(PORT, () => console.log(`System 32 Roulette running on :${PORT}`));
+
