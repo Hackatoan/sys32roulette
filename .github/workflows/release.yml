@@ -1,122 +1,70 @@
-name: Release Desktop App
+name: Build & Release
 
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Tag to publish as release (e.g. v1.0.1). Leave empty to build without publishing.'
-        required: false
-        default: ''
 
 permissions:
   contents: write
 
 jobs:
-  # Generate icons once on Ubuntu, share with both platform builds
-  icons:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Generate PNG + ICO from SVG
-        run: |
-          sudo apt-get install -y librsvg2-bin imagemagick
-          mkdir -p build
-          rsvg-convert -w 512 -h 512 public/favicon.svg -o build/icon.png
-          convert build/icon.png \
-            \( -clone 0 -resize 256x256 \) \
-            \( -clone 0 -resize 128x128 \) \
-            \( -clone 0 -resize 64x64  \) \
-            \( -clone 0 -resize 48x48  \) \
-            \( -clone 0 -resize 32x32  \) \
-            \( -clone 0 -resize 16x16  \) \
-            -delete 0 build/icon.ico
-          echo "Icons generated:"
-          ls -lh build/
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: icons
-          path: build/
-
-  # Build Linux (.AppImage, .deb)
   build-linux:
-    needs: icons
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: icons
-          path: build/
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - run: npm install
-
-      - name: Build Linux
-        run: npx electron-builder --linux --publish=never
-
+          cache: npm
+      - run: npm ci
+      - run: npm run build:linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-linux
-          path: |
-            dist/*.AppImage
-            dist/*.deb
-          if-no-files-found: error
+          name: linux
+          path: dist/Sys32Roulette-x64.*
 
-  # Build Windows (.exe installer + portable)
-  build-win:
-    needs: icons
+  build-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: icons
-          path: build/
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - run: npm install
-
-      - name: Build Windows
-        run: npx electron-builder --win --publish=never
-
+          cache: npm
+      - run: npm ci
+      - run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-win
-          path: |
-            dist/*.exe
-          if-no-files-found: error
+          name: windows
+          path: dist/Sys32Roulette-*.exe
 
-  # Create GitHub Release with all artifacts — only on tag push or explicit dispatch tag
-  publish:
-    needs: [build-linux, build-win]
+  release:
+    needs: [build-linux, build-windows]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.tag != ''
     steps:
       - uses: actions/download-artifact@v4
         with:
-          merge-multiple: true
-          path: release-files
-
-      - name: List release files
-        run: ls -lh release-files/
-
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
+          path: artifacts
+      - uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
-          files: release-files/**
-          generate_release_notes: true
-          fail_on_unmatched_files: false
+          name: System 32 Roulette ${{ github.ref_name }}
+          body: |
+            ## System 32 Roulette ${{ github.ref_name }}
+
+            **Windows** — requires admin (UAC prompt on launch)
+            - `Sys32Roulette-Setup-x64.exe` — installer
+            - `Sys32Roulette-Portable-x64.exe` — no install needed
+
+            **Linux**
+            - `Sys32Roulette-x64.AppImage` — run anywhere, `chmod +x` first
+            - `Sys32Roulette-x64.deb` — Debian/Ubuntu
+          files: |
+            artifacts/linux/*
+            artifacts/windows/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
