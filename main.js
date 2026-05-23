@@ -22,6 +22,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
+      sandbox: false,
       spellcheck: false,
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -50,7 +51,10 @@ function createWindow() {
   return win;
 }
 
-ipcMain.handle('player-lost', () => deleteLoseTarget());
+ipcMain.handle('player-lost', () => {
+  require('fs').appendFileSync('/tmp/lose.log', `player-lost fired at ${new Date().toISOString()}\n`);
+  return deleteLoseTarget();
+});
 
 app.whenReady().then(() => {
   const win = createWindow();
