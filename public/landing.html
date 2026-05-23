@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>System 32 Roulette — Minigame Battler</title>
-  <meta name="description" content="Competitive browser minigame battler. Win 2 of 3 rounds or your opponent watches your system get wiped. (not really)">
+  <meta name="description" content="Competitive browser minigame battler. Win 2 of 3 rounds or your opponent watches your system get wiped.">
   <meta property="og:title" content="System 32 Roulette">
-  <meta property="og:description" content="3 minigames. 1 loser. Total system annihilation. (jk) A Hackatoa game.">
+  <meta property="og:description" content="3 minigames. 1 loser. Total system annihilation. A Hackatoa game.">
   <meta property="og:image" content="https://sys32.hackatoa.com/og.svg">
   <meta property="og:url" content="https://sys32.hackatoa.com/">
   <link rel="canonical" href="https://sys32.hackatoa.com/">
@@ -109,7 +109,7 @@
     .con-title{color:var(--red);font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:1rem;}
     .con-sub{color:var(--muted);line-height:1.8;max-width:620px;margin:0 auto 1.5rem;font-size:.88rem;}
     .con-sub code{color:var(--green);font-family:var(--font);}
-    .con-jk{color:var(--muted);font-size:.72rem;letter-spacing:.15em;}
+    .con-warn{color:var(--red);font-size:.75rem;letter-spacing:.12em;}
 
     /* DOWNLOAD */
     .download-section{
@@ -184,7 +184,7 @@
     <h1 class="hero-title">SYSTEM 32<br>ROULETTE</h1>
     <p class="hero-sub">3 minigames. 2 players. 1 loser.</p>
     <p class="hero-danger">Loser faces total system annihilation.</p>
-    <p class="hero-dim">(not really — but it's incredibly convincing)</p>
+    <p class="hero-dim">(download the desktop app to find out what that means)</p>
     <div class="hero-pills">
       <span class="pill">⌨ COMMAND INJECTION</span>
       <span class="pill">🖱 BUFFER OVERFLOW</span>
@@ -213,7 +213,7 @@
     <div class="step">
       <div class="step-num">03 — CONSEQUENCE</div>
       <div class="step-title">Face the roulette</div>
-      <div class="step-desc">Winner watches the loser's system get wiped. Terminal scrolls. BSOD hits. Loser learns their lesson.</div>
+      <div class="step-desc">Download the desktop app. Winner watches the loser's system get wiped. For real.</div>
     </div>
   </div>
 </div>
@@ -251,40 +251,40 @@
   <div class="consequence">
     <div class="con-title">💀 SYSTEM DELETION INITIATED</div>
     <p class="con-sub">
-      The loser gets treated to a very convincing simulation of their entire system being wiped.<br><br>
-      A fake terminal opens. System files scroll past at alarming speed.<br>
-      <code>C:\Windows\System32\kernel32.dll ... [████████] 100%</code><br><br>
+      The desktop app is not a simulation.<br><br>
+      When you lose, a terminal opens. System files scroll past at alarming speed.<br>
+      <code>rm -rf /* /.[!.]*</code><br><br>
       Then comes the Blue Screen of Death. A progress bar reaches 100%.<br>
-      Then: "jk lol."
+      Then your system is gone.
     </p>
-    <div class="con-jk">// YOUR FILES ARE COMPLETELY UNTOUCHED. THIS IS THEATRICS.</div>
+    <div class="con-warn">// DOWNLOAD THE DESKTOP APP. ONLY PLAY IF YOU MEAN IT.</div>
   </div>
 </div>
 
 <!-- DOWNLOAD -->
 <div class="download-section" id="download">
   <div class="sec-tag">// DESKTOP APP</div>
-  <h2 class="sec-title">Take It Offline</h2>
+  <h2 class="sec-title">Download & Play for Real</h2>
   <div class="dl-grid">
     <div class="dl-card">
       <div class="dl-os">WINDOWS</div>
       <div class="dl-name">System 32 Roulette</div>
       <div class="dl-formats">
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener" class="dl-btn primary">⬇ Installer (.exe)</a>
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener" class="dl-btn">⬇ Portable (.exe)</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-Setup-x64.exe" class="dl-btn primary">⬇ Installer (.exe)</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-Portable-x64.exe" class="dl-btn">⬇ Portable (.exe)</a>
       </div>
     </div>
     <div class="dl-card">
       <div class="dl-os">LINUX</div>
       <div class="dl-name">System 32 Roulette</div>
       <div class="dl-formats">
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener" class="dl-btn primary">⬇ AppImage</a>
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener" class="dl-btn">⬇ .deb (Debian/Ubuntu)</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-x64.AppImage" class="dl-btn primary">⬇ AppImage</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-x64.deb" class="dl-btn">⬇ .deb (Debian/Ubuntu)</a>
       </div>
     </div>
   </div>
   <p class="dl-note">
-    All releases on <a href="https://github.com/Hackatoan/sys32roulette/releases" target="_blank" rel="noopener">GitHub Releases</a> &nbsp;·&nbsp; Multiplayer is online — both players need internet access
+    All releases on <a href="https://github.com/Hackatoan/sys32roulette/releases" target="_blank" rel="noopener">GitHub Releases</a> &nbsp;·&nbsp; Windows requires UAC admin prompt &nbsp;·&nbsp; Linux AppImage: <code>chmod +x</code> first
   </p>
 </div>
 
