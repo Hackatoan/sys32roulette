@@ -17,10 +17,22 @@
     <div class="panel">
       <div class="panel-title">SYSTEM 32 ROULETTE</div>
       <div class="menu-btns">
-        <button class="btn btn-primary" onclick="doCreateRoom()">Create Game</button>
+        <button class="btn btn-primary" onclick="doQuickPlay()">⚡ Quick Play</button>
+        <button class="btn btn-secondary" onclick="doCreateRoom()">Create Game</button>
         <button class="btn btn-secondary" onclick="showJoin()">Join Game</button>
         <button class="btn btn-ghost" onclick="location.href='/'">← About</button>
       </div>
+    </div>
+  </div>
+
+  <!-- QUEUE -->
+  <div id="s-queue" class="screen">
+    <div class="panel">
+      <div class="panel-title">FINDING OPPONENT</div>
+      <div class="spinner"></div>
+      <p class="hint-text" id="queue-status-text">Searching for a target...</p>
+      <div class="queue-timer" id="queue-timer">0s</div>
+      <button class="btn btn-ghost" onclick="leaveQueue()">Cancel</button>
     </div>
   </div>
 
@@ -189,7 +201,6 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="game.js"></script>
   <script>
-    // Override the landing screen redirect — game.html has no landing screen
     document.addEventListener('DOMContentLoaded', () => {
       showScreen('s-menu');
       const code = new URLSearchParams(location.search).get('join');
