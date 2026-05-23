@@ -2,14 +2,38 @@ name: Build & Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [main]
 
 permissions:
   contents: write
 
 jobs:
+  tag:
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.bump.outputs.new_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: bump
+        run: |
+          git fetch --tags
+          latest=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$latest" ]; then
+            new_tag="v1.0.0"
+          else
+            IFS='.' read -r major minor patch <<< "${latest#v}"
+            new_tag="v${major}.${minor}.$((patch+1))"
+          fi
+          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$new_tag"
+          git push origin "$new_tag"
+
   build-linux:
+    needs: tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +50,7 @@ jobs:
           path: dist/Sys32Roulette-x64.*
 
   build-windows:
+    needs: tag
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +67,7 @@ jobs:
           path: dist/Sys32Roulette-*.exe
 
   release:
-    needs: [build-linux, build-windows]
+    needs: [tag, build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -50,11 +75,12 @@ jobs:
           path: artifacts
       - uses: softprops/action-gh-release@v2
         with:
-          name: System 32 Roulette ${{ github.ref_name }}
+          tag_name: ${{ needs.tag.outputs.new_tag }}
+          name: System 32 Roulette ${{ needs.tag.outputs.new_tag }}
           body: |
-            ## System 32 Roulette ${{ github.ref_name }}
+            ## System 32 Roulette ${{ needs.tag.outputs.new_tag }}
 
-            **Windows** — requires admin (UAC prompt on launch)
+            **Windows** — UAC admin prompt on launch
             - `Sys32Roulette-Setup-x64.exe` — installer
             - `Sys32Roulette-Portable-x64.exe` — no install needed
 
