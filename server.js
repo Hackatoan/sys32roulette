@@ -73,8 +73,9 @@ function startMinigame(room) {
     room.gameData.grid = grid;
     room.gameData.answers = {};
     clearTimeout(room.timer);
+    const memRound = room.currentGame;
     room.timer = setTimeout(() => {
-      if (room.gameData.finished) return;
+      if (room.currentGame !== memRound || room.gameData.finished) return;
       room.gameData.finished = true;
       room.players.forEach(pid => {
         if (!room.gameData.answers[pid]) room.gameData.answers[pid] = new Array(grid.length).fill(0);
