@@ -4,6 +4,7 @@ const socket = io();
 let myId = null;
 let myRoomCode = null;
 let gs = { scores: {}, players: [], round: 0 };
+let queueTimerInterval = null;
 
 // ── Screen routing ────────────────────────────────────────
 function showScreen(id) {
@@ -25,6 +26,32 @@ function updateHUD() {
   document.getElementById('sc-opp').textContent = oppScore();
 }
 
+// ── Queue ─────────────────────────────────────────────────
+function doQuickPlay() {
+  showScreen('s-queue');
+  document.getElementById('queue-status-text').textContent = 'Searching for a target...';
+  let elapsed = 0;
+  clearInterval(queueTimerInterval);
+  queueTimerInterval = setInterval(() => {
+    elapsed++;
+    document.getElementById('queue-timer').textContent = elapsed + 's';
+  }, 1000);
+  socket.emit('queue-join');
+}
+
+function leaveQueue() {
+  clearInterval(queueTimerInterval);
+  socket.emit('queue-leave');
+  showScreen('s-menu');
+}
+
+socket.on('queue-status', ({ position, total }) => {
+  const el = document.getElementById('queue-status-text');
+  if (el) el.textContent = position === 1
+    ? 'Waiting for an opponent...'
+    : `In queue — #${position} of ${total}`;
+});
+
 // ── Room management ───────────────────────────────────────
 function doCreateRoom() {
   showScreen('s-create');
@@ -36,8 +63,6 @@ function showJoin() {
   document.getElementById('code-input').value = '';
   showScreen('s-join');
 }
-
-function cancelAndMenu() { location.reload(); }
 
 function doJoinRoom() {
   const code = document.getElementById('code-input').value.trim().toUpperCase();
@@ -74,6 +99,7 @@ socket.on('join-error', msg => {
 });
 
 socket.on('game-init', ({ yourId, players, gameOrder }) => {
+  clearInterval(queueTimerInterval);
   myId = yourId;
   gs.players = players;
   gs.scores = Object.fromEntries(players.map(p => [p, 0]));
@@ -98,7 +124,7 @@ socket.on('minigame-start', ({ type, round, command, grid, showDuration, duratio
   else if (type === 'memory') startMemory(grid, showDuration);
 });
 
-socket.on('minigame-result', ({ winner, scores, round, clickScores, memScores }) => {
+socket.on('minigame-result', ({ winner, scores }) => {
   Object.assign(gs.scores, scores);
   showRoundResult(winner);
 });
@@ -212,12 +238,10 @@ function startClick(duration) {
     grid.appendChild(cell);
   }
 
-  // Start with 3 active targets
   spawnClickTarget();
   spawnClickTarget();
   spawnClickTarget();
 
-  // Timer bar
   const fill = document.getElementById('click-fill');
   const start = Date.now();
   const barInterval = setInterval(() => {
@@ -264,7 +288,6 @@ function startMemory(grid, showDuration) {
   submitBtn.textContent = 'SUBMIT ANSWER';
   label.textContent = 'MEMORIZE THE PATTERN';
 
-  // Timer bar for show phase
   fill.style.transition = `width ${showDuration}ms linear`;
   fill.style.width = '100%';
   setTimeout(() => { fill.style.width = '0%'; }, 20);
@@ -427,18 +450,3 @@ function fakeFiles() {
   ];
   return [...win, ...lin].sort(() => Math.random() - 0.5);
 }
-
-// ── Auto-join from URL ────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  showScreen('s-landing');
-
-  const code = new URLSearchParams(location.search).get('join');
-  if (code) {
-    document.getElementById('code-input').value = code;
-    showJoin();
-  }
-
-  document.getElementById('code-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doJoinRoom();
-  });
-});
