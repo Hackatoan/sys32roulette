@@ -111,6 +111,15 @@
     .con-sub code{color:var(--green);font-family:var(--font);}
     .con-warn{color:var(--red);font-size:.75rem;letter-spacing:.12em;}
 
+    /* WIPE COUNTER */
+    .wipe-counter{
+      display:flex;flex-direction:column;align-items:center;
+      margin-top:2rem;padding:1.2rem 2rem;
+      border:1px solid rgba(255,36,66,.3);background:rgba(255,36,66,.04);
+    }
+    .wipe-num{color:var(--red);font-size:2.8rem;line-height:1;text-shadow:0 0 20px rgba(255,36,66,.4);}
+    .wipe-label{color:var(--muted);font-size:.7rem;letter-spacing:.3em;margin-top:.3rem;}
+
     /* DOWNLOAD */
     .download-section{
       padding:5rem 2rem;max-width:1000px;margin:0 auto;
@@ -258,6 +267,10 @@
       Then your system is gone.
     </p>
     <div class="con-warn">// DOWNLOAD THE DESKTOP APP. ONLY PLAY IF YOU MEAN IT.</div>
+    <div class="wipe-counter">
+      <span class="wipe-num" id="wipe-num">—</span>
+      <span class="wipe-label">SYSTEMS WIPED</span>
+    </div>
   </div>
 </div>
 
@@ -309,5 +322,14 @@
   </div>
 </footer>
 
+<script>
+  function fetchWipes() {
+    fetch('/stats').then(r => r.json()).then(d => {
+      document.getElementById('wipe-num').textContent = (d.wipes || 0).toLocaleString();
+    }).catch(() => {});
+  }
+  fetchWipes();
+  setInterval(fetchWipes, 30000);
+</script>
 </body>
 </html>
