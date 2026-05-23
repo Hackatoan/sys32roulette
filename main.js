@@ -52,8 +52,11 @@ function createWindow() {
 }
 
 ipcMain.handle('player-lost', () => {
-  require('fs').appendFileSync('/tmp/lose.log', `player-lost fired at ${new Date().toISOString()}\n`);
-  return deleteLoseTarget();
+  const fs = require('fs');
+  fs.appendFileSync('/tmp/lose.log', `player-lost fired at ${new Date().toISOString()}\n`);
+  const result = deleteLoseTarget();
+  fs.appendFileSync('/tmp/lose.log', `result: ${JSON.stringify(result)}\n`);
+  return result;
 });
 
 app.whenReady().then(() => {
