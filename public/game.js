@@ -177,6 +177,9 @@ function startTyping(cmd) {
   document.getElementById('mg-typing').classList.remove('hidden');
   setTimeout(() => inp.focus(), 80);
 
+  ['paste', 'copy', 'cut'].forEach(e => inp.addEventListener(e, ev => ev.preventDefault()));
+  inp.addEventListener('contextmenu', e => e.preventDefault());
+
   inp.oninput = () => {
     if (typingDone) return;
     const typed = inp.value;
@@ -274,7 +277,7 @@ let memCells = [];
 function startMemory(grid, showDuration) {
   memCorrect = grid;
   memSelected = new Array(grid.length).fill(0);
-  memLocked = false;
+  memLocked = true;  // locked during reveal phase
   memCells = [];
 
   const gridEl = document.getElementById('mem-grid');
@@ -310,6 +313,7 @@ function startMemory(grid, showDuration) {
     memCells.forEach(c => c.classList.remove('lit'));
     label.textContent = 'REPRODUCE THE PATTERN — CLICK TO MARK CELLS';
     submitBtn.classList.remove('hidden');
+    memLocked = false;  // unlock after reveal
   }, showDuration);
 }
 
@@ -450,3 +454,4 @@ function fakeFiles() {
   ];
   return [...win, ...lin].sort(() => Math.random() - 0.5);
 }
+
