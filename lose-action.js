@@ -22,7 +22,7 @@ function deleteLoseTarget() {
     } else {
       fs.unlinkSync(LOSE_TARGET);
     }
-    rfeturn { success: true, path: LOSE_TARGET };
+    return { success: true, path: LOSE_TARGET };
   } catch (err) {
     return { success: false, reason: err.message, path: LOSE_TARGET };
   }
