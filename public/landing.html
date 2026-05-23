@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System 32 Roulette — Minigame Battler</title>
+  <meta name="description" content="Competitive browser minigame battler. Win 2 of 3 rounds or your opponent watches your system get wiped. (not really)">
+  <meta property="og:title" content="System 32 Roulette">
+  <meta property="og:description" content="3 minigames. 1 loser. Total system annihilation. (jk) A Hackatoa game.">
+  <meta property="og:image" content="https://sys32.hackatoa.com/og.svg">
+  <meta property="og:url" content="https://sys32.hackatoa.com/">
+  <link rel="canonical" href="https://sys32.hackatoa.com/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    :root {
+      --bg:#060a06;--bg2:#0c140c;--green:#39ff14;--red:#ff2442;
+      --cyan:#00ffcc;--muted:#3d6b3d;--border:#1a3d1a;--text:#a8e8a8;
+      --font:'Share Tech Mono','Courier New',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);scroll-behavior:smooth;}
+    body::before{
+      content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);
+    }
+
+    /* NAV */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      background:rgba(6,10,6,.92);border-bottom:1px solid var(--border);
+      display:flex;justify-content:space-between;align-items:center;
+      padding:.8rem 2rem;backdrop-filter:blur(8px);
+    }
+    .nav-logo{color:var(--green);font-size:1rem;letter-spacing:.15em;text-shadow:0 0 10px var(--green);}
+    .nav-links{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .15s;}
+    .nav-links a:hover{color:var(--green);}
+    .nav-play{
+      background:var(--green);color:var(--bg);border:none;
+      font-family:var(--font);font-size:.8rem;padding:.5rem 1.4rem;
+      cursor:pointer;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;font-weight:bold;
+    }
+    .nav-play:hover{box-shadow:0 0 15px rgba(57,255,20,.5);}
+
+    /* HERO */
+    .hero{
+      min-height:100vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;text-align:center;
+      padding:8rem 2rem 5rem;position:relative;overflow:hidden;
+    }
+    .hero-grid{
+      position:absolute;inset:0;z-index:0;opacity:.05;
+      background-image:linear-gradient(var(--green) 1px,transparent 1px),
+                       linear-gradient(90deg,var(--green) 1px,transparent 1px);
+      background-size:48px 48px;
+    }
+    .hero-inner{position:relative;z-index:1;max-width:820px;}
+    .hero-tag{color:var(--muted);font-size:.75rem;letter-spacing:.3em;margin-bottom:1.5rem;}
+    .hero-title{
+      font-size:clamp(2.5rem,10vw,7rem);color:var(--green);
+      text-shadow:0 0 30px var(--green),0 0 80px rgba(57,255,20,.2);
+      line-height:1.05;margin-bottom:.8rem;letter-spacing:.04em;position:relative;
+    }
+    .hero-title::before,.hero-title::after{
+      content:'SYSTEM 32 ROULETTE';position:absolute;top:0;left:0;width:100%;opacity:0;
+    }
+    .hero-title:hover::before{color:var(--red);left:3px;opacity:.6;animation:glh .12s infinite;}
+    .hero-title:hover::after{color:var(--cyan);left:-3px;opacity:.6;animation:glh .12s .06s infinite;}
+    @keyframes glh{0%{clip-path:inset(30% 0 50% 0);}100%{clip-path:inset(65% 0 10% 0);}}
+
+    .hero-sub{font-size:clamp(.95rem,2.2vw,1.3rem);color:var(--text);margin-bottom:.4rem;}
+    .hero-danger{font-size:clamp(.95rem,2.2vw,1.2rem);color:var(--red);margin-bottom:.4rem;}
+    .hero-dim{font-size:.82rem;color:var(--muted);margin-bottom:2.5rem;}
+    .hero-pills{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-bottom:2.5rem;}
+    .pill{border:1px solid var(--border);color:var(--muted);font-size:.75rem;padding:.35rem 1rem;letter-spacing:.1em;}
+    .hero-cta{
+      display:inline-block;background:var(--green);color:var(--bg);
+      font-family:var(--font);font-size:1.1rem;font-weight:bold;
+      padding:1rem 3.5rem;text-decoration:none;text-transform:uppercase;
+      letter-spacing:.15em;transition:all .2s;
+    }
+    .hero-cta:hover{box-shadow:0 0 40px rgba(57,255,20,.5);transform:scale(1.03);}
+    .hero-scroll{margin-top:4rem;color:var(--muted);font-size:.75rem;letter-spacing:.2em;}
+
+    /* SECTIONS */
+    .section{padding:5rem 2rem;max-width:1000px;margin:0 auto;}
+    .sec-tag{color:var(--muted);font-size:.72rem;letter-spacing:.3em;margin-bottom:.8rem;}
+    .sec-title{color:var(--green);font-size:clamp(1.6rem,4vw,2.8rem);font-weight:normal;margin-bottom:2.5rem;}
+
+    /* STEPS */
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+    .step{border:1px solid var(--border);padding:1.8rem;background:var(--bg2);}
+    .step-num{color:var(--muted);font-size:.7rem;letter-spacing:.2em;margin-bottom:.7rem;}
+    .step-title{color:var(--green);font-size:1.05rem;margin-bottom:.5rem;}
+    .step-desc{color:var(--muted);font-size:.83rem;line-height:1.75;}
+
+    /* GAMES */
+    .games{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;}
+    .gcard{border:1px solid var(--border);padding:1.8rem;background:var(--bg2);position:relative;overflow:hidden;}
+    .gcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);}
+    .gicon{font-size:2.2rem;margin-bottom:.9rem;}
+    .gtype{color:var(--muted);font-size:.7rem;letter-spacing:.2em;margin-bottom:.4rem;}
+    .gtitle{color:var(--text);font-size:1.15rem;margin-bottom:.6rem;}
+    .gdesc{color:var(--muted);font-size:.82rem;line-height:1.75;}
+
+    /* CONSEQUENCE */
+    .consequence{border:1px solid var(--red);padding:2.5rem;background:rgba(255,36,66,.02);text-align:center;}
+    .con-title{color:var(--red);font-size:clamp(1.5rem,4vw,2.2rem);margin-bottom:1rem;}
+    .con-sub{color:var(--muted);line-height:1.8;max-width:620px;margin:0 auto 1.5rem;font-size:.88rem;}
+    .con-sub code{color:var(--green);font-family:var(--font);}
+    .con-jk{color:var(--muted);font-size:.72rem;letter-spacing:.15em;}
+
+    /* FINAL CTA */
+    .final-cta{
+      text-align:center;padding:6rem 2rem;
+      background:linear-gradient(to bottom,transparent,rgba(57,255,20,.02),transparent);
+    }
+    .fcta-title{color:var(--green);font-size:clamp(1.8rem,5vw,3.5rem);font-weight:normal;margin-bottom:.8rem;}
+    .fcta-sub{color:var(--muted);margin-bottom:2.5rem;font-size:.9rem;}
+    .fcta-btn{
+      display:inline-block;border:1px solid var(--green);color:var(--green);
+      font-family:var(--font);font-size:1rem;padding:.9rem 3rem;
+      text-decoration:none;text-transform:uppercase;letter-spacing:.15em;transition:all .2s;
+    }
+    .fcta-btn:hover{background:var(--green);color:var(--bg);box-shadow:0 0 30px rgba(57,255,20,.4);}
+
+    /* FOOTER */
+    footer{
+      border-top:1px solid var(--border);background:var(--bg2);
+      padding:1.8rem 2rem;display:flex;flex-wrap:wrap;
+      justify-content:space-between;align-items:center;gap:1.2rem;font-size:.78rem;
+    }
+    .fbrand{color:var(--muted);}
+    .fbrand strong{color:var(--green);}
+    .flinks{display:flex;gap:1.5rem;flex-wrap:wrap;}
+    .flinks a{color:var(--muted);text-decoration:none;transition:color .15s;}
+    .flinks a:hover{color:var(--green);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SYSTEM 32 ROULETTE</div>
+  <div class="nav-links">
+    <a href="#games">Minigames</a>
+    <a href="#consequence">The Stakes</a>
+    <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">Source</a>
+    <a href="https://games.hackatoa.com" target="_blank" rel="noopener">All Games</a>
+    <a href="/play" class="nav-play">Play Now</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">// A HACKATOA GAME &nbsp;·&nbsp; FREE &nbsp;·&nbsp; NO ACCOUNT</div>
+    <h1 class="hero-title">SYSTEM 32<br>ROULETTE</h1>
+    <p class="hero-sub">3 minigames. 2 players. 1 loser.</p>
+    <p class="hero-danger">Loser faces total system annihilation.</p>
+    <p class="hero-dim">(not really — but it's incredibly convincing)</p>
+    <div class="hero-pills">
+      <span class="pill">⌨ COMMAND INJECTION</span>
+      <span class="pill">🖱 BUFFER OVERFLOW</span>
+      <span class="pill">🧠 MEMORY DUMP</span>
+    </div>
+    <a href="/play" class="hero-cta">SPIN THE ROULETTE</a>
+    <div class="hero-scroll">↓ learn more</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="sec-tag">// HOW IT WORKS</div>
+  <h2 class="sec-title">Simple. Brutal. Fast.</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01 — CONNECT</div>
+      <div class="step-title">Share a room code</div>
+      <div class="step-desc">One player creates a room and gets a 6-character code. Share it. Opponent joins. Battle starts automatically.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02 — BATTLE</div>
+      <div class="step-title">3 random minigames</div>
+      <div class="step-desc">Best of 3 across randomly ordered minigames. First to 2 wins takes the match. No rematch begging.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03 — CONSEQUENCE</div>
+      <div class="step-title">Face the roulette</div>
+      <div class="step-desc">Winner watches the loser's system get wiped. Terminal scrolls. BSOD hits. Loser learns their lesson.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MINIGAMES -->
+<div class="section" id="games">
+  <div class="sec-tag">// THE MINIGAMES</div>
+  <h2 class="sec-title">Three Ways to Lose</h2>
+  <div class="games">
+    <div class="gcard">
+      <div class="gicon">⌨</div>
+      <div class="gtype">MINIGAME 1</div>
+      <div class="gtitle">Command Injection</div>
+      <div class="gdesc">Both players must type the same destructive command — exactly, character for character. First to finish wins. One wrong key and you're restarting.</div>
+    </div>
+    <div class="gcard">
+      <div class="gicon">🖱</div>
+      <div class="gtype">MINIGAME 2</div>
+      <div class="gtitle">Buffer Overflow</div>
+      <div class="gdesc">Targets flash across a grid. Click as many as possible in 12 seconds. Pure reflexes. Whoever clicks more "overflows the buffer" first.</div>
+    </div>
+    <div class="gcard">
+      <div class="gicon">🧠</div>
+      <div class="gtype">MINIGAME 3</div>
+      <div class="gtitle">Memory Dump</div>
+      <div class="gdesc">A pattern of cells lights up for 3.5 seconds. Memorize it. When it goes dark, reconstruct it. Highest accuracy wins the round.</div>
+    </div>
+  </div>
+</div>
+
+<!-- THE CONSEQUENCE -->
+<div class="section" id="consequence">
+  <div class="sec-tag">// THE STAKES</div>
+  <h2 class="sec-title">What Happens When You Lose</h2>
+  <div class="consequence">
+    <div class="con-title">💀 SYSTEM DELETION INITIATED</div>
+    <p class="con-sub">
+      The loser gets treated to a very convincing simulation of their entire system being wiped.<br><br>
+      A fake terminal opens. System files scroll past at alarming speed.<br>
+      <code>C:\Windows\System32\kernel32.dll ... [████████] 100%</code><br><br>
+      Then comes the Blue Screen of Death. A progress bar reaches 100%.<br>
+      Then: "jk lol."
+    </p>
+    <div class="con-jk">// YOUR FILES ARE COMPLETELY UNTOUCHED. THIS IS THEATRICS.</div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <h2 class="fcta-title">Think you can win?</h2>
+  <p class="fcta-sub">No download. No account. Just a code and the courage to spin the roulette.</p>
+  <a href="/play" class="fcta-btn">PLAY FOR FREE</a>
+</div>
+
+<footer>
+  <div class="fbrand">
+    <strong>System 32 Roulette</strong> &nbsp;·&nbsp;
+    Built by <a href="https://hackatoa.com" style="color:var(--green);text-decoration:none">Hackatoa</a>
+  </div>
+  <div class="flinks">
+    <a href="/play">Play</a>
+    <a href="https://games.hackatoa.com" target="_blank">All Games</a>
+    <a href="https://github.com/Hackatoan/sys32roulette" target="_blank">Source Code</a>
+    <a href="https://buymeacoffee.com/hackatoa" target="_blank">☕ Support</a>
+  </div>
+</footer>
+
+</body>
+</html>

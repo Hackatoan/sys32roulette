@@ -1,0 +1,12 @@
+{
+  "name": "sys32roulette",
+  "version": "1.0.0",
+  "description": "System 32 Roulette — competitive minigame battler. Loser faces total system annihilation. (jk)",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "engines": { "node": ">=18" }
+}

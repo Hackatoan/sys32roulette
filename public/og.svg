@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Courier New',monospace">
+  <rect width="1200" height="630" fill="#060a06"/>
+  <!-- grid lines -->
+  <defs>
+    <pattern id="g" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#39ff14" stroke-width="0.4" opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <!-- vignette -->
+  <radialGradient id="v" cx="50%" cy="50%" r="70%">
+    <stop offset="0%" stop-color="transparent"/>
+    <stop offset="100%" stop-color="#060a06" stop-opacity="0.7"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#v)"/>
+
+  <!-- left: fake terminal -->
+  <rect x="60" y="80" width="480" height="470" rx="4" fill="#0a0a0a" stroke="#1a3d1a" stroke-width="1.5"/>
+  <rect x="60" y="80" width="480" height="28" rx="4" fill="#1c1c1c"/>
+  <circle cx="84" cy="94" r="6" fill="#ff5f56"/>
+  <circle cx="102" cy="94" r="6" fill="#ffbd2e"/>
+  <circle cx="120" cy="94" r="6" fill="#27c93f"/>
+  <text x="150" y="99" font-size="10" fill="#555">SYSTEM — Administrator — sys32roulette</text>
+
+  <text x="80" y="132" font-size="11" fill="#39ff14" opacity="0.9">&gt; FATAL ERROR DETECTED IN PROCESS</text>
+  <text x="80" y="150" font-size="11" fill="#39ff14" opacity="0.9">&gt; Initiating cleanup protocol...</text>
+  <text x="80" y="168" font-size="11" fill="#39ff14" opacity="0.6">&gt;</text>
+  <text x="80" y="186" font-size="11" fill="#39ff14">&gt; Deleting: C:\Windows\System32\ntdll.dll</text>
+  <rect x="80" y="195" width="180" height="6" rx="2" fill="#39ff14" opacity="0.8"/>
+  <text x="266" y="201" font-size="10" fill="#39ff14">100%</text>
+  <text x="80" y="216" font-size="11" fill="#39ff14">&gt; Deleting: C:\Windows\System32\kernel32.dll</text>
+  <rect x="80" y="225" width="180" height="6" rx="2" fill="#39ff14" opacity="0.8"/>
+  <text x="266" y="231" font-size="10" fill="#39ff14">100%</text>
+  <text x="80" y="246" font-size="11" fill="#39ff14">&gt; Deleting: C:\Windows\System32\user32.dll</text>
+  <rect x="80" y="255" width="180" height="6" rx="2" fill="#39ff14" opacity="0.8"/>
+  <text x="266" y="261" font-size="10" fill="#39ff14">100%</text>
+  <text x="80" y="276" font-size="11" fill="#39ff14" opacity="0.7">&gt; Deleting: /bin/bash</text>
+  <text x="80" y="294" font-size="11" fill="#39ff14" opacity="0.7">&gt; Deleting: /etc/passwd</text>
+  <text x="80" y="312" font-size="11" fill="#39ff14" opacity="0.7">&gt; Deleting: /lib/libc.so.6</text>
+  <text x="80" y="340" font-size="11" fill="#39ff14" opacity="0.3">&gt;</text>
+  <text x="80" y="358" font-size="13" fill="#ff2442">&gt; ALL SYSTEM FILES REMOVED</text>
+  <text x="80" y="376" font-size="11" fill="#39ff14" opacity="0.5">&gt; Terminating display driver...</text>
+
+  <!-- right: title block -->
+  <text x="620" y="185" font-size="62" fill="#39ff14" font-weight="bold" letter-spacing="2"
+    style="text-shadow:0 0 30px #39ff14">SYSTEM 32</text>
+  <text x="620" y="260" font-size="62" fill="#39ff14" font-weight="bold" letter-spacing="2">ROULETTE</text>
+  <rect x="620" y="275" width="500" height="2" fill="#39ff14" opacity="0.3"/>
+
+  <text x="620" y="320" font-size="18" fill="#a8e8a8">3 minigames. 1 loser.</text>
+  <text x="620" y="348" font-size="18" fill="#ff2442">Loser faces total system annihilation.</text>
+  <text x="620" y="372" font-size="13" fill="#3d6b3d">(not really — but it's convincing)</text>
+
+  <!-- minigame pills -->
+  <rect x="620" y="400" width="158" height="28" rx="3" fill="none" stroke="#1a3d1a" stroke-width="1"/>
+  <text x="630" y="419" font-size="12" fill="#3d6b3d">⌨ CMD INJECTION</text>
+  <rect x="788" y="400" width="148" height="28" rx="3" fill="none" stroke="#1a3d1a" stroke-width="1"/>
+  <text x="798" y="419" font-size="12" fill="#3d6b3d">🖱 BUF OVERFLOW</text>
+  <rect x="946" y="400" width="132" height="28" rx="3" fill="none" stroke="#1a3d1a" stroke-width="1"/>
+  <text x="956" y="419" font-size="12" fill="#3d6b3d">🧠 MEM DUMP</text>
+
+  <!-- CTA -->
+  <rect x="620" y="455" width="220" height="44" rx="2" fill="#39ff14"/>
+  <text x="730" y="483" font-size="14" fill="#060a06" text-anchor="middle" font-weight="bold" letter-spacing="2">PLAY NOW</text>
+
+  <!-- footer -->
+  <text x="600" y="610" font-size="12" fill="#3d6b3d" text-anchor="middle">sys32.hackatoa.com &nbsp;·&nbsp; A Hackatoa Game &nbsp;·&nbsp; Free, No Account</text>
+</svg>

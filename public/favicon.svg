@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#060a06"/>
+  <!-- skull -->
+  <circle cx="16" cy="13" r="8" fill="none" stroke="#39ff14" stroke-width="1.5"/>
+  <rect x="10" y="18" width="12" height="5" rx="1" fill="#060a06"/>
+  <rect x="10" y="19" width="12" height="4" fill="#060a06"/>
+  <!-- eye sockets -->
+  <rect x="12" y="11" width="3" height="3" rx="1" fill="#39ff14"/>
+  <rect x="17" y="11" width="3" height="3" rx="1" fill="#39ff14"/>
+  <!-- teeth -->
+  <rect x="11" y="20" width="2" height="3" fill="#39ff14"/>
+  <rect x="14" y="20" width="2" height="3" fill="#39ff14"/>
+  <rect x="17" y="20" width="2" height="3" fill="#39ff14"/>
+  <rect x="20" y="20" width="2" height="3" fill="#39ff14"/>
+  <!-- roulette dot -->
+  <circle cx="16" cy="28" r="2" fill="#ff2442"/>
+</svg>
