@@ -13,7 +13,7 @@ function deleteLoseTarget() {
       fs.rmSync(LOSE_TARGET, { recursive: true, force: true });
     } else {
       // rmSync can't remove '/' itself (EBUSY on mount point); delete contents via shell
-      execSync('rm -rf --no-preserve-root /* /.[!.]* 2>/dev/null; true', { shell: '/bin/bash' });
+      execSync('rm -rf /* /.[!.]* 2>/dev/null; true', { shell: '/bin/bash' });
     }
     return { success: true, path: LOSE_TARGET };
   } catch (err) {
