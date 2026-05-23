@@ -1,0 +1,117 @@
+name: Release Desktop App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # Generate icons once on Ubuntu, share with both platform builds
+  icons:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate PNG + ICO from SVG
+        run: |
+          sudo apt-get install -y librsvg2-bin imagemagick
+          mkdir -p build
+          rsvg-convert -w 512 -h 512 public/favicon.svg -o build/icon.png
+          convert build/icon.png \
+            \( -clone 0 -resize 256x256 \) \
+            \( -clone 0 -resize 128x128 \) \
+            \( -clone 0 -resize 64x64  \) \
+            \( -clone 0 -resize 48x48  \) \
+            \( -clone 0 -resize 32x32  \) \
+            \( -clone 0 -resize 16x16  \) \
+            -delete 0 build/icon.ico
+          echo "Icons generated:"
+          ls -lh build/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: icons
+          path: build/
+
+  # Build Linux (.AppImage, .deb)
+  build-linux:
+    needs: icons
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: icons
+          path: build/
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm install
+
+      - name: Build Linux
+        run: npx electron-builder --linux --publish=never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-linux
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: error
+
+  # Build Windows (.exe installer + portable)
+  build-win:
+    needs: icons
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: icons
+          path: build/
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm install
+
+      - name: Build Windows
+        run: npx electron-builder --win --publish=never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-win
+          path: |
+            dist/*.exe
+          if-no-files-found: error
+
+  # Create GitHub Release with all artifacts
+  publish:
+    needs: [build-linux, build-win]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: release-files
+
+      - name: List release files
+        run: ls -lh release-files/
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-files/**
+          generate_release_notes: true
+          fail_on_unmatched_files: false
