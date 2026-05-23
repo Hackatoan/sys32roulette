@@ -21,14 +21,7 @@ jobs:
           sudo apt-get install -y librsvg2-bin imagemagick
           mkdir -p build
           rsvg-convert -w 512 -h 512 public/favicon.svg -o build/icon.png
-          convert build/icon.png \
-            \( -clone 0 -resize 256x256 \) \
-            \( -clone 0 -resize 128x128 \) \
-            \( -clone 0 -resize 64x64  \) \
-            \( -clone 0 -resize 48x48  \) \
-            \( -clone 0 -resize 32x32  \) \
-            \( -clone 0 -resize 16x16  \) \
-            -delete 0 build/icon.ico
+          convert build/icon.png             \( -clone 0 -resize 256x256 \)             \( -clone 0 -resize 128x128 \)             \( -clone 0 -resize 64x64  \)             \( -clone 0 -resize 48x48  \)             \( -clone 0 -resize 32x32  \)             \( -clone 0 -resize 16x16  \)             -delete 0 build/icon.ico
           echo "Icons generated:"
           ls -lh build/
 
@@ -52,7 +45,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - run: npm install
 
@@ -82,7 +74,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
 
       - run: npm install
 
