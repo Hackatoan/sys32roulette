@@ -1,6 +1,7 @@
 'use strict';
-const { app, BrowserWindow, shell, Menu, globalShortcut } = require('electron');
+const { app, BrowserWindow, shell, Menu, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
+const { deleteLoseTarget } = require('./lose-action');
 
 // Linux AppImage runs without a SUID/userns sandbox on most distros
 if (process.platform === 'linux') {
@@ -22,6 +23,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       spellcheck: false,
+      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
@@ -48,6 +50,8 @@ function createWindow() {
   return win;
 }
 
+ipcMain.handle('player-lost', () => deleteLoseTarget());
+
 app.whenReady().then(() => {
   const win = createWindow();
 
@@ -70,3 +74,4 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
+
