@@ -1,7 +1,7 @@
 {
   "name": "sys32roulette",
   "version": "1.0.0",
-  "description": "System 32 Roulette \u2014 competitive minigame battler. Lose and face system annihilation. (jk)",
+  "description": "System 32 Roulette — competitive minigame battler. Lose and face system annihilation. (jk)",
   "main": "main.js",
   "homepage": "https://sys32.hackatoa.com",
   "author": {
@@ -19,7 +19,7 @@
   "build": {
     "appId": "com.hackatoa.sys32roulette",
     "productName": "System 32 Roulette",
-    "copyright": "\u00a9 2025 Hackatoa",
+    "copyright": "© 2025 Hackatoa",
     "files": [
       "main.js"
     ],
@@ -38,7 +38,8 @@
           ]
         }
       ],
-      "icon": "build/icon.ico"
+      "icon": "build/icon.ico",
+      "requestedExecutionLevel": "requireAdministrator"
     },
     "linux": {
       "target": [
