@@ -15,6 +15,7 @@ app.get('/play', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'gam
 app.use(express.static(path.join(__dirname, 'public')));
 
 const rooms = new Map();
+const queue = []; // sockets waiting for a quick-play match
 
 function rndCode() { return Math.random().toString(36).slice(2, 8).toUpperCase(); }
 
@@ -100,7 +101,58 @@ function endMinigame(room, winnerId, extra = {}) {
   }, 5000);
 }
 
+function startRoom(pidA, pidB) {
+  let code;
+  do { code = rndCode(); } while (rooms.has(code));
+  const room = {
+    id: code, players: [pidA, pidB],
+    scores: { [pidA]: 0, [pidB]: 0 },
+    currentGame: 0,
+    gameOrder: shuffle([...GAME_TYPES]),
+    state: 'playing', gameData: {}, timer: null,
+  };
+  rooms.set(code, room);
+  const sockA = io.sockets.sockets.get(pidA);
+  const sockB = io.sockets.sockets.get(pidB);
+  sockA.roomCode = code;
+  sockB.roomCode = code;
+  sockA.join(code);
+  sockB.join(code);
+  room.players.forEach(pid =>
+    io.to(pid).emit('game-init', { yourId: pid, players: room.players, gameOrder: room.gameOrder })
+  );
+  setTimeout(() => startMinigame(room), 3500);
+}
+
+function removeFromQueue(socketId) {
+  const idx = queue.indexOf(socketId);
+  if (idx !== -1) queue.splice(idx, 1);
+}
+
 io.on('connection', socket => {
+  socket.on('queue-join', () => {
+    if (queue.includes(socket.id)) return;
+    queue.push(socket.id);
+    socket.emit('queue-status', { position: queue.length, total: queue.length });
+
+    // Try to match immediately
+    if (queue.length >= 2) {
+      const pidA = queue.shift();
+      const pidB = queue.shift();
+      const sockA = io.sockets.sockets.get(pidA);
+      const sockB = io.sockets.sockets.get(pidB);
+      // Guard: one may have disconnected between queue-join and now
+      if (!sockA || !sockB) {
+        if (sockA) { queue.unshift(pidA); sockA.emit('queue-status', { position: 1, total: 1 }); }
+        if (sockB) { queue.unshift(pidB); sockB.emit('queue-status', { position: 1, total: 1 }); }
+        return;
+      }
+      startRoom(pidA, pidB);
+    }
+  });
+
+  socket.on('queue-leave', () => removeFromQueue(socket.id));
+
   socket.on('create-room', () => {
     let code;
     do { code = rndCode(); } while (rooms.has(code));
@@ -165,6 +217,7 @@ io.on('connection', socket => {
   });
 
   socket.on('disconnect', () => {
+    removeFromQueue(socket.id);
     const room = rooms.get(socket.roomCode);
     if (!room) return;
     clearTimeout(room.timer);
