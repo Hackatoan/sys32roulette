@@ -21,54 +21,58 @@
     "productName": "System 32 Roulette",
     "copyright": "© 2025 Hackatoa",
     "files": [
-      "main.js"
+      "main.js",
+      "preload.js",
+      "lose-action.js"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Hackatoan",
+        "repo": "sys32roulette"
+      }
     ],
     "win": {
       "target": [
         {
           "target": "nsis",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         },
         {
           "target": "portable",
-          "arch": [
-            "x64"
-          ]
+          "arch": ["x64"]
         }
       ],
       "icon": "build/icon.ico",
       "requestedExecutionLevel": "requireAdministrator"
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "deb",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "icon": "build/icon.png",
-      "category": "Game",
-      "description": "Competitive minigame battler with fake system destruction",
-      "executableArgs": [
-        "--no-sandbox"
-      ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "System 32 Roulette"
+      "shortcutName": "System 32 Roulette",
+      "artifactName": "Sys32Roulette-Setup-x64.exe"
+    },
+    "portable": {
+      "artifactName": "Sys32Roulette-Portable-x64.exe"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "Game",
+      "description": "Competitive minigame battler with fake system destruction",
+      "executableArgs": ["--no-sandbox"],
+      "artifactName": "Sys32Roulette-x64.${ext}"
     },
     "deb": {
       "packageCategory": "games"
