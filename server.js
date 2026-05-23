@@ -3,11 +3,35 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3028;
+
+// ── Wipe counter ──────────────────────────────────────────
+const STATS_FILE = process.env.STATS_FILE || '/data/stats.json';
+
+function readStats() {
+  try { return JSON.parse(fs.readFileSync(STATS_FILE, 'utf8')); } catch { return { wipes: 0 }; }
+}
+function writeStats(s) {
+  try {
+    fs.mkdirSync(path.dirname(STATS_FILE), { recursive: true });
+    fs.writeFileSync(STATS_FILE, JSON.stringify(s));
+  } catch {}
+}
+
+app.post('/wipe', (_req, res) => {
+  const s = readStats();
+  s.wipes = (s.wipes || 0) + 1;
+  writeStats(s);
+  res.json(s);
+});
+
+app.get('/stats', (_req, res) => res.json(readStats()));
+// ─────────────────────────────────────────────────────────
 
 // Landing page at /, game at /play
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
@@ -244,4 +268,5 @@ io.on('connection', socket => {
 });
 
 server.listen(PORT, () => console.log(`System 32 Roulette running on :${PORT}`));
+
 
