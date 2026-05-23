@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to publish as release (e.g. v1.0.1). Leave empty to build without publishing.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -21,7 +26,14 @@ jobs:
           sudo apt-get install -y librsvg2-bin imagemagick
           mkdir -p build
           rsvg-convert -w 512 -h 512 public/favicon.svg -o build/icon.png
-          convert build/icon.png             \( -clone 0 -resize 256x256 \)             \( -clone 0 -resize 128x128 \)             \( -clone 0 -resize 64x64  \)             \( -clone 0 -resize 48x48  \)             \( -clone 0 -resize 32x32  \)             \( -clone 0 -resize 16x16  \)             -delete 0 build/icon.ico
+          convert build/icon.png \
+            \( -clone 0 -resize 256x256 \) \
+            \( -clone 0 -resize 128x128 \) \
+            \( -clone 0 -resize 64x64  \) \
+            \( -clone 0 -resize 48x48  \) \
+            \( -clone 0 -resize 32x32  \) \
+            \( -clone 0 -resize 16x16  \) \
+            -delete 0 build/icon.ico
           echo "Icons generated:"
           ls -lh build/
 
@@ -87,10 +99,11 @@ jobs:
             dist/*.exe
           if-no-files-found: error
 
-  # Create GitHub Release with all artifacts
+  # Create GitHub Release with all artifacts — only on tag push or explicit dispatch tag
   publish:
     needs: [build-linux, build-win]
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.tag != ''
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -103,6 +116,7 @@ jobs:
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
           files: release-files/**
           generate_release_notes: true
           fail_on_unmatched_files: false
