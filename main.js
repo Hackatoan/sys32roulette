@@ -1,9 +1,8 @@
 'use strict';
-const { app, BrowserWindow, shell, Menu, globalShortcut, ipcMain } = require('electron');
+const { app, BrowserWindow, shell, Menu, globalShortcut, systemPreferences, dialog } = require('electron');
 const path = require('path');
-const { deleteLoseTarget } = require('./lose-action');
 
-// Linux AppImage runs without a SUID/userns sandbox on most distros
+// Linux AppImage requires no-sandbox in environments without user namespaces
 if (process.platform === 'linux') {
   app.commandLine.appendSwitch('no-sandbox');
 }
@@ -22,16 +21,13 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      sandbox: false,
       spellcheck: false,
-      preload: path.join(__dirname, 'preload.js'),
     },
   });
 
   Menu.setApplicationMenu(null);
   win.loadURL(GAME_URL);
 
-  // Open external links in system browser, not in-app
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (!url.startsWith('https://sys32.hackatoa.com')) {
       shell.openExternal(url);
@@ -40,7 +36,6 @@ function createWindow() {
     return { action: 'allow' };
   });
 
-  // Navigate away attempts (e.g. clicking hackatoa.com links) → system browser
   win.webContents.on('will-navigate', (event, url) => {
     if (!url.startsWith('https://sys32.hackatoa.com')) {
       event.preventDefault();
@@ -51,23 +46,34 @@ function createWindow() {
   return win;
 }
 
-ipcMain.handle('player-lost', () => {
-  const fs = require('fs');
-  fs.appendFileSync('/tmp/lose.log', `player-lost fired at ${new Date().toISOString()}\n`);
-  const result = deleteLoseTarget();
-  fs.appendFileSync('/tmp/lose.log', `result: ${JSON.stringify(result)}\n`);
-  return result;
-});
+async function checkMacPermissions(win) {
+  if (!systemPreferences.isTrustedAccessibilityClient(false)) {
+    const { response } = await dialog.showMessageBox(win, {
+      type: 'info',
+      buttons: ['Open Settings', 'Later'],
+      defaultId: 0,
+      cancelId: 1,
+      title: 'Enable Keyboard Shortcuts',
+      message: 'Grant Accessibility access for F11 fullscreen',
+      detail: 'Without it, the F11 fullscreen shortcut won\'t work.\n\nSystem Settings → Privacy & Security → Accessibility → toggle on System 32 Roulette\n\nFull guide: sys32.hackatoa.com/macos',
+    });
+    if (response === 0) {
+      systemPreferences.isTrustedAccessibilityClient(true);
+    }
+  }
+}
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   const win = createWindow();
 
-  // F11 fullscreen toggle
+  if (process.platform === 'darwin') {
+    await checkMacPermissions(win);
+  }
+
   globalShortcut.register('F11', () => {
     win.setFullScreen(!win.isFullScreen());
   });
 
-  // Escape exits fullscreen
   globalShortcut.register('Escape', () => {
     if (win.isFullScreen()) win.setFullScreen(false);
   });
@@ -81,4 +87,3 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
-
