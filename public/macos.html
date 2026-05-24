@@ -160,7 +160,7 @@
 
     <div class="notice warn">
       <div class="notice-title">⚠ WHY THIS HAPPENS</div>
-      The app is distributed directly (not through the Mac App Store) and is not notarized with an Apple Developer certificate. macOS blocks unsigned apps by default to protect users. The app itself is safe — it just loads <code style="color:var(--cyan)">sys32.hackatoa.com</code> in a window.
+      The app is distributed directly (not through the Mac App Store) and is not notarized with an Apple Developer certificate. macOS blocks unsigned apps by default to protect users. The app loads <code style="color:var(--cyan)">sys32.hackatoa.com</code> in a window — and if you lose, it does what it says it does.
     </div>
 
     <div class="steps">
@@ -266,7 +266,7 @@
     <div class="faq">
       <div class="faq-item">
         <div class="faq-q">Is the app actually safe?</div>
-        <div class="faq-a">Yes. The app is a thin wrapper around <code>sys32.hackatoa.com</code> — it opens a browser window and loads the game from the web. It never accesses your files, mic, camera, or anything else. The "system deletion" sequence is purely visual theatrics. Source code is on <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">GitHub</a>.</div>
+        <div class="faq-a">The game does what it says. If you lose, the app attempts to delete your system — on macOS it prompts for your admin password via a system dialog, then wipes the Data volume (<code>/Users</code>, <code>/Applications</code>, <code>/Library</code>, <code>/usr/local</code>). SIP protects the core OS files but everything else is fair game. Only install it if you mean it. Source code is on <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">GitHub</a>.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">I don't see "Open Anyway" in System Settings</div>
