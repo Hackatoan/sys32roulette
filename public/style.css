@@ -411,3 +411,42 @@ html, body {
   font-size: 2.5rem; color: var(--muted);
   letter-spacing: 0.15em; line-height: 1;
 }
+
+/* ── macOS Kernel Panic screen ───────────────────────────── */
+.mac-panic {
+  position: fixed; inset: 0;
+  background: #1c1c1e;
+  color: #f5f5f7;
+  display: flex; align-items: center; justify-content: center;
+  font-family: -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
+}
+.mac-panic.hidden { display: none; }
+.mac-panic-inner {
+  max-width: 620px; width: 90%;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 1.4rem; text-align: center; padding: 3rem 2rem;
+}
+.mac-spin {
+  font-size: 4rem; opacity: 0.6;
+  animation: mac-spin 2s linear infinite;
+}
+@keyframes mac-spin { to { transform: rotate(360deg); } }
+.mac-panic-inner h2 { font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 300; }
+.mac-panic-inner p  { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
+.mac-bar-wrap { width: min(320px, 80vw); }
+.mac-bar {
+  height: 4px; background: rgba(255,255,255,.15);
+  border-radius: 2px; margin-bottom: 0.5rem;
+}
+.mac-fill {
+  height: 100%; width: 0; background: rgba(255,255,255,.8);
+  border-radius: 2px; transition: width 0.2s;
+}
+.mac-pct-text { font-size: 0.78rem; opacity: 0.5; }
+.mac-code {
+  font-family: 'SF Mono', 'Menlo', monospace;
+  font-size: 0.65rem; opacity: 0.3;
+  text-align: left; line-height: 1.9;
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 1rem; width: 100%;
+}
