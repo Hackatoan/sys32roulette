@@ -164,7 +164,24 @@
         </div>
       </div>
     </div>
-    <div id="lose-phase3" class="lose-reveal hidden">
+    <!-- macOS Kernel Panic -->
+  <div id="lose-phase2-mac" class="mac-panic hidden">
+    <div class="mac-panic-inner">
+      <div class="mac-spin">&#x29B5;</div>
+      <h2>Your Mac restarted because of a problem.</h2>
+      <p>To see more details, open the Console app and look at the panic log.</p>
+      <div class="mac-bar-wrap">
+        <div class="mac-bar"><div id="mac-fill" class="mac-fill"></div></div>
+        <div id="mac-pct" class="mac-pct-text">Collecting panic info... 0%</div>
+      </div>
+      <div class="mac-code">panic(cpu 0 caller 0xffffff80004a2e1c): SYS32_ROULETTE_GAME_LOSS<br>
+Backtrace: 0xffffff810a3d0 0xffffff8000232 0xffffff8000831<br>
+BSD process name: sys32roulette [terminated]<br>
+Mac OS version: you lost</div>
+    </div>
+  </div>
+
+  <div id="lose-phase3" class="lose-reveal hidden">
       <div class="reveal-icon">💀</div>
       <h1 class="reveal-title">you lost.</h1>
       <p class="reveal-sub">Playing in the browser? Your system is fine. <em>This time.</em></p>
