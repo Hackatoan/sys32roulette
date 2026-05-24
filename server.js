@@ -36,6 +36,7 @@ app.get('/stats', (_req, res) => res.json(readStats()));
 // Landing page at /, game at /play
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
 app.get('/play', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'game.html')));
+app.get('/macos', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'macos.html')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const rooms = new Map();
