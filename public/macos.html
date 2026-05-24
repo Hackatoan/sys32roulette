@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>macOS Setup — System 32 Roulette</title>
+  <meta name="description" content="How to open System 32 Roulette on macOS — bypass Gatekeeper and enable shortcuts.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    :root {
+      --bg:#060a06;--bg2:#0c140c;--green:#39ff14;--red:#ff2442;
+      --cyan:#00ffcc;--muted:#3d6b3d;--border:#1a3d1a;--text:#a8e8a8;
+      --font:'Share Tech Mono','Courier New',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;scroll-behavior:smooth;}
+    body::before{
+      content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);
+    }
+
+    nav{
+      position:sticky;top:0;z-index:100;
+      background:rgba(6,10,6,.95);border-bottom:1px solid var(--border);
+      display:flex;justify-content:space-between;align-items:center;
+      padding:.8rem 2rem;backdrop-filter:blur(8px);
+    }
+    .nav-logo{color:var(--green);font-size:.9rem;letter-spacing:.15em;text-decoration:none;text-shadow:0 0 10px var(--green);}
+    .nav-links{display:flex;gap:1.5rem;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .15s;}
+    .nav-links a:hover{color:var(--green);}
+    .nav-back{
+      background:transparent;border:1px solid var(--border);color:var(--muted);
+      font-family:var(--font);font-size:.78rem;padding:.4rem 1rem;
+      text-decoration:none;transition:all .15s;
+    }
+    .nav-back:hover{border-color:var(--green);color:var(--green);}
+
+    .hero{
+      padding:5rem 2rem 3rem;max-width:800px;margin:0 auto;
+    }
+    .hero-tag{color:var(--muted);font-size:.72rem;letter-spacing:.3em;margin-bottom:1rem;}
+    .hero-title{color:var(--green);font-size:clamp(1.8rem,5vw,3rem);font-weight:normal;margin-bottom:.6rem;}
+    .hero-sub{color:var(--muted);font-size:.88rem;max-width:600px;}
+
+    .content{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+
+    .section{margin-bottom:3rem;}
+    .sec-tag{color:var(--muted);font-size:.7rem;letter-spacing:.3em;margin-bottom:.6rem;}
+    .sec-title{color:var(--green);font-size:1.3rem;font-weight:normal;margin-bottom:1.5rem;}
+
+    .notice{
+      border:1px solid var(--border);background:var(--bg2);
+      padding:1.2rem 1.5rem;margin-bottom:2rem;font-size:.85rem;
+    }
+    .notice.warn{border-color:var(--red);background:rgba(255,36,66,.03);}
+    .notice.ok{border-color:var(--green);background:rgba(57,255,20,.03);}
+    .notice-title{font-size:.75rem;letter-spacing:.2em;margin-bottom:.4rem;}
+    .notice.warn .notice-title{color:var(--red);}
+    .notice.ok .notice-title{color:var(--green);}
+
+    .steps{display:flex;flex-direction:column;gap:1rem;}
+    .step{
+      display:flex;gap:1.2rem;
+      border:1px solid var(--border);background:var(--bg2);padding:1.2rem 1.5rem;
+    }
+    .step-num{
+      flex-shrink:0;width:2rem;height:2rem;
+      border:1px solid var(--muted);color:var(--muted);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.8rem;
+    }
+    .step-body{}
+    .step-title{color:var(--text);margin-bottom:.3rem;font-size:.95rem;}
+    .step-desc{color:var(--muted);font-size:.82rem;}
+    .step-desc kbd{
+      background:var(--bg);border:1px solid var(--border);color:var(--green);
+      font-family:var(--font);padding:.1rem .4rem;font-size:.8rem;
+    }
+    .step-desc code{color:var(--cyan);font-family:var(--font);}
+
+    .divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0;}
+
+    .method-alt{
+      border:1px dashed var(--muted);padding:1.2rem 1.5rem;margin-top:1.2rem;
+      font-size:.82rem;color:var(--muted);
+    }
+    .method-alt strong{color:var(--text);}
+
+    .screenshot-mock{
+      background:#000;border:1px solid var(--border);
+      padding:1.5rem;font-size:.8rem;color:var(--muted);
+      margin:1rem 0;position:relative;
+    }
+    .screenshot-mock::before{
+      content:'SYSTEM PREFERENCES MOCK';position:absolute;
+      top:-.7rem;left:1rem;background:var(--bg);
+      font-size:.65rem;color:var(--muted);padding:0 .5rem;letter-spacing:.15em;
+    }
+    .mock-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--border);}
+    .mock-row:last-child{border-bottom:none;}
+    .mock-app{color:var(--text);}
+    .mock-toggle{
+      width:36px;height:20px;background:var(--green);border-radius:10px;
+      display:flex;align-items:center;padding:2px;justify-content:flex-end;
+    }
+    .mock-toggle-off{justify-content:flex-start;background:var(--muted);}
+    .mock-dot{width:16px;height:16px;background:white;border-radius:50%;}
+    .mock-allow-btn{
+      border:1px solid var(--green);color:var(--green);
+      font-family:var(--font);font-size:.72rem;padding:.2rem .7rem;cursor:default;
+    }
+
+    .faq{display:flex;flex-direction:column;gap:1rem;}
+    .faq-item{border:1px solid var(--border);background:var(--bg2);}
+    .faq-q{
+      padding:1rem 1.2rem;color:var(--text);font-size:.88rem;cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .faq-q::after{content:'▾';color:var(--muted);font-size:.75rem;}
+    .faq-a{padding:0 1.2rem 1rem;color:var(--muted);font-size:.82rem;line-height:1.8;}
+    .faq-a code{color:var(--cyan);font-family:var(--font);}
+
+    a{color:var(--green);text-decoration:none;}
+    a:hover{text-decoration:underline;}
+
+    footer{
+      border-top:1px solid var(--border);background:var(--bg2);
+      padding:1.5rem 2rem;display:flex;justify-content:space-between;
+      align-items:center;font-size:.78rem;flex-wrap:wrap;gap:1rem;
+    }
+    .fbrand{color:var(--muted);}
+    .flinks{display:flex;gap:1.5rem;}
+    .flinks a{color:var(--muted);}
+    .flinks a:hover{color:var(--green);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">SYSTEM 32 ROULETTE</a>
+  <div class="nav-links">
+    <a href="/" class="nav-back">← Back to site</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// MACOS SETUP GUIDE</div>
+  <h1 class="hero-title">Running the App on macOS</h1>
+  <p class="hero-sub">The app is not signed with an Apple Developer certificate, so macOS will block it on first launch. Here's how to open it and get everything working.</p>
+</div>
+
+<div class="content">
+
+  <!-- GATEKEEPER -->
+  <div class="section" id="gatekeeper">
+    <div class="sec-tag">// STEP 1 — REQUIRED</div>
+    <h2 class="sec-title">Bypassing Gatekeeper</h2>
+
+    <div class="notice warn">
+      <div class="notice-title">⚠ WHY THIS HAPPENS</div>
+      The app is distributed directly (not through the Mac App Store) and is not notarized with an Apple Developer certificate. macOS blocks unsigned apps by default to protect users. The app itself is safe — it just loads <code style="color:var(--cyan)">sys32.hackatoa.com</code> in a window.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Download and install the DMG</div>
+          <div class="step-desc">Download the <code>.dmg</code> from <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener">GitHub Releases</a>. Open it, drag <strong>System 32 Roulette</strong> to your Applications folder.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Try to open — macOS will block it</div>
+          <div class="step-desc">Double-clicking the app shows: <em style="color:var(--red)">"System 32 Roulette cannot be opened because it is from an unidentified developer."</em> Click <kbd>OK</kbd> to dismiss.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Open System Settings → Privacy &amp; Security</div>
+          <div class="step-desc">Go to <kbd>Apple menu</kbd> → <kbd>System Settings</kbd> → <kbd>Privacy &amp; Security</kbd>. Scroll down to the Security section. You'll see:<br><br>
+            <div class="screenshot-mock">
+              <div class="mock-row">
+                <span class="mock-app">System 32 Roulette was blocked from use because it is not from an identified developer.</span>
+                <span class="mock-allow-btn">Open Anyway</span>
+              </div>
+            </div>
+            Click <kbd>Open Anyway</kbd>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Confirm in the dialog</div>
+          <div class="step-desc">macOS shows a final confirmation dialog. Click <kbd>Open</kbd>. The app opens. You only need to do this once — future launches work normally.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-alt">
+      <strong>Alternative (faster):</strong> Right-click the app in Applications → <strong>Open</strong> → <strong>Open</strong> in the dialog. Skips System Settings entirely.
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ACCESSIBILITY -->
+  <div class="section" id="accessibility">
+    <div class="sec-tag">// STEP 2 — OPTIONAL</div>
+    <h2 class="sec-title">Enable Keyboard Shortcuts (F11 Fullscreen)</h2>
+
+    <div class="notice ok">
+      <div class="notice-title">✓ THE GAME WORKS WITHOUT THIS</div>
+      This only affects the <kbd>F11</kbd> fullscreen toggle and <kbd>Escape</kbd> to exit fullscreen. If you don't use those, skip this step.
+    </div>
+
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;">Global keyboard shortcuts require Accessibility access on macOS. When you first press <kbd>F11</kbd> the app will prompt you automatically — or follow these steps manually:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Open Privacy &amp; Security → Accessibility</div>
+          <div class="step-desc">Go to <kbd>Apple menu</kbd> → <kbd>System Settings</kbd> → <kbd>Privacy &amp; Security</kbd> → <kbd>Accessibility</kbd>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Toggle on System 32 Roulette</div>
+          <div class="step-desc">Find <strong>System 32 Roulette</strong> in the list and flip the toggle on.<br><br>
+            <div class="screenshot-mock">
+              <div class="mock-row">
+                <span class="mock-app">Terminal</span>
+                <div class="mock-toggle mock-toggle-off"><div class="mock-dot"></div></div>
+              </div>
+              <div class="mock-row">
+                <span class="mock-app" style="color:var(--green)">System 32 Roulette</span>
+                <div class="mock-toggle"><div class="mock-dot"></div></div>
+              </div>
+            </div>
+            If it's not in the list yet, launch the app and press <kbd>F11</kbd> once — it will appear.
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Restart the app</div>
+          <div class="step-desc">Quit and reopen System 32 Roulette. <kbd>F11</kbd> now toggles fullscreen, <kbd>Escape</kbd> exits it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <div class="sec-tag">// FAQ</div>
+    <h2 class="sec-title">Common Questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">Is the app actually safe?</div>
+        <div class="faq-a">Yes. The app is a thin wrapper around <code>sys32.hackatoa.com</code> — it opens a browser window and loads the game from the web. It never accesses your files, mic, camera, or anything else. The "system deletion" sequence is purely visual theatrics. Source code is on <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">GitHub</a>.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">I don't see "Open Anyway" in System Settings</div>
+        <div class="faq-a">You need to attempt to open the app first (step 2) — the "Open Anyway" button only appears after macOS has blocked a specific app. Try double-clicking the app in Applications, dismiss the error dialog, then check System Settings → Privacy &amp; Security immediately.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Can I just play in the browser instead?</div>
+        <div class="faq-a">Yes — <a href="/play">sys32.hackatoa.com/play</a> works in any modern browser. The desktop app just adds a native window and fullscreen shortcuts.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Which Mac do I need — Intel or Apple Silicon?</div>
+        <div class="faq-a">The download is a universal binary — it runs natively on both Intel (x86_64) and Apple Silicon (M1/M2/M3/M4) Macs without Rosetta.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fbrand">System 32 Roulette &nbsp;·&nbsp; <a href="https://hackatoa.com">Hackatoa</a></div>
+  <div class="flinks">
+    <a href="/play">Play Now</a>
+    <a href="/">About</a>
+    <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank">Download</a>
+  </div>
+</footer>
+
+</body>
+</html>
