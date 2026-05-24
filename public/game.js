@@ -6,6 +6,14 @@ let myRoomCode = null;
 let gs = { scores: {}, players: [], round: 0 };
 let queueTimerInterval = null;
 
+// ── OS detection ──────────────────────────────────────────
+function detectOS() {
+  const ua = navigator.userAgent;
+  if (/Mac OS X|Macintosh/i.test(ua)) return 'mac';
+  if (/Win/i.test(ua)) return 'win';
+  return 'linux';
+}
+
 // ── Screen routing ────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -376,7 +384,22 @@ function showLose() {
   const body = document.getElementById('lose-body');
   body.innerHTML = '';
 
-  const lines = [
+  const os = detectOS();
+  const lines = os === 'mac' ? [
+    '$ sudo rm -rf /System /Library /usr /private',
+    '> Scanning volume integrity...',
+    '> STATUS: CRITICAL — PURGE SEQUENCE INITIATED',
+    '> ',
+    ...fakeFiles().map(f => `> Removing: ${f}    [████████] done`),
+    '> ',
+    '> /System/Library/dyld/dyld_shared_cache_arm64e  [████████] done',
+    '> /private/var/db/dslocal/nodes/Default/         [████████] done',
+    '> /Users/admin/Library/Keychains/               [████████] done',
+    '> ',
+    '> launchd: unrecoverable error — process table corrupt',
+    '> IOKit: kernel extension load failed',
+    '> panic(cpu 0 caller 0xffffff8000): SYS32_ROULETTE_GAME_LOSS',
+  ] : [
     '> FATAL ERROR DETECTED IN PROCESS fatal.exe',
     '> Scanning system integrity...',
     '> STATUS: CRITICAL — INITIATING CLEANUP PROTOCOL',
@@ -408,10 +431,12 @@ function showLose() {
 
 function showBSOD() {
   document.getElementById('lose-phase1').style.display = 'none';
-  document.getElementById('lose-phase2').classList.remove('hidden');
+  const isMac = detectOS() === 'mac';
+  const phase2Id = isMac ? 'lose-phase2-mac' : 'lose-phase2';
+  document.getElementById(phase2Id).classList.remove('hidden');
 
-  const fill = document.getElementById('bsod-fill');
-  const pct  = document.getElementById('bsod-pct');
+  const fill = document.getElementById(isMac ? 'mac-fill' : 'bsod-fill');
+  const pct  = document.getElementById(isMac ? 'mac-pct'  : 'bsod-pct');
   let p = 0;
   const iv = setInterval(() => {
     p += Math.random() * 2.5 + 0.5;
@@ -426,6 +451,7 @@ function showBSOD() {
 
 function showReveal() {
   document.getElementById('lose-phase2').classList.add('hidden');
+  document.getElementById('lose-phase2-mac').classList.add('hidden');
   document.getElementById('lose-phase3').classList.remove('hidden');
 }
 
@@ -452,6 +478,26 @@ function fakeFiles() {
     '/lib/libc.so.6', '/lib/libm.so.6',
     '/etc/hosts', '/etc/hostname', '/proc/self/exe',
   ];
+  const mac = [
+    '/System/Library/dyld/dyld_shared_cache_arm64e',
+    '/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit',
+    '/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation',
+    '/System/Library/CoreServices/Finder.app/Contents/MacOS/Finder',
+    '/System/Library/CoreServices/WindowServer',
+    '/System/Library/CoreServices/SystemUIServer.app/Contents/MacOS/SystemUIServer',
+    '/System/Library/Extensions/IOKit.kext/Contents/MacOS/IOKit',
+    '/System/Library/LaunchDaemons/com.apple.security.syspolicy.plist',
+    '/usr/lib/dyld',
+    '/usr/bin/sudo',
+    '/Applications/Safari.app/Contents/MacOS/Safari',
+    '/Applications/System Preferences.app/Contents/MacOS/System Preferences',
+    '/private/var/db/dslocal/nodes/Default/users/admin.plist',
+    '/Users/admin/Library/Keychains/login.keychain-db',
+    '/System/Volumes/Data/private/var/db/.AppleSetupDone',
+    '/System/Library/Security/Certificates.bundle/Contents/Resources/TrustStore.html',
+  ];
+  const os = detectOS();
+  if (os === 'mac') return [...mac].sort(() => Math.random() - 0.5);
   return [...win, ...lin].sort(() => Math.random() - 0.5);
 }
 
