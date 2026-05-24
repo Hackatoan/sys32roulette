@@ -1,103 +1,162 @@
-name: Build & Release
+name: Release Desktop App
 
 on:
   push:
-    branches: [main]
-    paths:
-      - 'main.js'
-      - 'preload.js'
-      - 'lose-action.js'
-      - 'package.json'
-      - '.github/workflows/release.yml'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to publish as release (e.g. v1.0.1). Leave empty to build without publishing.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
 
 jobs:
-  tag:
+  # Generate PNG + ICO on Ubuntu, shared with Linux + Windows builds
+  icons:
     runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.bump.outputs.new_tag }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - id: bump
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git fetch --tags --force
-          latest=$(git tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
-          if [ -z "$latest" ]; then
-            new_tag="v1.0.0"
-          else
-            IFS='.' read -r major minor patch <<< "${latest#v}"
-            new_tag="v${major}.${minor}.$((patch+1))"
-          fi
-          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag "$new_tag"
-          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$new_tag"
 
+      - name: Generate PNG + ICO from SVG
+        run: |
+          sudo apt-get install -y librsvg2-bin imagemagick
+          mkdir -p build
+          rsvg-convert -w 512 -h 512 public/favicon.svg -o build/icon.png
+          convert build/icon.png \
+            \( -clone 0 -resize 256x256 \) \
+            \( -clone 0 -resize 128x128 \) \
+            \( -clone 0 -resize 64x64  \) \
+            \( -clone 0 -resize 48x48  \) \
+            \( -clone 0 -resize 32x32  \) \
+            \( -clone 0 -resize 16x16  \) \
+            -delete 0 build/icon.ico
+          echo "Icons generated:"
+          ls -lh build/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: icons
+          path: build/
+
+  # Build Linux (.AppImage, .deb)
   build-linux:
-    needs: tag
+    needs: icons
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: icons
+          path: build/
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - run: npm install
-      - run: npm run build:linux
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Linux
+        run: npx electron-builder --linux --publish=never
+
       - uses: actions/upload-artifact@v4
         with:
-          name: linux
-          path: dist/Sys32Roulette-x64.*
+          name: dist-linux
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+          if-no-files-found: error
 
-  build-windows:
-    needs: tag
+  # Build Windows (.exe installer + portable)
+  build-win:
+    needs: icons
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: icons
+          path: build/
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - run: npm install
-      - run: npm run build:win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Windows
+        run: npx electron-builder --win --publish=never
+
       - uses: actions/upload-artifact@v4
         with:
-          name: windows
-          path: dist/Sys32Roulette-*.exe
+          name: dist-win
+          path: |
+            dist/*.exe
+          if-no-files-found: error
 
-  release:
-    needs: [tag, build-linux, build-windows]
+  # Build macOS (universal DMG — Intel + Apple Silicon)
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate .icns from SVG
+        run: |
+          brew install librsvg
+          mkdir -p build build/icon.iconset
+          rsvg-convert -w 1024 -h 1024 public/favicon.svg -o /tmp/icon1024.png
+          sips -z 16   16   /tmp/icon1024.png --out build/icon.iconset/icon_16x16.png
+          sips -z 32   32   /tmp/icon1024.png --out build/icon.iconset/icon_16x16@2x.png
+          sips -z 32   32   /tmp/icon1024.png --out build/icon.iconset/icon_32x32.png
+          sips -z 64   64   /tmp/icon1024.png --out build/icon.iconset/icon_32x32@2x.png
+          sips -z 128  128  /tmp/icon1024.png --out build/icon.iconset/icon_128x128.png
+          sips -z 256  256  /tmp/icon1024.png --out build/icon.iconset/icon_128x128@2x.png
+          sips -z 256  256  /tmp/icon1024.png --out build/icon.iconset/icon_256x256.png
+          sips -z 512  512  /tmp/icon1024.png --out build/icon.iconset/icon_256x256@2x.png
+          sips -z 512  512  /tmp/icon1024.png --out build/icon.iconset/icon_512x512.png
+          cp /tmp/icon1024.png build/icon.iconset/icon_512x512@2x.png
+          iconutil -c icns build/icon.iconset -o build/icon.icns
+          echo "icon.icns generated:"
+          ls -lh build/icon.icns
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+
+      - name: Build macOS
+        run: npx electron-builder --mac --publish=never
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-mac
+          path: dist/*.dmg
+          if-no-files-found: error
+
+  # Create GitHub Release — only on tag push or explicit dispatch tag
+  publish:
+    needs: [build-linux, build-win, build-mac]
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event.inputs.tag != ''
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: artifacts
-      - uses: softprops/action-gh-release@v2
+          merge-multiple: true
+          path: release-files
+
+      - name: List release files
+        run: ls -lh release-files/
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.tag.outputs.new_tag }}
-          name: System 32 Roulette ${{ needs.tag.outputs.new_tag }}
-          body: |
-            ## System 32 Roulette ${{ needs.tag.outputs.new_tag }}
-
-            **Windows** — UAC admin prompt on launch
-            - `Sys32Roulette-Setup-x64.exe` — installer
-            - `Sys32Roulette-Portable-x64.exe` — no install needed
-
-            **Linux**
-            - `Sys32Roulette-x64.AppImage` — run anywhere, `chmod +x` first
-            - `Sys32Roulette-x64.deb` — Debian/Ubuntu
-          files: |
-            artifacts/linux/*
-            artifacts/windows/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: release-files/**
+          generate_release_notes: true
+          fail_on_unmatched_files: false
