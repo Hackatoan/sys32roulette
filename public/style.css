@@ -406,6 +406,197 @@ html, body {
 
 .hidden { display: none !important; }
 
+/* ── REACTION GAME ───────────────────────────────────────── */
+.reaction-status {
+  font-size: 1.1rem; color: var(--muted); letter-spacing: 0.15em; text-align: center;
+}
+.reaction-btn {
+  width: 180px; height: 180px; border-radius: 50%;
+  font-family: var(--font); font-size: 1.4rem; letter-spacing: 0.15em;
+  cursor: pointer; border: 3px solid var(--muted); background: var(--bg2);
+  color: var(--muted); transition: all 0.1s;
+}
+.reaction-btn.reaction-wait {
+  border-color: var(--muted); color: var(--muted); background: var(--bg2);
+  animation: reaction-pulse 1.5s ease-in-out infinite;
+}
+.reaction-btn.reaction-go {
+  border-color: var(--green); color: var(--green); background: var(--green-dim);
+  box-shadow: 0 0 40px var(--green), 0 0 80px rgba(57,255,20,.3);
+  animation: none;
+}
+.reaction-btn:disabled { opacity: 0.4; cursor: default; }
+@keyframes reaction-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(57,255,20,0); }
+  50% { box-shadow: 0 0 0 12px rgba(57,255,20,.1); }
+}
+.reaction-result { color: var(--cyan); font-size: 0.85rem; min-height: 1.2rem; }
+
+/* ── MATH GAME ───────────────────────────────────────────── */
+.quiz-progress { color: var(--cyan); font-size: 1.1rem; letter-spacing: 0.1em; }
+.math-problem {
+  font-size: clamp(2rem, 6vw, 4rem); color: var(--green);
+  text-shadow: 0 0 20px var(--green); letter-spacing: 0.05em;
+}
+.quiz-feedback { font-size: 1.1rem; min-height: 1.4rem; letter-spacing: 0.1em; }
+.fb-ok  { color: var(--green); }
+.fb-err { color: var(--red); }
+.math-input {
+  background: var(--bg2); border: none; border-bottom: 2px solid var(--green);
+  color: var(--green); font-family: var(--font); font-size: 2rem;
+  padding: 0.5rem 1rem; width: min(220px, 80vw); outline: none;
+  text-align: center; letter-spacing: 0.1em;
+}
+.math-input:focus { border-bottom-color: var(--cyan); }
+.math-input:disabled { opacity: 0.4; }
+
+/* ── ORDER GAME ──────────────────────────────────────────── */
+.order-next {
+  color: var(--muted); font-size: 0.85rem; letter-spacing: 0.2em;
+}
+.order-next span { color: var(--green); font-size: 1.4rem; margin-left: 0.3rem; }
+.order-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem; width: min(320px, 80vw);
+}
+.oc {
+  aspect-ratio: 1; background: var(--bg2); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; color: var(--text); cursor: pointer;
+  transition: all 0.1s; border-radius: 4px;
+}
+.oc:hover { border-color: var(--green); color: var(--green); }
+.oc.oc-done { background: var(--green-dim); border-color: var(--green); color: var(--green); opacity: 0.5; }
+.oc.oc-wrong { border-color: var(--red); color: var(--red); }
+
+/* ── SCRAMBLE GAME ───────────────────────────────────────── */
+.scramble-word {
+  font-size: clamp(2rem, 7vw, 4rem); color: var(--yellow);
+  text-shadow: 0 0 20px var(--yellow); letter-spacing: 0.35em;
+}
+
+/* ── WHACK GAME ──────────────────────────────────────────── */
+.whack-arena {
+  position: relative; width: min(600px, 92vw); flex: 1;
+  max-height: 280px; border: 1px solid var(--border);
+  background: var(--bg2); overflow: hidden; border-radius: 4px;
+}
+.process-pill {
+  position: absolute; background: var(--red);
+  color: #fff; font-family: var(--font); font-size: 0.72rem;
+  padding: 0.35rem 0.7rem; cursor: pointer; border-radius: 3px;
+  white-space: nowrap; transition: transform 0.05s;
+  animation: pill-pop 0.15s ease-out;
+  user-select: none;
+}
+.process-pill:hover { transform: scale(1.06); }
+.process-pill:active { transform: scale(0.94); }
+@keyframes pill-pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* ── BINARY GAME ─────────────────────────────────────────── */
+.binary-value {
+  font-size: clamp(1.8rem, 5vw, 3.5rem); color: var(--green);
+  text-shadow: 0 0 20px var(--green); letter-spacing: 0.3em;
+  font-family: var(--font);
+}
+.binary-choices { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+.binary-btn { min-width: 80px; padding: 0.6rem 1.2rem; font-size: 1.1rem; }
+
+/* ── STROOP GAME ─────────────────────────────────────────── */
+.stroop-word {
+  font-size: clamp(3rem, 10vw, 6rem); font-weight: normal;
+  letter-spacing: 0.05em; text-shadow: 0 0 20px currentColor;
+}
+.stroop-choices { display: flex; gap: 1rem; }
+.stroop-btn {
+  width: 70px; height: 70px; border: none; border-radius: 8px;
+  cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.1);
+}
+.stroop-btn:hover { transform: scale(1.1); box-shadow: 0 0 16px rgba(255,255,255,.3); }
+.stroop-btn:active { transform: scale(0.94); }
+.stroop-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+/* ── HOLD GAME ───────────────────────────────────────────── */
+.hold-target-label { color: var(--muted); font-size: 0.75rem; letter-spacing: 0.2em; }
+.hold-target {
+  font-size: clamp(3rem, 8vw, 5rem); color: var(--cyan);
+  text-shadow: 0 0 20px var(--cyan); letter-spacing: 0.05em;
+}
+.hold-btn {
+  width: 200px; height: 200px; border-radius: 50%;
+  font-family: var(--font); font-size: 1.2rem; letter-spacing: 0.2em;
+  cursor: pointer; border: 3px solid var(--green); background: var(--bg2);
+  color: var(--green); transition: all 0.1s; user-select: none;
+  -webkit-user-select: none;
+}
+.hold-btn.hold-active {
+  background: var(--green-mid); border-color: var(--green);
+  box-shadow: 0 0 30px var(--green), inset 0 0 20px rgba(57,255,20,.15);
+  color: var(--green);
+}
+.hold-btn:disabled { opacity: 0.4; cursor: default; }
+.hold-elapsed { font-size: 1.5rem; color: var(--yellow); min-height: 2rem; letter-spacing: 0.1em; }
+.hold-status { color: var(--muted); font-size: 0.82rem; min-height: 1.2rem; }
+
+/* ── AIM GAME ────────────────────────────────────────────── */
+.aim-arena {
+  position: relative; width: min(600px, 92vw); flex: 1;
+  max-height: 280px; border: 1px solid var(--border);
+  background: var(--bg2); overflow: hidden; border-radius: 4px;
+}
+.aim-target {
+  position: absolute; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.2rem; color: var(--red); cursor: crosshair;
+  text-shadow: 0 0 12px var(--red); transition: left 0.08s, top 0.08s;
+  user-select: none; -webkit-user-select: none;
+}
+.aim-target:hover { color: var(--yellow); text-shadow: 0 0 16px var(--yellow); }
+
+/* ── SIMON GAME ──────────────────────────────────────────── */
+.simon-chips {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;
+  max-width: 360px;
+}
+.simon-chip {
+  width: 44px; height: 44px; border: 2px solid var(--border);
+  background: var(--bg2); display: flex; align-items: center;
+  justify-content: center; font-size: 1rem; color: var(--muted);
+  border-radius: 4px; letter-spacing: 0;
+}
+.simon-chip-active { border-color: var(--yellow); color: var(--yellow); background: rgba(255,215,0,.1); box-shadow: 0 0 12px var(--yellow); }
+.simon-chip-ok     { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+.simon-chip-wrong  { border-color: var(--red);    color: var(--red);    background: rgba(255,36,66,.1); }
+.simon-label { color: var(--muted); font-size: 0.8rem; letter-spacing: 0.15em; }
+.simon-btns { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.simon-row { display: flex; gap: 0.4rem; }
+.simon-key {
+  width: 60px; height: 60px; background: var(--bg2);
+  border: 2px solid var(--border); color: var(--text);
+  font-family: var(--font); font-size: 1.1rem; cursor: pointer;
+  transition: all 0.1s; border-radius: 4px;
+}
+.simon-key:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); }
+.simon-key:disabled { opacity: 0.3; cursor: default; }
+.simon-key-flash { background: var(--cyan) !important; border-color: var(--cyan) !important; color: var(--bg) !important; }
+.simon-progress { color: var(--cyan); font-size: 0.9rem; letter-spacing: 0.1em; }
+
+/* ── COUNTDOWN GAME ──────────────────────────────────────── */
+.countdown-race-timer {
+  font-size: clamp(3.5rem, 10vw, 7rem); color: var(--green);
+  text-shadow: 0 0 30px var(--green); letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── PIPES GAME ──────────────────────────────────────────── */
+.pipes-display {
+  background: #000; border: 1px solid var(--border);
+  padding: 0.9rem 1.4rem; font-size: clamp(0.85rem, 2.5vw, 1.2rem);
+  color: var(--green); letter-spacing: 0.04em;
+  max-width: 620px; width: 100%; word-break: break-all;
+}
+
 /* ── Queue screen ────────────────────────────────────── */
 .queue-timer {
   font-size: 2.5rem; color: var(--muted);

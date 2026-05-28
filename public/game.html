@@ -76,7 +76,7 @@
   <!-- ACTIVE GAME -->
   <div id="s-game" class="screen">
     <div class="game-header">
-      <div class="round-tag">ROUND <span id="round-num">1</span>/3</div>
+      <div class="round-tag">ROUND <span id="round-num">1</span>/<span id="round-total">5</span></div>
       <div class="game-badge" id="game-badge">—</div>
       <div class="score-row">
         <span class="sc-you">YOU <span id="sc-you">0</span></span>
@@ -110,6 +110,127 @@
       <div class="mem-timer-bar"><div id="mem-fill" class="mem-fill"></div></div>
       <div class="mem-grid" id="mem-grid"></div>
       <button id="mem-submit" class="btn btn-primary hidden" onclick="submitMemory()">SUBMIT ANSWER</button>
+    </div>
+
+    <!-- REACTION: KERNEL PANIC -->
+    <div id="mg-reaction" class="minigame hidden">
+      <div class="mg-label">CLICK WHEN THE SIGNAL FIRES — EARLY CLICK FORFEITS THE ROUND</div>
+      <div id="reaction-status" class="reaction-status">STANDBY...</div>
+      <button id="reaction-btn" class="reaction-btn" onclick="doReactionClick()">CLICK</button>
+      <div id="reaction-result" class="reaction-result"></div>
+    </div>
+
+    <!-- MATH: HASH COLLISION -->
+    <div id="mg-math" class="minigame hidden">
+      <div class="mg-label">SOLVE MATH PROBLEMS — FIRST TO 5 CORRECT WINS</div>
+      <div id="math-progress" class="quiz-progress">0 / 5</div>
+      <div id="math-problem" class="math-problem">...</div>
+      <div id="math-feedback" class="quiz-feedback"></div>
+      <input id="math-input" class="math-input" type="number" autocomplete="off" placeholder="answer">
+      <button class="btn btn-primary" onclick="submitMath()">SUBMIT</button>
+    </div>
+
+    <!-- ORDER: STACK SORT -->
+    <div id="mg-order" class="minigame hidden">
+      <div class="mg-label">CLICK NUMBERS IN ORDER — FIRST TO SORT THE STACK WINS</div>
+      <div class="order-next">NEXT: <span id="order-next-num">1</span></div>
+      <div class="order-grid" id="order-grid"></div>
+    </div>
+
+    <!-- SCRAMBLE: BUFFER DECODE -->
+    <div id="mg-scramble" class="minigame hidden">
+      <div class="mg-label">UNSCRAMBLE THE COMMAND — FIRST TO TYPE IT CORRECTLY WINS</div>
+      <div id="scramble-word" class="scramble-word"></div>
+      <input id="scramble-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="type the unscrambled word...">
+      <div id="scramble-feedback" class="quiz-feedback"></div>
+      <button class="btn btn-primary" onclick="submitScramble()">SUBMIT</button>
+    </div>
+
+    <!-- WHACK: PROCESS KILL -->
+    <div id="mg-whack" class="minigame hidden">
+      <div class="mg-label">KILL PROCESSES BEFORE THEY ESCAPE — MOST KILLS IN 12s WINS</div>
+      <div class="click-hud">
+        <div class="click-timer-bar"><div id="whack-fill" class="click-fill"></div></div>
+        <div class="click-counter">KILLS: <span id="whack-count">0</span></div>
+      </div>
+      <div class="whack-arena" id="whack-arena"></div>
+    </div>
+
+    <!-- BINARY: BIT FLIP -->
+    <div id="mg-binary" class="minigame hidden">
+      <div class="mg-label">CONVERT BINARY TO DECIMAL — FIRST TO 5 CORRECT WINS</div>
+      <div id="binary-progress" class="quiz-progress">0 / 5</div>
+      <div id="binary-value" class="binary-value"></div>
+      <div id="binary-choices" class="binary-choices"></div>
+      <div id="binary-feedback" class="quiz-feedback"></div>
+    </div>
+
+    <!-- STROOP: MEMORY CORRUPTION -->
+    <div id="mg-stroop" class="minigame hidden">
+      <div class="mg-label">CLICK THE COLOR THE TEXT IS DRAWN IN — NOT WHAT THE WORD SAYS — FIRST TO 5 WINS</div>
+      <div id="stroop-progress" class="quiz-progress">0 / 5</div>
+      <div id="stroop-word" class="stroop-word"></div>
+      <div id="stroop-choices" class="stroop-choices"></div>
+      <div id="stroop-feedback" class="quiz-feedback"></div>
+    </div>
+
+    <!-- HOLD: PRECISION TIMING -->
+    <div id="mg-hold" class="minigame hidden">
+      <div class="mg-label">HOLD THE BUTTON FOR EXACTLY THE TARGET DURATION — CLOSEST WINS</div>
+      <div class="hold-target-label">TARGET</div>
+      <div id="hold-target-display" class="hold-target">0.0s</div>
+      <button id="hold-btn" class="hold-btn"
+        onmousedown="holdStart(event)" onmouseup="holdEnd(event)"
+        ontouchstart="holdStart(event)" ontouchend="holdEnd(event)">HOLD</button>
+      <div id="hold-elapsed" class="hold-elapsed"></div>
+      <div id="hold-status" class="hold-status"></div>
+    </div>
+
+    <!-- AIM: TARGET LOCK -->
+    <div id="mg-aim" class="minigame hidden">
+      <div class="mg-label">CLICK THE TARGET — MOST HITS IN 12s WINS</div>
+      <div class="click-hud">
+        <div class="click-timer-bar"><div id="aim-fill" class="click-fill"></div></div>
+        <div class="click-counter">HITS: <span id="aim-count">0</span></div>
+      </div>
+      <div class="aim-arena" id="aim-arena">
+        <div class="aim-target" id="aim-target">◉</div>
+      </div>
+    </div>
+
+    <!-- SIMON: INTERRUPT VECTOR -->
+    <div id="mg-simon" class="minigame hidden">
+      <div class="mg-label">MEMORIZE THE SEQUENCE — REPRODUCE IT USING W/A/S/D — FIRST CORRECT WINS</div>
+      <div id="simon-chips" class="simon-chips"></div>
+      <div id="simon-label" class="simon-label">MEMORIZING...</div>
+      <div class="simon-btns">
+        <div class="simon-row">
+          <button class="simon-key" id="sk-W" onclick="simonPress('W')">W</button>
+        </div>
+        <div class="simon-row">
+          <button class="simon-key" id="sk-A" onclick="simonPress('A')">A</button>
+          <button class="simon-key" id="sk-S" onclick="simonPress('S')">S</button>
+          <button class="simon-key" id="sk-D" onclick="simonPress('D')">D</button>
+        </div>
+      </div>
+      <div id="simon-progress" class="simon-progress">0 / 6</div>
+    </div>
+
+    <!-- COUNTDOWN: RACE CONDITION -->
+    <div id="mg-countdown" class="minigame hidden">
+      <div class="mg-label">CLICK STOP WHEN THE TIMER REACHES ZERO — CLOSEST WINS</div>
+      <div id="countdown-race-timer" class="countdown-race-timer">10.000</div>
+      <button id="countdown-stop-btn" class="btn btn-primary" onclick="doCountdownStop()">STOP</button>
+      <div id="countdown-stop-result" class="hold-status"></div>
+    </div>
+
+    <!-- PIPES: PIPE REDIRECT -->
+    <div id="mg-pipes" class="minigame hidden">
+      <div class="mg-label">WHAT DOES THIS COMMAND OUTPUT? — FIRST CORRECT ANSWER WINS</div>
+      <div id="pipes-display" class="pipes-display"></div>
+      <input id="pipes-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="output...">
+      <div id="pipes-feedback" class="quiz-feedback"></div>
+      <button class="btn btn-primary" onclick="submitPipes()">SUBMIT</button>
     </div>
   </div>
 
@@ -165,23 +286,23 @@
       </div>
     </div>
     <!-- macOS Kernel Panic -->
-  <div id="lose-phase2-mac" class="mac-panic hidden">
-    <div class="mac-panic-inner">
-      <div class="mac-spin">&#x29B5;</div>
-      <h2>Your Mac restarted because of a problem.</h2>
-      <p>To see more details, open the Console app and look at the panic log.</p>
-      <div class="mac-bar-wrap">
-        <div class="mac-bar"><div id="mac-fill" class="mac-fill"></div></div>
-        <div id="mac-pct" class="mac-pct-text">Collecting panic info... 0%</div>
-      </div>
-      <div class="mac-code">panic(cpu 0 caller 0xffffff80004a2e1c): SYS32_ROULETTE_GAME_LOSS<br>
+    <div id="lose-phase2-mac" class="mac-panic hidden">
+      <div class="mac-panic-inner">
+        <div class="mac-spin">&#x29B5;</div>
+        <h2>Your Mac restarted because of a problem.</h2>
+        <p>To see more details, open the Console app and look at the panic log.</p>
+        <div class="mac-bar-wrap">
+          <div class="mac-bar"><div id="mac-fill" class="mac-fill"></div></div>
+          <div id="mac-pct" class="mac-pct-text">Collecting panic info... 0%</div>
+        </div>
+        <div class="mac-code">panic(cpu 0 caller 0xffffff80004a2e1c): SYS32_ROULETTE_GAME_LOSS<br>
 Backtrace: 0xffffff810a3d0 0xffffff8000232 0xffffff8000831<br>
 BSD process name: sys32roulette [terminated]<br>
 Mac OS version: you lost</div>
+      </div>
     </div>
-  </div>
 
-  <div id="lose-phase3" class="lose-reveal hidden">
+    <div id="lose-phase3" class="lose-reveal hidden">
       <div class="reveal-icon">💀</div>
       <h1 class="reveal-title">you lost.</h1>
       <p class="reveal-sub">Playing in the browser? Your system is fine. <em>This time.</em></p>
@@ -232,4 +353,3 @@ Mac OS version: you lost</div>
   </script>
 </body>
 </html>
-
