@@ -159,6 +159,7 @@
     <!-- BINARY: BIT FLIP -->
     <div id="mg-binary" class="minigame hidden">
       <div class="mg-label">CONVERT BINARY TO DECIMAL — FIRST TO 5 CORRECT WINS</div>
+      <div class="mg-tip">💡 Each bit is a power of 2 from right: 8·4·2·1 — e.g. 1011 = 8+2+1 = 11</div>
       <div id="binary-progress" class="quiz-progress">0 / 5</div>
       <div id="binary-value" class="binary-value"></div>
       <div id="binary-choices" class="binary-choices"></div>
@@ -167,7 +168,8 @@
 
     <!-- STROOP: MEMORY CORRUPTION -->
     <div id="mg-stroop" class="minigame hidden">
-      <div class="mg-label">CLICK THE COLOR THE TEXT IS DRAWN IN — NOT WHAT THE WORD SAYS — FIRST TO 5 WINS</div>
+      <div class="mg-label">MATCH THE COLOR — CLICK THE COLOR THE TEXT IS <em>DRAWN IN</em>, NOT WHAT THE WORD SAYS</div>
+      <div class="mg-tip">💡 Ignore the word — click the button matching the ink color</div>
       <div id="stroop-progress" class="quiz-progress">0 / 5</div>
       <div id="stroop-word" class="stroop-word"></div>
       <div id="stroop-choices" class="stroop-choices"></div>
@@ -247,11 +249,11 @@
   <!-- WIN -->
   <div id="s-win" class="screen">
     <div class="end-content">
-      <div class="end-icon">💀</div>
-      <h1 class="end-title glitch" data-text="SYSTEM DELETED">SYSTEM DELETED</h1>
-      <p class="end-sub">Your opponent's system has been wiped from existence.</p>
+      <div class="end-icon">✅</div>
+      <h1 class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED">ENEMY SYSTEM DELETED</h1>
+      <p class="end-sub end-sub-win">You survived. The other system was wiped.</p>
       <div class="win-terminal" id="win-terminal"></div>
-      <p class="end-real">You win. GG.</p>
+      <p class="end-real" style="color:var(--green)">YOUR SYSTEM: INTACT — GG.</p>
       <div class="end-btns">
         <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
         <button class="btn btn-ghost" onclick="location.href='/'">Main Menu</button>

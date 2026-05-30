@@ -628,6 +628,7 @@ socket.on('stroop-question', ({ word, displayColor, choices, qnum, target, corre
     btn.className = 'stroop-btn';
     btn.style.background = STROOP_CSS[c];
     btn.title = c;
+    btn.textContent = c;
     btn.onclick = () => {
       choicesEl.querySelectorAll('button').forEach(b => b.disabled = true);
       socket.emit('stroop-answer', { choice: c });

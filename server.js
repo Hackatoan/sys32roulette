@@ -215,9 +215,7 @@ function startMinigame(room) {
     room.gameData.progress = Object.fromEntries(room.players.map(p => [p, 0]));
     room.gameData.questions = {};
     room.players.forEach(pid => {
-      const q = makeMathQ();
-      room.gameData.questions[pid] = q;
-      io.to(pid).emit('math-question', { ...q, qnum: 1, target: TARGET });
+      room.gameData.questions[pid] = makeMathQ();
     });
     clearTimeout(room.timer);
     room.timer = setTimeout(() => {
@@ -269,9 +267,7 @@ function startMinigame(room) {
     room.gameData.progress = Object.fromEntries(room.players.map(p => [p, 0]));
     room.gameData.questions = {};
     room.players.forEach(pid => {
-      const q = makeBinaryQ();
-      room.gameData.questions[pid] = q;
-      io.to(pid).emit('binary-question', { ...q, qnum: 1, target: TARGET });
+      room.gameData.questions[pid] = makeBinaryQ();
     });
     clearTimeout(room.timer);
     room.timer = setTimeout(() => {
@@ -288,9 +284,7 @@ function startMinigame(room) {
     room.gameData.progress = Object.fromEntries(room.players.map(p => [p, 0]));
     room.gameData.questions = {};
     room.players.forEach(pid => {
-      const q = makeStroopQ();
-      room.gameData.questions[pid] = q;
-      io.to(pid).emit('stroop-question', { ...q, qnum: 1, target: TARGET, choices: shuffle([...STROOP_COLORS]) });
+      room.gameData.questions[pid] = makeStroopQ();
     });
     clearTimeout(room.timer);
     room.timer = setTimeout(() => {
@@ -371,10 +365,26 @@ function startMinigame(room) {
     }, 25000);
   }
 
+  // Emit minigame-start FIRST so the client sets up the UI, then send per-player questions.
+  // This prevents startMath/startBinary/startStroop from wiping the question that arrived early.
   io.to(room.id).emit('minigame-start', payload);
 
-  // Emit per-player questions after the minigame-start for question-based games
-  // (already emitted above for math, binary, stroop via individual io.to(pid))
+  if (type === 'math') {
+    room.players.forEach(pid => {
+      const q = room.gameData.questions[pid];
+      io.to(pid).emit('math-question', { ...q, qnum: 1, target: room.gameData.target });
+    });
+  } else if (type === 'binary') {
+    room.players.forEach(pid => {
+      const q = room.gameData.questions[pid];
+      io.to(pid).emit('binary-question', { ...q, qnum: 1, target: room.gameData.target });
+    });
+  } else if (type === 'stroop') {
+    room.players.forEach(pid => {
+      const q = room.gameData.questions[pid];
+      io.to(pid).emit('stroop-question', { ...q, qnum: 1, target: room.gameData.target, choices: shuffle([...STROOP_COLORS]) });
+    });
+  }
 }
 
 function endMinigame(room, winnerId, extra = {}) {

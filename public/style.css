@@ -222,6 +222,11 @@ html, body {
   color: var(--muted); font-size: 0.75rem;
   letter-spacing: 0.15em; text-align: center; max-width: 600px;
 }
+.mg-tip {
+  color: var(--cyan); font-size: 0.72rem;
+  letter-spacing: 0.05em; text-align: center; max-width: 560px;
+  opacity: 0.75;
+}
 
 /* ── TYPING GAME ─────────────────────────────────────── */
 .typing-target {
@@ -327,7 +332,11 @@ html, body {
   font-size: clamp(2rem, 7vw, 4.5rem); font-weight: normal;
   color: var(--green); text-shadow: 0 0 30px var(--green); letter-spacing: 0.08em;
 }
+.end-title-win {
+  color: var(--green); text-shadow: 0 0 40px var(--green), 0 0 80px var(--green);
+}
 .end-sub  { color: var(--muted); font-size: 1rem; }
+.end-sub-win { color: var(--green); opacity: 0.85; font-size: 1.1rem; }
 .end-real { color: var(--cyan); font-size: 1.1rem; }
 .end-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 0.5rem; }
 
@@ -509,9 +518,11 @@ html, body {
 }
 .stroop-choices { display: flex; gap: 1rem; }
 .stroop-btn {
-  width: 70px; height: 70px; border: none; border-radius: 8px;
+  width: 90px; height: 70px; border: none; border-radius: 8px;
   cursor: pointer; transition: transform 0.1s, box-shadow 0.1s;
   box-shadow: 0 0 0 2px rgba(255,255,255,.1);
+  font-family: var(--font); font-size: 0.7rem; letter-spacing: 0.1em;
+  color: rgba(0,0,0,0.65); font-weight: bold;
 }
 .stroop-btn:hover { transform: scale(1.1); box-shadow: 0 0 16px rgba(255,255,255,.3); }
 .stroop-btn:active { transform: scale(0.94); }
