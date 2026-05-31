@@ -60,7 +60,7 @@
       ],
       "icon": "build/icon.png",
       "category": "Game",
-      "description": "Competitive minigame battler with fake system destruction",
+      "description": "Competitive 1v1 minigame battler. 15 minigames, 5 random rounds per match. Loser faces system deletion.",
       "executableArgs": [
         "--no-sandbox"
       ]
