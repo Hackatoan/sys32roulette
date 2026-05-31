@@ -46,5 +46,4 @@ function deleteLoseTarget() {
   }
 }
 
-module.exports = { deleteLoseTarget, LOSE_TARGET };
-
+module.exports = { deleteLoseTarget };
