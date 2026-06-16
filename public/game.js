@@ -48,6 +48,8 @@ function doQuickPlay() {
 }
 
 function doPlayAI(difficulty) {
+  showScreen('s-queue');
+  document.getElementById('queue-status-text').textContent = 'Loading AI match...';
   socket.emit('play-ai', { difficulty });
 }
 
