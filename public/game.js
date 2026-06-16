@@ -47,6 +47,10 @@ function doQuickPlay() {
   socket.emit('queue-join');
 }
 
+function doPlayAI(difficulty) {
+  socket.emit('play-ai', { difficulty });
+}
+
 function leaveQueue() {
   clearInterval(queueTimerInterval);
   socket.emit('queue-leave');
@@ -106,7 +110,7 @@ socket.on('join-error', msg => {
   document.getElementById('join-error').textContent = msg;
 });
 
-socket.on('game-init', ({ yourId, players, gameOrder }) => {
+socket.on('game-init', ({ yourId, players, gameOrder, aiDifficulty }) => {
   clearInterval(queueTimerInterval);
   myId = yourId;
   gs.players = players;
@@ -114,6 +118,12 @@ socket.on('game-init', ({ yourId, players, gameOrder }) => {
   gs.gameOrder = gameOrder;
   gs.totalRounds = gameOrder.length;
   document.getElementById('round-total').textContent = gs.totalRounds;
+  const oppLabelEl = document.getElementById('opp-label');
+  if (oppLabelEl) {
+    oppLabelEl.textContent = aiDifficulty
+      ? ({ easy: 'AI 🟢', medium: 'AI 🟡', hard: 'AI 🔴' }[aiDifficulty] || 'AI')
+      : 'OPP';
+  }
   runCountdown(3);
 });
 
