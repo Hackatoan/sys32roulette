@@ -888,7 +888,7 @@ io.on('connection', socket => {
     rooms.set(code, room);
     socket.roomCode = code;
     socket.join(code);
-    io.to(socket.id).emit('game-init', {
+    socket.emit('game-init', {
       yourId: socket.id, players: room.players,
       gameOrder: room.gameOrder, aiDifficulty: diff,
     });
