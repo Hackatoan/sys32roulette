@@ -149,6 +149,177 @@ function makeSimonSeq(len = 6) {
   return Array.from({ length: len }, () => keys[Math.floor(Math.random() * 4)]);
 }
 
+// ── AI opponent ───────────────────────────────────────────
+const AI_ID = 'AI';
+
+const AI_CFG = {
+  easy:   { typingMs:[16000,22000], reactionMs:[1600,2600], mathMs:[7000,12000], mathAcc:0.5,
+            orderMs:[14000,22000], scrambleMs:[18000,28000], holdErr:[700,1400], aimScore:[2,5],
+            clickScore:[5,10], whackScore:[4,9], binaryMs:[9000,15000], binaryAcc:0.5,
+            stroopMs:[9000,15000], stroopAcc:0.5, memCorrect:[5,9], simonMs:[20000,30000],
+            countdownErr:[1300,2200], pipesMs:[18000,28000] },
+  medium: { typingMs:[8000,13000], reactionMs:[650,1200], mathMs:[3000,6000], mathAcc:0.8,
+            orderMs:[7000,12000], scrambleMs:[8000,15000], holdErr:[200,500], aimScore:[5,8],
+            clickScore:[12,18], whackScore:[8,14], binaryMs:[4000,8000], binaryAcc:0.8,
+            stroopMs:[4000,8000], stroopAcc:0.8, memCorrect:[11,14], simonMs:[10000,16000],
+            countdownErr:[350,750], pipesMs:[8000,14000] },
+  hard:   { typingMs:[3500,6000], reactionMs:[180,420], mathMs:[1400,2800], mathAcc:1.0,
+            orderMs:[3000,6000], scrambleMs:[3500,7000], holdErr:[40,150], aimScore:[8,11],
+            clickScore:[20,27], whackScore:[16,22], binaryMs:[1000,2500], binaryAcc:1.0,
+            stroopMs:[1000,2500], stroopAcc:1.0, memCorrect:[14,16], simonMs:[5000,9000],
+            countdownErr:[60,190], pipesMs:[3000,6000] },
+};
+
+function rndMs([lo, hi]) { return lo + Math.random() * (hi - lo); }
+
+function scheduleAiMove(room) {
+  if (!room.isAiRoom || room.gameData.finished) return;
+  const cfg = AI_CFG[room.aiDifficulty] || AI_CFG.medium;
+  const type = room.gameData.type;
+
+  if (type === 'typing') {
+    room.aiTimer = setTimeout(() => {
+      if (room.gameData.finished || room.gameData.firstDone) return;
+      room.gameData.firstDone = AI_ID;
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      endMinigame(room, AI_ID);
+    }, rndMs(cfg.typingMs));
+
+  } else if (type === 'click') {
+    room.gameData.scores[AI_ID] = Math.round(rndMs(cfg.clickScore));
+
+  } else if (type === 'memory') {
+    const correct = Math.round(rndMs(cfg.memCorrect));
+    const grid = room.gameData.grid;
+    const ones = grid.map((v, i) => v === 1 ? i : -1).filter(i => i >= 0);
+    const ans = new Array(grid.length).fill(0);
+    shuffle([...ones]).slice(0, correct).forEach(i => { ans[i] = 1; });
+    room.gameData.answers[AI_ID] = ans;
+
+  } else if (type === 'reaction') {
+    const poll = setInterval(() => {
+      if (room.gameData.finished) { clearInterval(poll); return; }
+      if (!room.gameData.signalSent) return;
+      clearInterval(poll);
+      room.aiTimer = setTimeout(() => {
+        if (room.gameData.finished) return;
+        room.gameData.finished = true;
+        clearTimeout(room.timer);
+        endMinigame(room, AI_ID);
+      }, rndMs(cfg.reactionMs));
+    }, 100);
+
+  } else if (type === 'math') {
+    const TARGET = room.gameData.target;
+    let answered = 0;
+    function aiMathStep() {
+      if (room.gameData.finished) return;
+      if (Math.random() < cfg.mathAcc) answered++;
+      if (answered >= TARGET) {
+        room.gameData.finished = true;
+        clearTimeout(room.timer);
+        endMinigame(room, AI_ID);
+        return;
+      }
+      room.aiTimer = setTimeout(aiMathStep, rndMs(cfg.mathMs) / TARGET);
+    }
+    room.aiTimer = setTimeout(aiMathStep, rndMs(cfg.mathMs) / TARGET);
+
+  } else if (type === 'order') {
+    room.aiTimer = setTimeout(() => {
+      if (room.gameData.finished) return;
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      endMinigame(room, AI_ID);
+    }, rndMs(cfg.orderMs));
+
+  } else if (type === 'scramble') {
+    room.aiTimer = setTimeout(() => {
+      if (room.gameData.finished) return;
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      endMinigame(room, AI_ID);
+    }, rndMs(cfg.scrambleMs));
+
+  } else if (type === 'whack') {
+    room.gameData.scores[AI_ID] = Math.round(rndMs(cfg.whackScore));
+
+  } else if (type === 'binary') {
+    const TARGET = room.gameData.target;
+    let answered = 0;
+    function aiBinaryStep() {
+      if (room.gameData.finished) return;
+      if (Math.random() < cfg.binaryAcc) answered++;
+      if (answered >= TARGET) {
+        room.gameData.finished = true;
+        clearTimeout(room.timer);
+        endMinigame(room, AI_ID);
+        return;
+      }
+      room.aiTimer = setTimeout(aiBinaryStep, rndMs(cfg.binaryMs) / TARGET);
+    }
+    room.aiTimer = setTimeout(aiBinaryStep, rndMs(cfg.binaryMs) / TARGET);
+
+  } else if (type === 'stroop') {
+    const TARGET = room.gameData.target;
+    let answered = 0;
+    function aiStroopStep() {
+      if (room.gameData.finished) return;
+      if (Math.random() < cfg.stroopAcc) answered++;
+      if (answered >= TARGET) {
+        room.gameData.finished = true;
+        clearTimeout(room.timer);
+        endMinigame(room, AI_ID);
+        return;
+      }
+      room.aiTimer = setTimeout(aiStroopStep, rndMs(cfg.stroopMs) / TARGET);
+    }
+    room.aiTimer = setTimeout(aiStroopStep, rndMs(cfg.stroopMs) / TARGET);
+
+  } else if (type === 'hold') {
+    const err = Math.round(rndMs(cfg.holdErr));
+    room.gameData.results[AI_ID] = err;
+    const playerId = room.players.find(p => p !== AI_ID);
+    if (room.gameData.results[playerId] !== undefined) {
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      const ea = room.gameData.results[playerId], eb = err;
+      endMinigame(room, ea < eb ? playerId : eb < ea ? AI_ID : null);
+    }
+
+  } else if (type === 'aim') {
+    room.gameData.scores[AI_ID] = Math.round(rndMs(cfg.aimScore));
+
+  } else if (type === 'simon') {
+    room.aiTimer = setTimeout(() => {
+      if (room.gameData.finished) return;
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      endMinigame(room, AI_ID);
+    }, rndMs(cfg.simonMs));
+
+  } else if (type === 'countdown') {
+    const err = Math.round(rndMs(cfg.countdownErr));
+    room.gameData.stops[AI_ID] = err;
+    const playerId = room.players.find(p => p !== AI_ID);
+    if (room.gameData.stops[playerId] !== undefined) {
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      const ea = room.gameData.stops[playerId], eb = err;
+      endMinigame(room, ea < eb ? playerId : eb < ea ? AI_ID : null);
+    }
+
+  } else if (type === 'pipes') {
+    room.aiTimer = setTimeout(() => {
+      if (room.gameData.finished) return;
+      room.gameData.finished = true;
+      clearTimeout(room.timer);
+      endMinigame(room, AI_ID);
+    }, rndMs(cfg.pipesMs));
+  }
+}
+
 // ── Core game logic ───────────────────────────────────────
 function startMinigame(room) {
   const type = room.gameOrder[room.currentGame];
@@ -370,24 +541,27 @@ function startMinigame(room) {
   io.to(room.id).emit('minigame-start', payload);
 
   if (type === 'math') {
-    room.players.forEach(pid => {
+    room.players.filter(p => p !== AI_ID).forEach(pid => {
       const q = room.gameData.questions[pid];
       io.to(pid).emit('math-question', { ...q, qnum: 1, target: room.gameData.target });
     });
   } else if (type === 'binary') {
-    room.players.forEach(pid => {
+    room.players.filter(p => p !== AI_ID).forEach(pid => {
       const q = room.gameData.questions[pid];
       io.to(pid).emit('binary-question', { ...q, qnum: 1, target: room.gameData.target });
     });
   } else if (type === 'stroop') {
-    room.players.forEach(pid => {
+    room.players.filter(p => p !== AI_ID).forEach(pid => {
       const q = room.gameData.questions[pid];
       io.to(pid).emit('stroop-question', { ...q, qnum: 1, target: room.gameData.target, choices: shuffle([...STROOP_COLORS]) });
     });
   }
+
+  if (room.isAiRoom) scheduleAiMove(room);
 }
 
 function endMinigame(room, winnerId, extra = {}) {
+  if (room.aiTimer) { clearTimeout(room.aiTimer); room.aiTimer = null; }
   if (winnerId) room.scores[winnerId] = (room.scores[winnerId] || 0) + 1;
   io.to(room.id).emit('minigame-result', {
     winner: winnerId,
@@ -698,12 +872,38 @@ io.on('connection', socket => {
     }
   });
 
+  socket.on('play-ai', ({ difficulty }) => {
+    const diff = ['easy', 'medium', 'hard'].includes(difficulty) ? difficulty : 'medium';
+    let code;
+    do { code = rndCode(); } while (rooms.has(code));
+    const room = {
+      id: code,
+      players: [socket.id, AI_ID],
+      scores: { [socket.id]: 0, [AI_ID]: 0 },
+      currentGame: 0,
+      gameOrder: shuffle([...GAME_TYPES]).slice(0, ROUNDS_PER_MATCH),
+      state: 'playing', gameData: {}, timer: null, aiTimer: null,
+      isAiRoom: true, aiDifficulty: diff,
+    };
+    rooms.set(code, room);
+    socket.roomCode = code;
+    socket.join(code);
+    io.to(socket.id).emit('game-init', {
+      yourId: socket.id, players: room.players,
+      gameOrder: room.gameOrder, aiDifficulty: diff,
+    });
+    setTimeout(() => startMinigame(room), 3500);
+  });
+
   socket.on('disconnect', () => {
     removeFromQueue(socket.id);
     const room = rooms.get(socket.roomCode);
     if (!room) return;
     clearTimeout(room.timer);
-    room.players.filter(p => p !== socket.id).forEach(p => io.to(p).emit('opponent-left'));
+    if (room.aiTimer) clearTimeout(room.aiTimer);
+    if (!room.isAiRoom) {
+      room.players.filter(p => p !== socket.id).forEach(p => io.to(p).emit('opponent-left'));
+    }
     rooms.delete(room.id);
   });
 });
