@@ -32,9 +32,23 @@
       <div class="panel-title">SYSTEM 32 ROULETTE</div>
       <div class="menu-btns">
         <button class="btn btn-primary" onclick="doQuickPlay()">⚡ Quick Play</button>
+        <button class="btn btn-secondary" onclick="showScreen('s-ai-select')">🤖 VS AI</button>
         <button class="btn btn-secondary" onclick="doCreateRoom()">Create Game</button>
         <button class="btn btn-secondary" onclick="showJoin()">Join Game</button>
         <button class="btn btn-ghost" onclick="location.href='/'">← About</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VS AI DIFFICULTY -->
+  <div id="s-ai-select" class="screen">
+    <div class="panel">
+      <div class="panel-title">VS AI</div>
+      <div class="menu-btns">
+        <button class="btn btn-secondary" onclick="doPlayAI('easy')">🟢 Easy</button>
+        <button class="btn btn-primary" onclick="doPlayAI('medium')">🟡 Medium</button>
+        <button class="btn btn-danger" onclick="doPlayAI('hard')">🔴 Hard</button>
+        <button class="btn btn-ghost" onclick="showScreen('s-menu')">← Back</button>
       </div>
     </div>
   </div>
@@ -95,7 +109,7 @@
       <div class="score-row">
         <span class="sc-you">YOU <span id="sc-you">0</span></span>
         <span class="sc-sep">·</span>
-        <span class="sc-opp">OPP <span id="sc-opp">0</span></span>
+        <span class="sc-opp"><span id="opp-label">OPP</span> <span id="sc-opp">0</span></span>
       </div>
     </div>
 
