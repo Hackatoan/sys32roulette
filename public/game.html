@@ -11,20 +11,42 @@
   <meta property="og:description" content="Play Sys32 Roulette — 15 minigames, 5 random rounds per match. Beat your opponent or watch your system get wiped. Free competitive 1v1 browser game by Hackatoa." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://sys32.hackatoa.com/game.html" />
-  <meta property="og:image" content="https://hackatoa.com/assets/me.png" />
+  <meta property="og:image" content="https://sys32.hackatoa.com/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Sys32 Roulette — competitive 1v1 minigame battler" />
   <meta property="og:site_name" content="Hackatoa" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Play Sys32 Roulette — 15 Minigames, 1 Loser" />
   <meta name="twitter:description" content="Play Sys32 Roulette — 15 minigames, 5 random rounds per match. Beat your opponent or watch your system get wiped. Free competitive 1v1 browser game by Hackatoa." />
-  <meta name="twitter:image" content="https://hackatoa.com/assets/me.png" />
+  <meta name="twitter:image" content="https://sys32.hackatoa.com/og.png" />
+  <meta name="twitter:image:alt" content="Sys32 Roulette — competitive 1v1 minigame battler" />
   <meta name="twitter:site" content="@jhackatoa" />
   <link rel="canonical" href="https://sys32.hackatoa.com/game.html" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoGame",
+    "name": "Sys32 Roulette",
+    "url": "https://sys32.hackatoa.com/game.html",
+    "description": "A competitive 1v1 minigame battler: 15 minigames in the pool, 5 random rounds per match — typing races, reaction tests, math, memory, binary decoding, and more. The loser's system gets wiped. Free, no account.",
+    "genre": ["Action", "Party", "Arcade"],
+    "playMode": "MultiPlayer",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Web Browser",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Jacob Harris", "alternateName": "Hackatoa", "url": "https://hackatoa.com" },
+    "isPartOf": { "@type": "WebSite", "name": "Hackatoa Games", "url": "https://games.hackatoa.com" }
+  }
+  </script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="scanlines"></div>
   <div class="crt-vignette"></div>
+
+  <h1 class="sr-only">Sys32 Roulette — Competitive 1v1 Minigame Battler</h1>
 
   <!-- MENU -->
   <div id="s-menu" class="screen active">
@@ -278,7 +300,7 @@
   <div id="s-win" class="screen">
     <div class="end-content">
       <div class="end-icon">✅</div>
-      <h1 class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED">ENEMY SYSTEM DELETED</h1>
+      <div class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED">ENEMY SYSTEM DELETED</div>
       <p class="end-sub end-sub-win">You survived. The other system was wiped.</p>
       <div class="win-terminal" id="win-terminal"></div>
       <p class="end-real" style="color:var(--green)">YOUR SYSTEM: INTACT — GG.</p>
@@ -334,7 +356,7 @@ Mac OS version: you lost</div>
 
     <div id="lose-phase3" class="lose-reveal hidden">
       <div class="reveal-icon">💀</div>
-      <h1 class="reveal-title">you lost.</h1>
+      <div class="reveal-title">you lost.</div>
       <p class="reveal-sub">Playing in the browser? Your system is fine. <em>This time.</em></p>
       <p class="reveal-sub2">Download the desktop app to play for real.</p>
       <div class="end-btns">
@@ -348,7 +370,7 @@ Mac OS version: you lost</div>
   <div id="s-draw" class="screen">
     <div class="end-content">
       <div class="end-icon">🤝</div>
-      <h1 class="end-title" style="color:var(--cyan)">DEADLOCK</h1>
+      <div class="end-title" style="color:var(--cyan)">DEADLOCK</div>
       <p class="end-sub">Both systems survive. Equally unimpressive.</p>
       <div class="end-btns">
         <button class="btn btn-primary" onclick="location.reload()">Rematch</button>

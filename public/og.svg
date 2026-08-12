@@ -64,5 +64,5 @@
   <text x="730" y="483" font-size="14" fill="#060a06" text-anchor="middle" font-weight="bold" letter-spacing="2">PLAY NOW</text>
 
   <!-- footer -->
-  <text x="600" y="610" font-size="12" fill="#3d6b3d" text-anchor="middle">sys32.hackatoa.com &nbsp;·&nbsp; A Hackatoa Game &nbsp;·&nbsp; Free, No Account</text>
+  <text x="600" y="610" font-size="12" fill="#3d6b3d" text-anchor="middle">sys32.hackatoa.com &#160;·&#160; A Hackatoa Game &#160;·&#160; Free, No Account</text>
 </svg>
