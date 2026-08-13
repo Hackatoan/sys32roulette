@@ -47,7 +47,7 @@
   <text x="620" y="260" font-size="62" fill="#39ff14" font-weight="bold" letter-spacing="2">ROULETTE</text>
   <rect x="620" y="275" width="500" height="2" fill="#39ff14" opacity="0.3"/>
 
-  <text x="620" y="320" font-size="18" fill="#a8e8a8">3 minigames. 1 loser.</text>
+  <text x="620" y="320" font-size="18" fill="#a8e8a8">15 minigames. 1 loser.</text>
   <text x="620" y="348" font-size="18" fill="#ff2442">Loser faces total system annihilation.</text>
   <text x="620" y="372" font-size="13" fill="#3d6b3d">(not really — but it's convincing)</text>
 
@@ -64,5 +64,5 @@
   <text x="730" y="483" font-size="14" fill="#060a06" text-anchor="middle" font-weight="bold" letter-spacing="2">PLAY NOW</text>
 
   <!-- footer -->
-  <text x="600" y="610" font-size="12" fill="#3d6b3d" text-anchor="middle">sys32.hackatoa.com &nbsp;·&nbsp; A Hackatoa Game &nbsp;·&nbsp; Free, No Account</text>
+  <text x="600" y="610" font-size="12" fill="#3d6b3d" text-anchor="middle">sys32.hackatoa.com &#160;&#183;&#160; A Hackatoa Game &#160;&#183;&#160; Free, No Account</text>
 </svg>

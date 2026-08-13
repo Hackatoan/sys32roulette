@@ -10,15 +10,15 @@
   <meta property="og:title" content="Play Sys32 Roulette — 15 Minigames, 1 Loser" />
   <meta property="og:description" content="Play Sys32 Roulette — 15 minigames, 5 random rounds per match. Beat your opponent or watch your system get wiped. Free competitive 1v1 browser game by Hackatoa." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://sys32.hackatoa.com/game.html" />
-  <meta property="og:image" content="https://hackatoa.com/assets/me.png" />
+  <meta property="og:url" content="https://sys32.hackatoa.com/play" />
+  <meta property="og:image" content="https://sys32.hackatoa.com/og.png" />
   <meta property="og:site_name" content="Hackatoa" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Play Sys32 Roulette — 15 Minigames, 1 Loser" />
   <meta name="twitter:description" content="Play Sys32 Roulette — 15 minigames, 5 random rounds per match. Beat your opponent or watch your system get wiped. Free competitive 1v1 browser game by Hackatoa." />
-  <meta name="twitter:image" content="https://hackatoa.com/assets/me.png" />
+  <meta name="twitter:image" content="https://sys32.hackatoa.com/og.png" />
   <meta name="twitter:site" content="@jhackatoa" />
-  <link rel="canonical" href="https://sys32.hackatoa.com/game.html" />
+  <link rel="canonical" href="https://sys32.hackatoa.com/play" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -29,7 +29,7 @@
   <!-- MENU -->
   <div id="s-menu" class="screen active">
     <div class="panel">
-      <div class="panel-title">SYSTEM 32 ROULETTE</div>
+      <h1 class="panel-title">SYSTEM 32 ROULETTE</h1>
       <div class="menu-btns">
         <button class="btn btn-primary" onclick="doQuickPlay()">⚡ Quick Play</button>
         <button class="btn btn-secondary" onclick="showScreen('s-ai-select')">🤖 VS AI</button>
@@ -43,7 +43,7 @@
   <!-- VS AI DIFFICULTY -->
   <div id="s-ai-select" class="screen">
     <div class="panel">
-      <div class="panel-title">VS AI</div>
+      <h2 class="panel-title">VS AI</h2>
       <div class="menu-btns">
         <button class="btn btn-secondary" onclick="doPlayAI('easy')">🟢 Easy</button>
         <button class="btn btn-primary" onclick="doPlayAI('medium')">🟡 Medium</button>
@@ -56,7 +56,7 @@
   <!-- QUEUE -->
   <div id="s-queue" class="screen">
     <div class="panel">
-      <div class="panel-title">FINDING OPPONENT</div>
+      <h2 class="panel-title">FINDING OPPONENT</h2>
       <div class="spinner"></div>
       <p class="hint-text" id="queue-status-text">Searching for a target...</p>
       <div class="queue-timer" id="queue-timer">0s</div>
@@ -67,7 +67,7 @@
   <!-- WAITING (host) -->
   <div id="s-create" class="screen">
     <div class="panel">
-      <div class="panel-title">AWAITING OPPONENT</div>
+      <h2 class="panel-title">AWAITING OPPONENT</h2>
       <div class="code-label">ROOM CODE</div>
       <div class="room-code-big" id="room-code-display">------</div>
       <div class="copy-btns">
@@ -83,7 +83,7 @@
   <!-- JOIN -->
   <div id="s-join" class="screen">
     <div class="panel">
-      <div class="panel-title">ENTER ROOM CODE</div>
+      <h2 class="panel-title">ENTER ROOM CODE</h2>
       <input id="code-input" class="code-input" type="text" placeholder="XXXXXX" maxlength="6" autocomplete="off">
       <div id="join-error" class="error-msg"></div>
       <div class="row-btns">
@@ -278,7 +278,7 @@
   <div id="s-win" class="screen">
     <div class="end-content">
       <div class="end-icon">✅</div>
-      <h1 class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED">ENEMY SYSTEM DELETED</h1>
+      <h2 class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED">ENEMY SYSTEM DELETED</h2>
       <p class="end-sub end-sub-win">You survived. The other system was wiped.</p>
       <div class="win-terminal" id="win-terminal"></div>
       <p class="end-real" style="color:var(--green)">YOUR SYSTEM: INTACT — GG.</p>
@@ -334,7 +334,7 @@ Mac OS version: you lost</div>
 
     <div id="lose-phase3" class="lose-reveal hidden">
       <div class="reveal-icon">💀</div>
-      <h1 class="reveal-title">you lost.</h1>
+      <h2 class="reveal-title">you lost.</h2>
       <p class="reveal-sub">Playing in the browser? Your system is fine. <em>This time.</em></p>
       <p class="reveal-sub2">Download the desktop app to play for real.</p>
       <div class="end-btns">
@@ -348,7 +348,7 @@ Mac OS version: you lost</div>
   <div id="s-draw" class="screen">
     <div class="end-content">
       <div class="end-icon">🤝</div>
-      <h1 class="end-title" style="color:var(--cyan)">DEADLOCK</h1>
+      <h2 class="end-title" style="color:var(--cyan)">DEADLOCK</h2>
       <p class="end-sub">Both systems survive. Equally unimpressive.</p>
       <div class="end-btns">
         <button class="btn btn-primary" onclick="location.reload()">Rematch</button>
@@ -360,7 +360,7 @@ Mac OS version: you lost</div>
   <!-- OPPONENT LEFT -->
   <div id="s-left" class="screen">
     <div class="panel">
-      <div class="panel-title" style="color:var(--red)">CONNECTION LOST</div>
+      <h2 class="panel-title" style="color:var(--red)">CONNECTION LOST</h2>
       <p style="color:var(--muted);text-align:center">Your opponent disconnected before their system could be deleted.</p>
       <button class="btn btn-primary" onclick="location.href='/'">Main Menu</button>
     </div>
