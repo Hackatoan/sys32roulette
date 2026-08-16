@@ -34,6 +34,28 @@ function updateHUD() {
   document.getElementById('sc-opp').textContent = oppScore();
 }
 
+// ── Nickname ──────────────────────────────────────────────
+function currentName() {
+  const el = document.getElementById('name-input');
+  return window.PlayerName.set(el ? el.value : window.PlayerName.get());
+}
+
+async function loadLeaderboard() {
+  const body = document.getElementById('lb-body');
+  if (!body) return;
+  try {
+    const res = await fetch('/api/leaderboard');
+    const data = await res.json();
+    const players = (data && data.players) || [];
+    if (!players.length) { body.innerHTML = '<tr><td colspan="5">No games played yet — be the first!</td></tr>'; return; }
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const me = window.PlayerName.get();
+    body.innerHTML = players.map((p, i) =>
+      `<tr class="${me && p.player === me ? 'lb-me' : ''}"><td>${i + 1}</td><td>${esc(p.player)}</td><td>${p.wins}</td><td>${p.losses}</td><td>${p.draws}</td></tr>`
+    ).join('');
+  } catch { body.innerHTML = '<tr><td colspan="5">Leaderboard unavailable.</td></tr>'; }
+}
+
 // ── Queue ─────────────────────────────────────────────────
 function doQuickPlay() {
   showScreen('s-queue');
@@ -44,7 +66,7 @@ function doQuickPlay() {
     elapsed++;
     document.getElementById('queue-timer').textContent = elapsed + 's';
   }, 1000);
-  socket.emit('queue-join');
+  socket.emit('queue-join', { name: currentName() });
 }
 
 function doPlayAI(difficulty) {
@@ -69,7 +91,7 @@ socket.on('queue-status', ({ position, total }) => {
 // ── Room management ───────────────────────────────────────
 function doCreateRoom() {
   showScreen('s-create');
-  socket.emit('create-room');
+  socket.emit('create-room', { name: currentName() });
 }
 
 function showJoin() {
@@ -84,7 +106,7 @@ function doJoinRoom() {
     document.getElementById('join-error').textContent = 'Enter a valid room code';
     return;
   }
-  socket.emit('join-room', code);
+  socket.emit('join-room', { code, name: currentName() });
 }
 
 function copyCode() {
@@ -1075,3 +1097,10 @@ function fakeFiles() {
   if (os === 'mac') return [...mac].sort(() => Math.random() - 0.5);
   return [...win, ...lin].sort(() => Math.random() - 0.5);
 }
+
+// ── Init ──────────────────────────────────────────────────
+(function initMenu() {
+  const el = document.getElementById('name-input');
+  if (el) el.value = window.PlayerName.get();
+  loadLeaderboard();
+})();
