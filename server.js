@@ -4,6 +4,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
+const db = require('./db');
 
 const app = express();
 const server = http.createServer(app);
@@ -31,6 +32,12 @@ app.post('/wipe', (_req, res) => {
 });
 
 app.get('/stats', (_req, res) => res.json(readStats()));
+
+// Nickname-based leaderboard.
+app.get('/api/leaderboard', async (_req, res) => {
+  const players = await db.getLeaderboard(20);
+  res.json({ game: db.GAME, players });
+});
 // ─────────────────────────────────────────────────────────
 
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
@@ -574,10 +581,16 @@ function endMinigame(room, winnerId, extra = {}) {
     if (room.currentGame >= room.gameOrder.length) {
       const [a, b] = room.players;
       const sa = room.scores[a] || 0, sb = room.scores[b] || 0;
+      const winner = sa > sb ? a : sb > sa ? b : null;
       io.to(room.id).emit('game-over', {
-        winner: sa > sb ? a : sb > sa ? b : null,
+        winner,
         scores: room.scores,
       });
+      // Record human-vs-human matches to the leaderboard (skip AI games).
+      if (!room.isAiRoom && room.names) {
+        const winnerName = winner ? room.names[winner] : null;
+        db.recordMatch(room.names[a], room.names[b], winnerName);
+      }
       setTimeout(() => rooms.delete(room.id), 60000);
     } else {
       startMinigame(room);
@@ -588,16 +601,17 @@ function endMinigame(room, winnerId, extra = {}) {
 function startRoom(pidA, pidB) {
   let code;
   do { code = rndCode(); } while (rooms.has(code));
+  const sockA = io.sockets.sockets.get(pidA);
+  const sockB = io.sockets.sockets.get(pidB);
   const room = {
     id: code, players: [pidA, pidB],
     scores: { [pidA]: 0, [pidB]: 0 },
+    names: { [pidA]: (sockA && sockA.playerName) || '', [pidB]: (sockB && sockB.playerName) || '' },
     currentGame: 0,
     gameOrder: shuffle([...GAME_TYPES]).slice(0, ROUNDS_PER_MATCH),
     state: 'playing', gameData: {}, timer: null,
   };
   rooms.set(code, room);
-  const sockA = io.sockets.sockets.get(pidA);
-  const sockB = io.sockets.sockets.get(pidB);
   sockA.roomCode = code;
   sockB.roomCode = code;
   sockA.join(code);
@@ -614,7 +628,8 @@ function removeFromQueue(socketId) {
 }
 
 io.on('connection', socket => {
-  socket.on('queue-join', () => {
+  socket.on('queue-join', (payload) => {
+    socket.playerName = db.cleanName(payload && payload.name);
     if (queue.includes(socket.id)) return;
     queue.push(socket.id);
     socket.emit('queue-status', { position: queue.length, total: queue.length });
@@ -634,12 +649,14 @@ io.on('connection', socket => {
 
   socket.on('queue-leave', () => removeFromQueue(socket.id));
 
-  socket.on('create-room', () => {
+  socket.on('create-room', (payload) => {
+    socket.playerName = db.cleanName(payload && payload.name);
     let code;
     do { code = rndCode(); } while (rooms.has(code));
     const room = {
       id: code, players: [socket.id],
       scores: { [socket.id]: 0 },
+      names: { [socket.id]: socket.playerName },
       currentGame: 0,
       gameOrder: shuffle([...GAME_TYPES]).slice(0, ROUNDS_PER_MATCH),
       state: 'waiting', gameData: {}, timer: null,
@@ -651,12 +668,16 @@ io.on('connection', socket => {
   });
 
   socket.on('join-room', raw => {
-    const code = (raw || '').trim().toUpperCase();
+    // Backward compatible: raw may be a code string or { code, name }.
+    const codeRaw = typeof raw === 'string' ? raw : (raw && raw.code);
+    socket.playerName = db.cleanName(typeof raw === 'object' ? raw && raw.name : '');
+    const code = (codeRaw || '').trim().toUpperCase();
     const room = rooms.get(code);
     if (!room) return socket.emit('join-error', 'Room not found');
     if (room.players.length >= 2) return socket.emit('join-error', 'Room is full');
     room.players.push(socket.id);
     room.scores[socket.id] = 0;
+    if (room.names) room.names[socket.id] = socket.playerName;
     socket.roomCode = code;
     socket.join(code);
     room.state = 'playing';

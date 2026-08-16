@@ -1,0 +1,25 @@
+services:
+  sys32roulette:
+    image: ghcr.io/hackatoan/sys32roulette:latest
+    container_name: sys32roulette
+    restart: unless-stopped
+    ports:
+      - "3028:3028"
+    environment:
+      - PORT=3028
+      - GAME_ID=sys32roulette
+      - DATABASE_URL=postgresql://games:g4m3sDB_2024xQ!@games-db:5432/games
+    volumes:
+      - sys32-data:/data
+    networks:
+      - default
+      - games-net
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
+
+volumes:
+  sys32-data:
+
+networks:
+  games-net:
+    external: true
