@@ -1,7 +1,7 @@
 {
   "name": "sys32roulette",
   "version": "1.0.0",
-  "description": "System 32 Roulette — competitive 1v1 minigame battler. 15 games, 5 random rounds per match. Lose and face system annihilation.",
+  "description": "System 32 Roulette \u2014 competitive 1v1 minigame battler. 15 games, 5 random rounds per match. Lose and face system annihilation.",
   "main": "main.js",
   "homepage": "https://sys32.hackatoa.com",
   "author": {
@@ -15,12 +15,13 @@
     "build:linux": "electron-builder --linux",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
-    "build:all": "electron-builder --linux --win --mac"
+    "build:all": "electron-builder --linux --win --mac",
+    "i18n:auto": "node scripts/i18n-auto.mjs"
   },
   "build": {
     "appId": "com.hackatoa.sys32roulette",
     "productName": "System 32 Roulette",
-    "copyright": "© 2025 Hackatoa",
+    "copyright": "\u00a9 2025 Hackatoa",
     "files": [
       "main.js",
       "preload.js",
