@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sys32 Roulette — The Dangerous Windows Game | Hackatoa</title>
-  <meta name="description" content="System 32 Roulette is a free competitive 1v1 minigame battler with 15 unique games — typing races, reaction tests, math problems, memory grids, binary decoding, and more. Loser faces system deletion. No account needed.">
-  <meta name="keywords" content="system 32 roulette, competitive minigame, 1v1 browser game, typing game, memory game, click game, reaction game, math game, binary game, free online game, multiplayer browser game, hackatoa">
+  <meta name="description" content="System 32 Roulette é um jogo competitivo gratuito de 1v1 com 15 minijogos exclusivos — corridas de digitação, testes de reação, problemas de matemática, grades de memória, decodificação binária e muito mais. O perdedor enfrenta a exclusão do sistema. Sem necessidade de conta.">
+  <meta name="keywords" content="system 32 roulette, minijogo competitivo, jogo 1v1 de navegador, jogo de digitação, jogo de memória, jogo de clique, jogo de reação, jogo de matemática, jogo binário, jogo online grátis, jogo multiplayer de navegador, hackatoa">
   <meta name="author" content="Jacob Harris">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="System 32 Roulette — 15 Minigames. 1 Loser. Total System Annihilation.">
-  <meta property="og:description" content="Free competitive 1v1 minigame battler. 15 games in the pool — 5 random rounds per match. Beat your opponent or watch your system get wiped. No account needed.">
+  <meta property="og:title" content="System 32 Roulette — 15 Minijogos. 1 Perdedor. Aniquilação Total do Sistema.">
+  <meta property="og:description" content="Batalha competitiva 1v1 de minijogos grátis. 15 jogos no grupo — 5 rodadas aleatórias por partida. Vença seu oponente ou assista seu sistema ser apagado. Sem necessidade de conta.">
   <meta property="og:image" content="https://sys32.hackatoa.com/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -18,8 +18,8 @@
   <meta property="og:site_name" content="Hackatoa Games">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@jhackatoa">
-  <meta name="twitter:title" content="System 32 Roulette — Competitive Minigame Battler">
-  <meta name="twitter:description" content="Free 1v1 minigame battler. 15 games in the pool, 5 random rounds per match. Loser faces system deletion.">
+  <meta name="twitter:title" content="System 32 Roulette — Batalha Competitiva de Minijogos">
+  <meta name="twitter:description" content="Batalha competitiva 1v1 de minijogos grátis. 15 jogos no grupo, 5 rodadas aleatórias por partida. O perdedor enfrenta a exclusão do sistema.">
   <meta name="twitter:image" content="https://sys32.hackatoa.com/og.png">
   <link rel="canonical" href="https://sys32.hackatoa.com/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -213,9 +213,9 @@
 <body>
 <!-- i18n:switcher:start -->
 <nav aria-label="Language" style="position:fixed;top:8px;right:10px;z-index:99999;font-size:12px;font-family:system-ui,-apple-system,sans-serif;background:rgba(6,10,6,.92);border:1px solid #1a3d1a;border-radius:999px;padding:5px 12px;display:flex;gap:9px;box-shadow:0 2px 10px rgba(0,0,0,.5);">
-  <a href="/" hreflang="en" aria-current="true" style="color:#fff;font-weight:700;text-decoration:none;">EN</a>
+  <a href="/" hreflang="en" style="color:#8a8;text-decoration:none;">EN</a>
   <a href="/es/" hreflang="es" style="color:#8a8;text-decoration:none;">ES</a>
-  <a href="/pt-br/" hreflang="pt-BR" style="color:#8a8;text-decoration:none;">PT</a>
+  <a href="/pt-br/" hreflang="pt-BR" aria-current="true" style="color:#fff;font-weight:700;text-decoration:none;">PT</a>
   <a href="/fr/" hreflang="fr" style="color:#8a8;text-decoration:none;">FR</a>
   <a href="/de/" hreflang="de" style="color:#8a8;text-decoration:none;">DE</a>
   <a href="/vi/" hreflang="vi" style="color:#8a8;text-decoration:none;">VI</a>
@@ -226,12 +226,12 @@
 <nav>
   <div class="nav-logo">SYSTEM 32 ROULETTE</div>
   <div class="nav-links">
-    <a href="#games">Minigames</a>
-    <a href="#consequence">The Stakes</a>
-    <a href="#download">Download</a>
-    <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">Source</a>
-    <a href="https://games.hackatoa.com" target="_blank" rel="noopener">All Games</a>
-    <a href="/play" class="nav-play">Play Now</a>
+    <a href="#games">Minijogos</a>
+    <a href="#consequence">O Que Está Em Jogo</a>
+    <a href="#download">Baixar</a>
+    <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">Código-fonte</a>
+    <a href="https://games.hackatoa.com" target="_blank" rel="noopener">Todos os Jogos</a>
+    <a href="/play" class="nav-play">Jogar Agora</a>
   </div>
 </nav>
 
@@ -239,191 +239,194 @@
 <div class="hero">
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <div class="hero-tag">// A HACKATOA GAME &nbsp;·&nbsp; FREE &nbsp;·&nbsp; NO ACCOUNT</div>
+    <div class="hero-tag">// UM JOGO HACKATOA &nbsp;·&nbsp; GRÁTIS &nbsp;·&nbsp; SEM CONTA</div>
     <h1 class="hero-title">SYSTEM 32<br>ROULETTE</h1>
-    <p class="hero-sub">15 minigames. 2 players. 1 loser.</p>
-    <p class="hero-danger">Loser faces total system annihilation.</p>
-    <p class="hero-dim">(download the desktop app to find out what that means)</p>
+    <p class="hero-sub">15 minijogos. 2 jogadores. 1 perdedor.</p>
+    <p class="hero-danger">O perdedor enfrenta a aniquilação total do sistema.</p>
+    <p class="hero-dim">(baixe o aplicativo para desktop para descobrir o que isso significa)</p>
     <div class="hero-pills">
-      <span class="pill">⌨ COMMAND INJECTION</span>
-      <span class="pill">🖱 BUFFER OVERFLOW</span>
-      <span class="pill">🧠 MEMORY DUMP</span>
-      <span class="pill">⚡ KERNEL PANIC</span>
-      <span class="pill">∑ HASH COLLISION</span>
-      <span class="pill">↕ STACK SORT</span>
-      <span class="pill">01 BIT FLIP</span>
-      <span class="pill">◎ TARGET LOCK</span>
-      <span class="pill">⏱ PRECISION TIMING</span>
-      <span class="pill">| PIPE REDIRECT</span>
-      <span class="pill">+ 5 MORE</span>
+      <span class="pill">⌨ INJEÇÃO DE COMANDO</span>
+      <span class="pill">🖱 ESTOURO DE BUFFER</span>
+      <span class="pill">🧠 DUMP DE MEMÓRIA</span>
+      <span class="pill">⚡ PÂNICO NO KERNEL</span>
+      <span class="pill">∑ COLISÃO DE HASH</span>
+      <span class="pill">↕ ORDENAÇÃO DE PILHA</span>
+      <span class="pill">01 INVERSÃO DE BIT</span>
+      <span class="pill">◎ MIRA TRAVADA</span>
+      <span class="pill">⏱ CRONOMETRAGEM PRECISA</span>
+      <span class="pill">| REDIRECIONAMENTO DE PIPE</span>
+      <span class="pill">+ 5 A MAIS</span>
     </div>
-    <a href="/play" class="hero-cta">SPIN THE ROULETTE</a>
-    <div class="hero-scroll">↓ learn more</div>
+    <a href="/play" class="hero-cta">GIRAR A ROLETA</a>
+    <div class="hero-scroll">↓ saiba mais</div>
   </div>
 </div>
 
 <!-- HOW IT WORKS -->
 <div class="section">
-  <div class="sec-tag">// HOW IT WORKS</div>
-  <h2 class="sec-title">Simple. Brutal. Fast.</h2>
+  <div class="sec-tag">// COMO FUNCIONA</div>
+  <h2 class="sec-title">Simples. Brutal. Rápido.</h2>
   <div class="steps">
     <div class="step">
-      <div class="step-num">01 — CONNECT</div>
-      <div class="step-title">Share a room code</div>
-      <div class="step-desc">One player creates a room and gets a 6-character code. Share it. Opponent joins. Battle starts automatically.</div>
+      <div class="step-num">01 — CONECTAR</div>
+      <div class="step-title">Compartilhe um código de sala</div>
+      <div class="step-desc">Um jogador cria uma sala e recebe um código de 6 caracteres. Compartilhe-o. O oponente entra. A batalha começa automaticamente.</div>
     </div>
     <div class="step">
-      <div class="step-num">02 — BATTLE</div>
-      <div class="step-title">5 random minigames</div>
-      <div class="step-desc">5 rounds drawn randomly from a pool of 15 minigames — no two matches play the same. First to 3 wins takes it. No rematch begging.</div>
+      <div class="step-num">02 — BATALHA</div>
+      <div class="step-title">5 minijogos aleatórios</div>
+      <div class="step-desc">5 rodadas sorteadas aleatoriamente de um grupo de 15 minijogos — nenhuma partida é igual à outra. Quem vencer 3 primeiro leva a melhor. Sem choro por revanche.</div>
     </div>
     <div class="step">
-      <div class="step-num">03 — CONSEQUENCE</div>
-      <div class="step-title">Face the roulette</div>
-      <div class="step-desc">Download the desktop app. Winner watches the loser's system get wiped. For real.</div>
+      <div class="step-num">03 — CONSEQUÊNCIA</div>
+      <div class="step-title">Encare a roleta</div>
+      <div class="step-desc">Baixe o aplicativo para desktop. O vencedor assiste o sistema do perdedor ser apagado. De verdade.</div>
     </div>
   </div>
 </div>
 
 <!-- MINIGAMES -->
 <div class="section" id="games">
-  <div class="sec-tag">// THE MINIGAMES</div>
-  <h2 class="sec-title">15 Ways to Lose</h2>
-  <p style="color:var(--muted);font-size:.88rem;margin-bottom:2rem;max-width:600px;">Each match draws 5 at random — you never know what's coming.</p>
+  <div class="sec-tag">// OS MINIJOGOS</div>
+  <h2 class="sec-title">15 Formas de Perder</h2>
+  <p style="color:var(--muted);font-size:.88rem;margin-bottom:2rem;max-width:600px;">Cada partida sorteia 5 aleatoriamente — você nunca sabe o que vem por aí.</p>
   <div class="games">
     <div class="gcard">
       <div class="gicon">⌨</div>
       <div class="gtype">COMMAND INJECTION</div>
-      <div class="gtitle">Typing Race</div>
-      <div class="gdesc">Type a destructive command exactly, character for character. First to finish wins. One wrong key and you're restarting from scratch.</div>
+      <div class="gtitle">Corrida de Digitação</div>
+      <div class="gdesc">Digite um comando destrutivo exatamente, caractere por caractere. O primeiro a terminar vence. Uma tecla errada e você recomeça do zero.</div>
     </div>
     <div class="gcard">
       <div class="gicon">🖱</div>
       <div class="gtype">BUFFER OVERFLOW</div>
-      <div class="gtitle">Click Frenzy</div>
-      <div class="gdesc">Targets flash across a grid. Click as many as possible in 12 seconds. Most clicks wins — pure undiluted reflexes.</div>
+      <div class="gtitle">Frenesi de Cliques</div>
+      <div class="gdesc">Alvos piscam em uma grade. Clique no máximo possível em 12 segundos. Quem tiver mais cliques vence — reflexos puros e sem filtro.</div>
     </div>
     <div class="gcard">
       <div class="gicon">🧠</div>
       <div class="gtype">MEMORY DUMP</div>
-      <div class="gtitle">Pattern Memory</div>
-      <div class="gdesc">A grid pattern flashes for 3.5 seconds. Memorize it. Reproduce it from memory. Highest accuracy wins.</div>
+      <div class="gtitle">Memória de Padrão</div>
+      <div class="gdesc">Um padrão em grade pisca por 3.5 segundos. Memorize-o. Reproduza-o de memória. A maior precisão vence.</div>
     </div>
     <div class="gcard">
       <div class="gicon">⚡</div>
       <div class="gtype">KERNEL PANIC</div>
-      <div class="gtitle">Reaction Test</div>
-      <div class="gdesc">A signal fires after a random delay. Click the moment it appears. Click early and you instantly forfeit — no second chances.</div>
+      <div class="gtitle">Teste de Reação</div>
+      <div class="gdesc">Um sinal é disparado após um atraso aleatório. Clique no momento em que ele aparecer. Se clicar antes, você perde instantaneamente — sem segunda chance.</div>
     </div>
     <div class="gcard">
       <div class="gicon">∑</div>
       <div class="gtype">HASH COLLISION</div>
-      <div class="gtitle">Math Sprint</div>
-      <div class="gdesc">Rapid-fire arithmetic problems. First to solve 5 correctly wins. Sounds easy until the clock is ticking and your opponent is faster.</div>
+      <div class="gtitle">Sprint Matemático</div>
+      <div class="gdesc">Problemas aritméticos em ritmo acelerado. O primeiro a resolver 5 corretamente vence. Parece fácil até o relógio começar a correr e seu oponente ser mais rápido.</div>
     </div>
     <div class="gcard">
       <div class="gicon">↕</div>
       <div class="gtype">STACK SORT</div>
-      <div class="gtitle">Number Order</div>
-      <div class="gdesc">Nine numbers scattered across a grid. Click them in order from 1 to 9 as fast as possible. Wrong click wastes precious milliseconds.</div>
+      <div class="gtitle">Ordem Numérica</div>
+      <div class="gdesc">Nove números espalhados por uma grade. Clique neles em ordem de 1 a 9 o mais rápido possível. Um clique errado desperdiça milissegundos preciosos.</div>
     </div>
     <div class="gcard">
       <div class="gicon">?</div>
       <div class="gtype">BUFFER DECODE</div>
-      <div class="gtitle">Word Scramble</div>
-      <div class="gdesc">A hacker term has been scrambled. Unscramble and type it correctly before your opponent does. First correct answer wins.</div>
+      <div class="gtitle">Embaralhado</div>
+      <div class="gdesc">Um termo de hacker foi embaralhado. Desembaralhe e digite-o corretamente antes do seu oponente. A primeira resposta correta vence.</div>
     </div>
     <div class="gcard">
       <div class="gicon">💀</div>
       <div class="gtype">PROCESS KILL</div>
-      <div class="gtitle">Whack-a-Mole</div>
-      <div class="gdesc">Malware processes pop up and try to escape. Click to kill them before they vanish. Most kills in 12 seconds wins.</div>
+      <div class="gtitle">Acerte a Toupeira</div>
+      <div class="gdesc">Processos de malware aparecem e tentam escapar. Clique para eliminá-los antes que sumam. Quem tiver mais eliminações em 12 segundos vence.</div>
     </div>
     <div class="gcard">
       <div class="gicon">01</div>
       <div class="gtype">BIT FLIP</div>
-      <div class="gtitle">Binary Decode</div>
-      <div class="gdesc">A binary number flashes on screen. Pick the correct decimal value from four choices. First to 5 correct wins. Fast and accurate.</div>
+      <div class="gtitle">Decodificação Binária</div>
+      <div class="gdesc">Um número binário pisca na tela. Escolha o valor decimal correto entre quatro opções. O primeiro a acertar 5 vence. Rápido e preciso.</div>
     </div>
     <div class="gcard">
       <div class="gicon">◈</div>
       <div class="gtype">MEMORY CORRUPTION</div>
-      <div class="gtitle">Stroop Test</div>
-      <div class="gdesc">The word "GREEN" displayed in blue. Click the color shown — not the word. Your brain fights itself. First to 5 wins.</div>
+      <div class="gtitle">Teste de Stroop</div>
+      <div class="gdesc">A palavra "VERDE" exibida em azul. Clique na cor mostrada — não na palavra. Seu cérebro luta contra si mesmo. O primeiro a fazer 5 pontos vence.</div>
     </div>
     <div class="gcard">
       <div class="gicon">⏱</div>
       <div class="gtype">PRECISION TIMING</div>
-      <div class="gtitle">Hold the Button</div>
-      <div class="gdesc">Hold a button for exactly the target duration shown — then release. Closest to the mark wins. Easier said than done.</div>
+      <div class="gtitle">Segure o Botão</div>
+      <div class="gdesc">Segure um botão exatamente pela duração alvo mostrada — depois solte. Quem chegar mais perto do alvo vence. Mais fácil falar do que fazer.</div>
     </div>
     <div class="gcard">
       <div class="gicon">◎</div>
       <div class="gtype">TARGET LOCK</div>
-      <div class="gtitle">Moving Target</div>
-      <div class="gdesc">A single target bounces around the arena. Click it to score — it immediately teleports. Most hits in 12 seconds wins.</div>
+      <div class="gtitle">Alvo Móvel</div>
+      <div class="gdesc">Um único alvo quica pela arena. Clique nele para pontuar — ele se teletransporta imediatamente. Quem tiver mais acertos em 12 segundos vence.</div>
     </div>
     <div class="gcard">
       <div class="gicon">↑</div>
       <div class="gtype">INTERRUPT VECTOR</div>
       <div class="gtitle">Simon Says</div>
-      <div class="gdesc">A 6-key sequence lights up using W/A/S/D. Memorize it, then reproduce it perfectly. First to complete it without errors wins.</div>
+      <div class="gdesc">Uma sequência de 6 teclas acende usando W/A/S/D. Memorize-a e reproduza-a perfeitamente. O primeiro a completar sem erros vence.</div>
     </div>
     <div class="gcard">
       <div class="gicon">⏰</div>
       <div class="gtype">RACE CONDITION</div>
-      <div class="gtitle">Timer Stop</div>
-      <div class="gdesc">A 10-second timer counts down. Click STOP as close to zero as possible. Closest wins. Going over is still valid — closest is closest.</div>
+      <div class="gtitle">Parar o Cronômetro</div>
+      <div class="gdesc">Um cronômetro de 10 segundos faz contagem regressiva. Clique em PARAR o mais próximo possível de zero. O mais próximo vence. Passar do tempo ainda é válido — o mais próximo é o que conta.</div>
     </div>
     <div class="gcard">
       <div class="gicon">|</div>
       <div class="gtype">PIPE REDIRECT</div>
-      <div class="gtitle">Shell Quiz</div>
-      <div class="gdesc">A bash pipe command is shown — <code style="color:var(--green)">echo "cat" | rev</code>. Type what it outputs. First correct answer wins. Know your shell.</div>
+      <div class="gtitle">Quiz de Shell</div>
+      <div class="gdesc">Um comando de pipe bash é exibido — <code style="color:var(--green)">echo "cat" | rev</code>. Digite o que ele gera como saída. A primeira resposta correta vence. Conheça seu shell.</div>
     </div>
   </div>
 </div>
 
 <!-- THE CONSEQUENCE -->
 <div class="section" id="consequence">
-  <div class="sec-tag">// THE STAKES</div>
-  <h2 class="sec-title">What Happens When You Lose</h2>
+  <div class="sec-tag">// O QUE ESTÁ EM JOGO</div>
+  <h2 class="sec-title">O Acontece Quando Você Perde</h2>
   <div class="consequence">
-    <div class="con-title">💀 SYSTEM DELETION INITIATED</div>
+    <div class="con-title">💀 EXCLUSÃO DO SISTEMA INICIADA</div>
     <p class="con-sub">
-      The desktop app is not a simulation.<br><br>
-      When you lose, a terminal opens. System files scroll past at alarming speed.<br>
+      O aplicativo para desktop não é uma simulação.
+    <br><br>
+      Quando você perde, um terminal é aberto. Arquivos do sistema passam rapidamente a uma velocidade alarmante.
+    <br>
       <code>rm -rf /* /.[!.]*</code><br><br>
-      Then comes the Blue Screen of Death. A progress bar reaches 100%.<br>
-      Then your system is gone.
+      Em seguida, vem o Blue Screen of Death. Uma barra de progresso chega a 100%.
+    <br>
+      Depois, seu sistema desaparece.
     </p>
-    <div class="con-warn">// DOWNLOAD THE DESKTOP APP. ONLY PLAY IF YOU MEAN IT.</div>
+    <div class="con-warn">// BAIXE O APLICATIVO PARA DESKTOP. SÓ JOGUE SE FOR SÉRIO.</div>
     <div class="wipe-counter">
       <span class="wipe-num" id="wipe-num">—</span>
-      <span class="wipe-label">SYSTEMS WIPED</span>
+      <span class="wipe-label">SISTEMAS APAGADOS</span>
     </div>
   </div>
 </div>
 
 <!-- DOWNLOAD -->
 <div class="download-section" id="download">
-  <div class="sec-tag">// DESKTOP APP</div>
-  <h2 class="sec-title">Download & Play for Real</h2>
+  <div class="sec-tag">// APLICATIVO PARA DESKTOP</div>
+  <h2 class="sec-title">Baixe e Jogue de Verdade</h2>
   <div class="dl-grid">
     <div class="dl-card">
       <div class="dl-os">MACOS</div>
       <div class="dl-name">System 32 Roulette</div>
       <div class="dl-formats">
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener" class="dl-btn primary">⬇ Universal DMG (Intel + Apple Silicon)</a>
-        <a href="/macos" class="dl-btn" style="color:var(--cyan);border-color:var(--cyan);">📖 macOS Setup Guide</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener" class="dl-btn primary">⬇ DMG Universal (Intel + Apple Silicon)</a>
+        <a href="/macos" class="dl-btn" style="color:var(--cyan);border-color:var(--cyan);">📖 Guia de Instalação do macOS</a>
       </div>
     </div>
     <div class="dl-card">
       <div class="dl-os">WINDOWS</div>
       <div class="dl-name">System 32 Roulette</div>
       <div class="dl-formats">
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-Setup-x64.exe" class="dl-btn primary">⬇ Installer (.exe)</a>
-        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-Portable-x64.exe" class="dl-btn">⬇ Portable (.exe)</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-Setup-x64.exe" class="dl-btn primary">⬇ Instalador (.exe)</a>
+        <a href="https://github.com/Hackatoan/sys32roulette/releases/latest/download/Sys32Roulette-Portable-x64.exe" class="dl-btn">⬇ Versão Portátil (.exe)</a>
       </div>
     </div>
     <div class="dl-card">
@@ -436,28 +439,28 @@
     </div>
   </div>
   <p class="dl-note">
-    All releases on <a href="https://github.com/Hackatoan/sys32roulette/releases" target="_blank" rel="noopener">GitHub Releases</a> &nbsp;·&nbsp; Windows requires UAC admin prompt &nbsp;·&nbsp; Linux AppImage: <code>chmod +x</code> first
+    Todos os lançamentos em <a href="https://github.com/Hackatoan/sys32roulette/releases" target="_blank" rel="noopener">GitHub Releases</a> &nbsp;·&nbsp; O Windows requer solicitação de admin do UAC &nbsp;·&nbsp; Linux AppImage: <code>chmod +x</code> primeiro
   </p>
 </div>
 
 <!-- FINAL CTA -->
 <div class="final-cta">
-  <h2 class="fcta-title">Think you can win?</h2>
-  <p class="fcta-sub">No account required. Play in browser or download the desktop app.</p>
-  <a href="/play" class="fcta-btn">PLAY FOR FREE</a>
+  <h2 class="fcta-title">Acha que consegue vencer?</h2>
+  <p class="fcta-sub">Nenhuma conta necessária. Jogue no navegador ou baixe o aplicativo para desktop.</p>
+  <a href="/play" class="fcta-btn">JOGUE DE GRAÇA</a>
 </div>
 
 <footer>
   <div class="fbrand">
     <strong>System 32 Roulette</strong> &nbsp;·&nbsp;
-    Built by <a href="https://hackatoa.com" style="color:var(--green);text-decoration:none">Hackatoa</a>
+    Criado por <a href="https://hackatoa.com" style="color:var(--green);text-decoration:none">Hackatoa</a>
   </div>
   <div class="flinks">
-    <a href="/play">Play</a>
-    <a href="#download">Download</a>
-    <a href="https://games.hackatoa.com" target="_blank">All Games</a>
-    <a href="https://github.com/Hackatoan/sys32roulette" target="_blank">Source Code</a>
-    <a href="https://buymeacoffee.com/hackatoa" target="_blank">☕ Support</a>
+    <a href="/play">Jogar</a>
+    <a href="#download">Baixar</a>
+    <a href="https://games.hackatoa.com" target="_blank">Todos os Jogos</a>
+    <a href="https://github.com/Hackatoan/sys32roulette" target="_blank">Código-fonte</a>
+    <a href="https://buymeacoffee.com/hackatoa" target="_blank">☕ Apoiar</a>
   </div>
 </footer>
 
