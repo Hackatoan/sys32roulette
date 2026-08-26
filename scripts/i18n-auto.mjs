@@ -118,6 +118,11 @@ for (const loc of LOCALES.filter((l) => l !== 'en')) {
     let out = apply(src, map);
     out = out.replace(/<html lang="en">/i, `<html lang="${loc}">`);
     out = out.replace(/\b(href|src)="(?!https?:|\/|#|data:|mailto:)([^"]+)"/g, (m, a, p) => `${a}="/${p}"`);
+    // self-referential canonical + og:url for the localized page (both attr orders)
+    const locUrl = pageUrl(page, loc);
+    out = out.replace(/(<link\b[^>]*\brel="canonical"[^>]*\bhref=")[^"]*(")/i, `$1${locUrl}$2`)
+             .replace(/(<link\b[^>]*\bhref=")[^"]*("[^>]*\brel="canonical")/i, `$1${locUrl}$2`)
+             .replace(/(<meta\b[^>]*\bproperty="og:url"[^>]*\bcontent=")[^"]*(")/i, `$1${locUrl}$2`);
     // keep internal links in-locale (e.g. /play -> /<loc>/game.html)
     for (const [from, to] of Object.entries(cfg.internalLinks || {}))
       out = out.split(`href="${from}"`).join(`href="/${loc}${to}"`);
