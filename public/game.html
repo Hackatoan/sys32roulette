@@ -46,19 +46,19 @@
   <div id="s-menu" class="screen active">
     <div class="panel">
       <h1 class="panel-title">SYSTEM 32 ROULETTE</h1>
-      <input id="name-input" class="code-input" type="text" placeholder="your nickname" maxlength="24" autocomplete="off" style="text-transform:none;letter-spacing:normal;">
+      <input id="name-input" class="code-input" type="text" placeholder="your nickname" data-i18n-ph="namePlaceholder" maxlength="24" autocomplete="off" style="text-transform:none;letter-spacing:normal;">
       <div class="menu-btns">
-        <button class="btn btn-primary" onclick="doQuickPlay()">⚡ Quick Play</button>
-        <button class="btn btn-secondary" onclick="showScreen('s-ai-select')">🤖 VS AI</button>
-        <button class="btn btn-secondary" onclick="doCreateRoom()">Create Game</button>
-        <button class="btn btn-secondary" onclick="showJoin()">Join Game</button>
-        <button class="btn btn-ghost" onclick="location.href='/'">← About</button>
+        <button class="btn btn-primary" data-i18n="quickPlay" onclick="doQuickPlay()">⚡ Quick Play</button>
+        <button class="btn btn-secondary" data-i18n="vsAi" onclick="showScreen('s-ai-select')">🤖 VS AI</button>
+        <button class="btn btn-secondary" data-i18n="createGame" onclick="doCreateRoom()">Create Game</button>
+        <button class="btn btn-secondary" data-i18n="joinGame" onclick="showJoin()">Join Game</button>
+        <button class="btn btn-ghost" data-i18n="about" onclick="location.href='/'">← About</button>
       </div>
       <div class="leaderboard-box">
-        <h3 class="lb-title">🏆 LEADERBOARD</h3>
+        <h3 class="lb-title" data-i18n="leaderboard">🏆 LEADERBOARD</h3>
         <table class="leaderboard">
-          <thead><tr><th>#</th><th>Player</th><th>W</th><th>L</th><th>D</th></tr></thead>
-          <tbody id="lb-body"><tr><td colspan="5">Loading…</td></tr></tbody>
+          <thead><tr><th>#</th><th data-i18n="colPlayer">Player</th><th>W</th><th>L</th><th>D</th></tr></thead>
+          <tbody id="lb-body"><tr><td colspan="5" data-i18n="loading">Loading…</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -67,12 +67,12 @@
   <!-- VS AI DIFFICULTY -->
   <div id="s-ai-select" class="screen">
     <div class="panel">
-      <h2 class="panel-title">VS AI</h2>
+      <h2 class="panel-title" data-i18n="vsAiTitle">VS AI</h2>
       <div class="menu-btns">
-        <button class="btn btn-secondary" onclick="doPlayAI('easy')">🟢 Easy</button>
-        <button class="btn btn-primary" onclick="doPlayAI('medium')">🟡 Medium</button>
-        <button class="btn btn-danger" onclick="doPlayAI('hard')">🔴 Hard</button>
-        <button class="btn btn-ghost" onclick="showScreen('s-menu')">← Back</button>
+        <button class="btn btn-secondary" data-i18n="easy" onclick="doPlayAI('easy')">🟢 Easy</button>
+        <button class="btn btn-primary" data-i18n="medium" onclick="doPlayAI('medium')">🟡 Medium</button>
+        <button class="btn btn-danger" data-i18n="hard" onclick="doPlayAI('hard')">🔴 Hard</button>
+        <button class="btn btn-ghost" data-i18n="back" onclick="showScreen('s-menu')">← Back</button>
       </div>
     </div>
   </div>
@@ -80,39 +80,39 @@
   <!-- QUEUE -->
   <div id="s-queue" class="screen">
     <div class="panel">
-      <h2 class="panel-title">FINDING OPPONENT</h2>
+      <h2 class="panel-title" data-i18n="findingOpponent">FINDING OPPONENT</h2>
       <div class="spinner"></div>
       <p class="hint-text" id="queue-status-text">Searching for a target...</p>
       <div class="queue-timer" id="queue-timer">0s</div>
-      <button class="btn btn-ghost" onclick="leaveQueue()">Cancel</button>
+      <button class="btn btn-ghost" data-i18n="cancel" onclick="leaveQueue()">Cancel</button>
     </div>
   </div>
 
   <!-- WAITING (host) -->
   <div id="s-create" class="screen">
     <div class="panel">
-      <h2 class="panel-title">AWAITING OPPONENT</h2>
-      <div class="code-label">ROOM CODE</div>
+      <h2 class="panel-title" data-i18n="awaitingOpponent">AWAITING OPPONENT</h2>
+      <div class="code-label" data-i18n="roomCode">ROOM CODE</div>
       <div class="room-code-big" id="room-code-display">------</div>
       <div class="copy-btns">
-        <button class="btn-copy" onclick="copyCode()">Copy Code</button>
-        <button class="btn-copy" onclick="copyLink()">Copy Link</button>
+        <button class="btn-copy" data-i18n="copyCode" onclick="copyCode()">Copy Code</button>
+        <button class="btn-copy" data-i18n="copyLink" onclick="copyLink()">Copy Link</button>
       </div>
       <div class="spinner"></div>
-      <p class="hint-text">Share the code with your opponent to start</p>
-      <button class="btn btn-ghost" onclick="location.reload()">Cancel</button>
+      <p class="hint-text" data-i18n="shareHint">Share the code with your opponent to start</p>
+      <button class="btn btn-ghost" data-i18n="cancel" onclick="location.reload()">Cancel</button>
     </div>
   </div>
 
   <!-- JOIN -->
   <div id="s-join" class="screen">
     <div class="panel">
-      <h2 class="panel-title">ENTER ROOM CODE</h2>
+      <h2 class="panel-title" data-i18n="enterRoomCode">ENTER ROOM CODE</h2>
       <input id="code-input" class="code-input" type="text" placeholder="XXXXXX" maxlength="6" autocomplete="off">
       <div id="join-error" class="error-msg"></div>
       <div class="row-btns">
-        <button class="btn btn-primary" onclick="doJoinRoom()">Connect</button>
-        <button class="btn btn-ghost" onclick="showScreen('s-menu')">← Back</button>
+        <button class="btn btn-primary" data-i18n="connect" onclick="doJoinRoom()">Connect</button>
+        <button class="btn btn-ghost" data-i18n="back" onclick="showScreen('s-menu')">← Back</button>
       </div>
     </div>
   </div>
@@ -120,7 +120,7 @@
   <!-- COUNTDOWN -->
   <div id="s-countdown" class="screen">
     <div class="countdown-wrap">
-      <div class="countdown-label">BATTLE INITIATING IN</div>
+      <div class="countdown-label" data-i18n="battleInitiating">BATTLE INITIATING IN</div>
       <div class="countdown-num" id="countdown-num">3</div>
     </div>
   </div>
@@ -131,7 +131,7 @@
       <div class="round-tag">ROUND <span id="round-num">1</span>/<span id="round-total">5</span></div>
       <div class="game-badge" id="game-badge">—</div>
       <div class="score-row">
-        <span class="sc-you">YOU <span id="sc-you">0</span></span>
+        <span class="sc-you"><span data-i18n="you">YOU</span> <span id="sc-you">0</span></span>
         <span class="sc-sep">·</span>
         <span class="sc-opp"><span id="opp-label">OPP</span> <span id="sc-opp">0</span></span>
       </div>
@@ -139,79 +139,79 @@
 
     <!-- TYPING: COMMAND INJECTION -->
     <div id="mg-typing" class="minigame hidden">
-      <div class="mg-label">TYPE THE COMMAND EXACTLY — FIRST TO FINISH WINS</div>
+      <div class="mg-label" data-i18n="mgTyping">TYPE THE COMMAND EXACTLY — FIRST TO FINISH WINS</div>
       <div class="typing-target" id="typing-target"></div>
       <div class="typing-overlay" id="typing-overlay"></div>
-      <input id="typing-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="start typing...">
-      <div class="typing-status" id="typing-status">Waiting...</div>
+      <input id="typing-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="start typing..." data-i18n-ph="typingPlaceholder">
+      <div class="typing-status" id="typing-status" data-i18n="typingStatus">Waiting...</div>
     </div>
 
     <!-- CLICK: BUFFER OVERFLOW -->
     <div id="mg-click" class="minigame hidden">
-      <div class="mg-label">CLICK TARGETS TO OVERFLOW THE BUFFER — MOST CLICKS IN 12s WINS</div>
+      <div class="mg-label" data-i18n="mgClick">CLICK TARGETS TO OVERFLOW THE BUFFER — MOST CLICKS IN 12s WINS</div>
       <div class="click-hud">
         <div class="click-timer-bar"><div id="click-fill" class="click-fill"></div></div>
-        <div class="click-counter">CLICKS: <span id="click-count">0</span></div>
+        <div class="click-counter"><span data-i18n="clicks">CLICKS:</span> <span id="click-count">0</span></div>
       </div>
       <div class="click-grid" id="click-grid"></div>
     </div>
 
     <!-- MEMORY: MEMORY DUMP -->
     <div id="mg-memory" class="minigame hidden">
-      <div class="mg-label" id="mem-label">MEMORIZE THE DUMP — REPRODUCE IT FROM MEMORY</div>
+      <div class="mg-label" id="mem-label" data-i18n="mgMemory">MEMORIZE THE DUMP — REPRODUCE IT FROM MEMORY</div>
       <div class="mem-timer-bar"><div id="mem-fill" class="mem-fill"></div></div>
       <div class="mem-grid" id="mem-grid"></div>
-      <button id="mem-submit" class="btn btn-primary hidden" onclick="submitMemory()">SUBMIT ANSWER</button>
+      <button id="mem-submit" class="btn btn-primary hidden" data-i18n="submitAnswer" onclick="submitMemory()">SUBMIT ANSWER</button>
     </div>
 
     <!-- REACTION: KERNEL PANIC -->
     <div id="mg-reaction" class="minigame hidden">
-      <div class="mg-label">CLICK WHEN THE SIGNAL FIRES — EARLY CLICK FORFEITS THE ROUND</div>
-      <div id="reaction-status" class="reaction-status">STANDBY...</div>
-      <button id="reaction-btn" class="reaction-btn" onclick="doReactionClick()">CLICK</button>
+      <div class="mg-label" data-i18n="mgReaction">CLICK WHEN THE SIGNAL FIRES — EARLY CLICK FORFEITS THE ROUND</div>
+      <div id="reaction-status" class="reaction-status" data-i18n="reactionStandby">STANDBY...</div>
+      <button id="reaction-btn" class="reaction-btn" data-i18n="click" onclick="doReactionClick()">CLICK</button>
       <div id="reaction-result" class="reaction-result"></div>
     </div>
 
     <!-- MATH: HASH COLLISION -->
     <div id="mg-math" class="minigame hidden">
-      <div class="mg-label">SOLVE MATH PROBLEMS — FIRST TO 5 CORRECT WINS</div>
+      <div class="mg-label" data-i18n="mgMath">SOLVE MATH PROBLEMS — FIRST TO 5 CORRECT WINS</div>
       <div id="math-progress" class="quiz-progress">0 / 5</div>
       <div id="math-problem" class="math-problem">...</div>
       <div id="math-feedback" class="quiz-feedback"></div>
-      <input id="math-input" class="math-input" type="number" autocomplete="off" placeholder="answer">
-      <button class="btn btn-primary" onclick="submitMath()">SUBMIT</button>
+      <input id="math-input" class="math-input" type="number" autocomplete="off" placeholder="answer" data-i18n-ph="answerPlaceholder">
+      <button class="btn btn-primary" data-i18n="submit" onclick="submitMath()">SUBMIT</button>
     </div>
 
     <!-- ORDER: STACK SORT -->
     <div id="mg-order" class="minigame hidden">
-      <div class="mg-label">CLICK NUMBERS IN ORDER — FIRST TO SORT THE STACK WINS</div>
-      <div class="order-next">NEXT: <span id="order-next-num">1</span></div>
+      <div class="mg-label" data-i18n="mgOrder">CLICK NUMBERS IN ORDER — FIRST TO SORT THE STACK WINS</div>
+      <div class="order-next"><span data-i18n="next">NEXT:</span> <span id="order-next-num">1</span></div>
       <div class="order-grid" id="order-grid"></div>
     </div>
 
     <!-- SCRAMBLE: BUFFER DECODE -->
     <div id="mg-scramble" class="minigame hidden">
-      <div class="mg-label">UNSCRAMBLE THE COMMAND — FIRST TO TYPE IT CORRECTLY WINS</div>
+      <div class="mg-label" data-i18n="mgScramble">UNSCRAMBLE THE COMMAND — FIRST TO TYPE IT CORRECTLY WINS</div>
       <div id="scramble-word" class="scramble-word"></div>
-      <input id="scramble-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="type the unscrambled word...">
+      <input id="scramble-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="type the unscrambled word..." data-i18n-ph="scramblePlaceholder">
       <div id="scramble-feedback" class="quiz-feedback"></div>
-      <button class="btn btn-primary" onclick="submitScramble()">SUBMIT</button>
+      <button class="btn btn-primary" data-i18n="submit" onclick="submitScramble()">SUBMIT</button>
     </div>
 
     <!-- WHACK: PROCESS KILL -->
     <div id="mg-whack" class="minigame hidden">
-      <div class="mg-label">KILL PROCESSES BEFORE THEY ESCAPE — MOST KILLS IN 12s WINS</div>
+      <div class="mg-label" data-i18n="mgWhack">KILL PROCESSES BEFORE THEY ESCAPE — MOST KILLS IN 12s WINS</div>
       <div class="click-hud">
         <div class="click-timer-bar"><div id="whack-fill" class="click-fill"></div></div>
-        <div class="click-counter">KILLS: <span id="whack-count">0</span></div>
+        <div class="click-counter"><span data-i18n="kills">KILLS:</span> <span id="whack-count">0</span></div>
       </div>
       <div class="whack-arena" id="whack-arena"></div>
     </div>
 
     <!-- BINARY: BIT FLIP -->
     <div id="mg-binary" class="minigame hidden">
-      <div class="mg-label">CONVERT BINARY TO DECIMAL — FIRST TO 5 CORRECT WINS</div>
-      <div class="mg-tip">💡 Each bit is a power of 2 from right: 8·4·2·1 — e.g. 1011 = 8+2+1 = 11</div>
+      <div class="mg-label" data-i18n="mgBinary">CONVERT BINARY TO DECIMAL — FIRST TO 5 CORRECT WINS</div>
+      <div class="mg-tip" data-i18n-html="binaryTip">💡 Each bit is a power of 2 from right: 8·4·2·1 — e.g. 1011 = 8+2+1 = 11</div>
       <div id="binary-progress" class="quiz-progress">0 / 5</div>
       <div id="binary-value" class="binary-value"></div>
       <div id="binary-choices" class="binary-choices"></div>
@@ -220,8 +220,8 @@
 
     <!-- STROOP: MEMORY CORRUPTION -->
     <div id="mg-stroop" class="minigame hidden">
-      <div class="mg-label">MATCH THE COLOR — CLICK THE COLOR THE TEXT IS <em>DRAWN IN</em>, NOT WHAT THE WORD SAYS</div>
-      <div class="mg-tip">💡 Ignore the word — click the button matching the ink color</div>
+      <div class="mg-label" data-i18n-html="mgStroop">MATCH THE COLOR — CLICK THE COLOR THE TEXT IS <em>DRAWN IN</em>, NOT WHAT THE WORD SAYS</div>
+      <div class="mg-tip" data-i18n="stroopTip">💡 Ignore the word — click the button matching the ink color</div>
       <div id="stroop-progress" class="quiz-progress">0 / 5</div>
       <div id="stroop-word" class="stroop-word"></div>
       <div id="stroop-choices" class="stroop-choices"></div>
@@ -230,10 +230,10 @@
 
     <!-- HOLD: PRECISION TIMING -->
     <div id="mg-hold" class="minigame hidden">
-      <div class="mg-label">HOLD THE BUTTON FOR EXACTLY THE TARGET DURATION — CLOSEST WINS</div>
-      <div class="hold-target-label">TARGET</div>
+      <div class="mg-label" data-i18n="mgHold">HOLD THE BUTTON FOR EXACTLY THE TARGET DURATION — CLOSEST WINS</div>
+      <div class="hold-target-label" data-i18n="target">TARGET</div>
       <div id="hold-target-display" class="hold-target">0.0s</div>
-      <button id="hold-btn" class="hold-btn"
+      <button id="hold-btn" class="hold-btn" data-i18n="hold"
         onmousedown="holdStart(event)" onmouseup="holdEnd(event)"
         ontouchstart="holdStart(event)" ontouchend="holdEnd(event)">HOLD</button>
       <div id="hold-elapsed" class="hold-elapsed"></div>
@@ -242,10 +242,10 @@
 
     <!-- AIM: TARGET LOCK -->
     <div id="mg-aim" class="minigame hidden">
-      <div class="mg-label">CLICK THE TARGET — MOST HITS IN 12s WINS</div>
+      <div class="mg-label" data-i18n="mgAim">CLICK THE TARGET — MOST HITS IN 12s WINS</div>
       <div class="click-hud">
         <div class="click-timer-bar"><div id="aim-fill" class="click-fill"></div></div>
-        <div class="click-counter">HITS: <span id="aim-count">0</span></div>
+        <div class="click-counter"><span data-i18n="hits">HITS:</span> <span id="aim-count">0</span></div>
       </div>
       <div class="aim-arena" id="aim-arena">
         <div class="aim-target" id="aim-target">◉</div>
@@ -254,9 +254,9 @@
 
     <!-- SIMON: INTERRUPT VECTOR -->
     <div id="mg-simon" class="minigame hidden">
-      <div class="mg-label">MEMORIZE THE SEQUENCE — REPRODUCE IT USING W/A/S/D — FIRST CORRECT WINS</div>
+      <div class="mg-label" data-i18n="mgSimon">MEMORIZE THE SEQUENCE — REPRODUCE IT USING W/A/S/D — FIRST CORRECT WINS</div>
       <div id="simon-chips" class="simon-chips"></div>
-      <div id="simon-label" class="simon-label">MEMORIZING...</div>
+      <div id="simon-label" class="simon-label" data-i18n="simonMemorizing">MEMORIZING...</div>
       <div class="simon-btns">
         <div class="simon-row">
           <button class="simon-key" id="sk-W" onclick="simonPress('W')">W</button>
@@ -272,19 +272,19 @@
 
     <!-- COUNTDOWN: RACE CONDITION -->
     <div id="mg-countdown" class="minigame hidden">
-      <div class="mg-label">CLICK STOP WHEN THE TIMER REACHES ZERO — CLOSEST WINS</div>
+      <div class="mg-label" data-i18n="mgCountdown">CLICK STOP WHEN THE TIMER REACHES ZERO — CLOSEST WINS</div>
       <div id="countdown-race-timer" class="countdown-race-timer">10.000</div>
-      <button id="countdown-stop-btn" class="btn btn-primary" onclick="doCountdownStop()">STOP</button>
+      <button id="countdown-stop-btn" class="btn btn-primary" data-i18n="stop" onclick="doCountdownStop()">STOP</button>
       <div id="countdown-stop-result" class="hold-status"></div>
     </div>
 
     <!-- PIPES: PIPE REDIRECT -->
     <div id="mg-pipes" class="minigame hidden">
-      <div class="mg-label">WHAT DOES THIS COMMAND OUTPUT? — FIRST CORRECT ANSWER WINS</div>
+      <div class="mg-label" data-i18n="mgPipes">WHAT DOES THIS COMMAND OUTPUT? — FIRST CORRECT ANSWER WINS</div>
       <div id="pipes-display" class="pipes-display"></div>
-      <input id="pipes-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="output...">
+      <input id="pipes-input" class="typing-input" type="text" autocomplete="off" spellcheck="false" placeholder="output..." data-i18n-ph="outputPlaceholder">
       <div id="pipes-feedback" class="quiz-feedback"></div>
-      <button class="btn btn-primary" onclick="submitPipes()">SUBMIT</button>
+      <button class="btn btn-primary" data-i18n="submit" onclick="submitPipes()">SUBMIT</button>
     </div>
   </div>
 
@@ -294,7 +294,7 @@
       <div class="round-result-title" id="rr-title">—</div>
       <div class="round-result-sub" id="rr-sub"></div>
       <div class="score-tally" id="rr-tally"></div>
-      <div class="next-hint">Next round loading...</div>
+      <div class="next-hint" data-i18n="nextRound">Next round loading...</div>
     </div>
   </div>
 
@@ -302,13 +302,13 @@
   <div id="s-win" class="screen">
     <div class="end-content">
       <div class="end-icon">✅</div>
-      <h2 class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED">ENEMY SYSTEM DELETED</h2>
-      <p class="end-sub end-sub-win">You survived. The other system was wiped.</p>
+      <h2 class="end-title end-title-win glitch" data-text="ENEMY SYSTEM DELETED" data-i18n="winTitle">ENEMY SYSTEM DELETED</h2>
+      <p class="end-sub end-sub-win" data-i18n="winSub">You survived. The other system was wiped.</p>
       <div class="win-terminal" id="win-terminal"></div>
-      <p class="end-real" style="color:var(--green)">YOUR SYSTEM: INTACT — GG.</p>
+      <p class="end-real" style="color:var(--green)" data-i18n="winReal">YOUR SYSTEM: INTACT — GG.</p>
       <div class="end-btns">
-        <button class="btn btn-primary" onclick="location.reload()">Play Again</button>
-        <button class="btn btn-ghost" onclick="location.href='/'">Main Menu</button>
+        <button class="btn btn-primary" data-i18n="playAgain" onclick="location.reload()">Play Again</button>
+        <button class="btn btn-ghost" data-i18n="mainMenu" onclick="location.href='/'">Main Menu</button>
       </div>
     </div>
   </div>
@@ -327,8 +327,8 @@
     <div id="lose-phase2" class="bsod hidden">
       <div class="bsod-inner">
         <div class="bsod-face">:(</div>
-        <h2>Your PC ran into a problem and needs to restart.</h2>
-        <p>We're just collecting some error info, and then we'll delete System32 for you.</p>
+        <h2 data-i18n="bsodTitle">Your PC ran into a problem and needs to restart.</h2>
+        <p data-i18n="bsodSub">We're just collecting some error info, and then we'll delete System32 for you.</p>
         <div class="bsod-bar-wrap">
           <div class="bsod-bar"><div id="bsod-fill" class="bsod-fill"></div></div>
           <div id="bsod-pct">0% complete</div>
@@ -343,8 +343,8 @@
     <div id="lose-phase2-mac" class="mac-panic hidden">
       <div class="mac-panic-inner">
         <div class="mac-spin">&#x29B5;</div>
-        <h2>Your Mac restarted because of a problem.</h2>
-        <p>To see more details, open the Console app and look at the panic log.</p>
+        <h2 data-i18n="macTitle">Your Mac restarted because of a problem.</h2>
+        <p data-i18n="macSub">To see more details, open the Console app and look at the panic log.</p>
         <div class="mac-bar-wrap">
           <div class="mac-bar"><div id="mac-fill" class="mac-fill"></div></div>
           <div id="mac-pct" class="mac-pct-text">Collecting panic info... 0%</div>
@@ -358,12 +358,12 @@ Mac OS version: you lost</div>
 
     <div id="lose-phase3" class="lose-reveal hidden">
       <div class="reveal-icon">💀</div>
-      <h2 class="reveal-title">you lost.</h2>
-      <p class="reveal-sub">Playing in the browser? Your system is fine. <em>This time.</em></p>
-      <p class="reveal-sub2">Download the desktop app to play for real.</p>
+      <h2 class="reveal-title" data-i18n="revealTitle">you lost.</h2>
+      <p class="reveal-sub" data-i18n-html="revealSub">Playing in the browser? Your system is fine. <em>This time.</em></p>
+      <p class="reveal-sub2" data-i18n="revealSub2">Download the desktop app to play for real.</p>
       <div class="end-btns">
-        <button class="btn btn-primary" onclick="location.reload()">Try Again</button>
-        <button class="btn btn-ghost" onclick="location.href='/'">Main Menu</button>
+        <button class="btn btn-primary" data-i18n="tryAgain" onclick="location.reload()">Try Again</button>
+        <button class="btn btn-ghost" data-i18n="mainMenu" onclick="location.href='/'">Main Menu</button>
       </div>
     </div>
   </div>
@@ -372,11 +372,11 @@ Mac OS version: you lost</div>
   <div id="s-draw" class="screen">
     <div class="end-content">
       <div class="end-icon">🤝</div>
-      <h2 class="end-title" style="color:var(--cyan)">DEADLOCK</h2>
-      <p class="end-sub">Both systems survive. Equally unimpressive.</p>
+      <h2 class="end-title" style="color:var(--cyan)" data-i18n="drawTitle">DEADLOCK</h2>
+      <p class="end-sub" data-i18n="drawSub">Both systems survive. Equally unimpressive.</p>
       <div class="end-btns">
-        <button class="btn btn-primary" onclick="location.reload()">Rematch</button>
-        <button class="btn btn-ghost" onclick="location.href='/'">Main Menu</button>
+        <button class="btn btn-primary" data-i18n="rematch" onclick="location.reload()">Rematch</button>
+        <button class="btn btn-ghost" data-i18n="mainMenu" onclick="location.href='/'">Main Menu</button>
       </div>
     </div>
   </div>
@@ -384,13 +384,50 @@ Mac OS version: you lost</div>
   <!-- OPPONENT LEFT -->
   <div id="s-left" class="screen">
     <div class="panel">
-      <h2 class="panel-title" style="color:var(--red)">CONNECTION LOST</h2>
-      <p style="color:var(--muted);text-align:center">Your opponent disconnected before their system could be deleted.</p>
-      <button class="btn btn-primary" onclick="location.href='/'">Main Menu</button>
+      <h2 class="panel-title" style="color:var(--red)" data-i18n="connectionLost">CONNECTION LOST</h2>
+      <p style="color:var(--muted);text-align:center" data-i18n="opponentLeft">Your opponent disconnected before their system could be deleted.</p>
+      <button class="btn btn-primary" data-i18n="mainMenu" onclick="location.href='/'">Main Menu</button>
     </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+
+  <!-- i18n:room:start (generated by scripts/i18n-room-build.mjs — do not edit) -->
+  <script>
+  (function () {
+    var DICT = {"en":{"namePlaceholder":"your nickname","quickPlay":"⚡ Quick Play","vsAi":"🤖 VS AI","createGame":"Create Game","joinGame":"Join Game","about":"← About","leaderboard":"🏆 LEADERBOARD","colPlayer":"Player","loading":"Loading…","vsAiTitle":"VS AI","easy":"🟢 Easy","medium":"🟡 Medium","hard":"🔴 Hard","back":"← Back","findingOpponent":"FINDING OPPONENT","cancel":"Cancel","awaitingOpponent":"AWAITING OPPONENT","roomCode":"ROOM CODE","copyCode":"Copy Code","copyLink":"Copy Link","shareHint":"Share the code with your opponent to start","enterRoomCode":"ENTER ROOM CODE","connect":"Connect","battleInitiating":"BATTLE INITIATING IN","you":"YOU","mgTyping":"TYPE THE COMMAND EXACTLY — FIRST TO FINISH WINS","typingStatus":"Waiting...","typingPlaceholder":"start typing...","mgClick":"CLICK TARGETS TO OVERFLOW THE BUFFER — MOST CLICKS IN 12s WINS","clicks":"CLICKS:","mgMemory":"MEMORIZE THE DUMP — REPRODUCE IT FROM MEMORY","submitAnswer":"SUBMIT ANSWER","mgReaction":"CLICK WHEN THE SIGNAL FIRES — EARLY CLICK FORFEITS THE ROUND","reactionStandby":"STANDBY...","click":"CLICK","mgMath":"SOLVE MATH PROBLEMS — FIRST TO 5 CORRECT WINS","answerPlaceholder":"answer","submit":"SUBMIT","mgOrder":"CLICK NUMBERS IN ORDER — FIRST TO SORT THE STACK WINS","next":"NEXT:","mgScramble":"UNSCRAMBLE THE COMMAND — FIRST TO TYPE IT CORRECTLY WINS","scramblePlaceholder":"type the unscrambled word...","mgWhack":"KILL PROCESSES BEFORE THEY ESCAPE — MOST KILLS IN 12s WINS","kills":"KILLS:","mgBinary":"CONVERT BINARY TO DECIMAL — FIRST TO 5 CORRECT WINS","binaryTip":"💡 Each bit is a power of 2 from right: 8·4·2·1 — e.g. 1011 = 8+2+1 = 11","mgStroop":"MATCH THE COLOR — CLICK THE COLOR THE TEXT IS <em>DRAWN IN</em>, NOT WHAT THE WORD SAYS","stroopTip":"💡 Ignore the word — click the button matching the ink color","mgHold":"HOLD THE BUTTON FOR EXACTLY THE TARGET DURATION — CLOSEST WINS","target":"TARGET","hold":"HOLD","mgAim":"CLICK THE TARGET — MOST HITS IN 12s WINS","hits":"HITS:","mgSimon":"MEMORIZE THE SEQUENCE — REPRODUCE IT USING W/A/S/D — FIRST CORRECT WINS","simonMemorizing":"MEMORIZING...","mgCountdown":"CLICK STOP WHEN THE TIMER REACHES ZERO — CLOSEST WINS","stop":"STOP","mgPipes":"WHAT DOES THIS COMMAND OUTPUT? — FIRST CORRECT ANSWER WINS","outputPlaceholder":"output...","nextRound":"Next round loading...","winTitle":"ENEMY SYSTEM DELETED","winSub":"You survived. The other system was wiped.","winReal":"YOUR SYSTEM: INTACT — GG.","playAgain":"Play Again","mainMenu":"Main Menu","bsodTitle":"Your PC ran into a problem and needs to restart.","bsodSub":"We're just collecting some error info, and then we'll delete System32 for you.","macTitle":"Your Mac restarted because of a problem.","macSub":"To see more details, open the Console app and look at the panic log.","revealTitle":"you lost.","revealSub":"Playing in the browser? Your system is fine. <em>This time.</em>","revealSub2":"Download the desktop app to play for real.","tryAgain":"Try Again","drawTitle":"DEADLOCK","drawSub":"Both systems survive. Equally unimpressive.","rematch":"Rematch","connectionLost":"CONNECTION LOST","opponentLeft":"Your opponent disconnected before their system could be deleted.","noGames":"No games played yet — be the first!","lbUnavailable":"Leaderboard unavailable.","searchingTarget":"Searching for a target...","loadingAi":"Loading AI match...","invalidCode":"Enter a valid room code","opponentTyping":"Opponent is typing...","submittedWaiting":"SUBMITTED — waiting for result...","memorizePattern":"MEMORIZE THE PATTERN","reproducePattern":"REPRODUCE THE PATTERN — CLICK TO MARK CELLS","submitted":"SUBMITTED...","standbySignal":"STANDBY — WAIT FOR THE SIGNAL","clickNow":"⚡ CLICK NOW!","incorrect":"✗ INCORRECT","heldWaiting":"Held {sec}s — waiting...","memorizeSequence":"MEMORIZE THE SEQUENCE","repeatSequence":"REPEAT THE SEQUENCE — USE W/A/S/D","roundWon":"ROUND WON","roundWonSub":"Your opponent's defenses are crumbling.","roundDraw":"DRAW","roundDrawSub":"Evenly matched. Fight harder.","roundLost":"ROUND LOST","roundLostSub":"Your system vulnerabilities are showing.","waitingOpponent":"Waiting for an opponent...","inQueue":"In queue — #{position} of {total}","codeCopied":"Code copied!","linkCopied":"Link copied!","clickedWaiting":"Clicked! Waiting...","tooEarly":"Too early! Submitting...","stoppedWaiting":"Stopped at {sec}s — waiting...","collectingPanic":"Collecting panic info... {pct}%","pctComplete":"{pct}% complete"},"es":{"namePlaceholder":"tu apodo","quickPlay":"⚡ Partida rápida","vsAi":"🤖 VS IA","createGame":"Crear partida","joinGame":"Unirse a partida","about":"← Acerca de","leaderboard":"🏆 CLASIFICACIÓN","colPlayer":"Jugador","loading":"Cargando…","vsAiTitle":"VS IA","easy":"🟢 Fácil","medium":"🟡 Medio","hard":"🔴 Difícil","back":"← Volver","findingOpponent":"BUSCANDO OPONENTE","cancel":"Cancelar","awaitingOpponent":"ESPERANDO OPONENTE","roomCode":"CÓDIGO DE SALA","copyCode":"Copiar código","copyLink":"Copiar enlace","shareHint":"Comparte el código con tu oponente para empezar","enterRoomCode":"INTRODUCIR CÓDIGO DE SALA","connect":"Conectar","battleInitiating":"BATALLA INICIANDO EN","you":"TÚ","mgTyping":"ESCRIBE EL COMANDO EXACTAMENTE — EL PRIMERO EN TERMINAR GANA","typingStatus":"Esperando...","typingPlaceholder":"empieza a escribir...","mgClick":"HAZ CLIC EN LOS OBJETIVOS PARA DESBORDAR EL BÚFER — MÁS CLICS EN 12s GANA","clicks":"CLICS:","mgMemory":"MEMORIZA EL VOLCADO — REPÍTELO DE MEMORIA","submitAnswer":"ENVIAR RESPUESTA","mgReaction":"HAZ CLIC CUANDO SE DISPARE LA SEÑAL — UN CLIC PREMATURO HACE PIERDE LA RONDA","reactionStandby":"EN ESPERA...","click":"CLIC","mgMath":"RESUELVE PROBLEMAS MATEMÁTICOS — EL PRIMERO EN 5 CORRECTAS GANA","answerPlaceholder":"respuesta","submit":"ENVIAR","mgOrder":"HAZ CLIC EN LOS NÚMEROS EN ORDEN — EL PRIMERO EN ORDENAR LA PILA GANA","next":"SIGUIENTE:","mgScramble":"DESENCRIPTA EL COMANDO — EL PRIMERO EN ESCRIBIRLO CORRECTamente GANA","scramblePlaceholder":"escribe la palabra descifrada...","mgWhack":"MATA LOS PROCESOS ANTES DE QUE ESCAPEN — MÁS BAJAS EN 12s GANA","kills":"BAJAS:","mgBinary":"CONVIERTE BINARIO A DECIMAL — EL PRIMERO EN LLEGAR A 5 ACIERTOS GANA","binaryTip":"💡 Cada bit es una potencia de 2 desde la derecha: 8·4·2·1 — ej. 1011 = 8+2+1 = 11","mgStroop":"COINCIDE CON EL COLOR — HAZ CLIC EN EL COLOR EN EL QUE ESTÁ <em>ESCRITO</em> EL TEXTO, NO LO QUE DICE LA PALABRA","stroopTip":"💡 Ignora la palabra — haz clic en el botón que coincida con el color de la tinta","mgHold":"MANTÉN PULSADO EL BOTÓN DURANTE EXACTAMENTE EL TIEMPO OBJETIVO — EL MÁS CERCANO GANA","target":"OBJETIVO","hold":"MANTENER","mgAim":"HAZ CLIC EN EL OBJETIVO — MÁS ACIERTOS EN 12s GANA","hits":"ACIERTOS:","mgSimon":"MEMORIZA LA SECUENCIA — REPÚDELA USANDO W/A/S/D — EL PRIMERO EN ACERTAR GANA","simonMemorizing":"MEMORIZANDO...","mgCountdown":"HAZ CLIC EN STOP CUANDO EL CRONÓMETRO LLEGUE A CERO — EL MÁS CERCANO GANA","stop":"STOP","mgPipes":"¿QUÉ DEVUELVE ESTE COMANDO? — LA PRIMERA RESPUESTA CORRECTA GANA","outputPlaceholder":"salida...","nextRound":"Cargando siguiente ronda...","winTitle":"SISTEMA ENEMIGO ELIMINADO","winSub":"Sobreviviste. El otro sistema fue borrado.","winReal":"TU SISTEMA: INTACTO — GG.","playAgain":"Jugar de nuevo","mainMenu":"Menú principal","bsodTitle":"Tu PC tuvo un problema y necesita reiniciarse.","bsodSub":"Solo estamos recopilando información de errores y luego borraremos System32 por ti.","macTitle":"Tu Mac se reinició debido a un problema.","macSub":"Para ver más detalles, abre la aplicación Console y busca el registro de pánico.","revealTitle":"perdiste.","revealSub":"¿Jugando en el navegador? Tu sistema está bien. <em>Esta vez.</em>","revealSub2":"Descarga la aplicación de escritorio para jugar de verdad.","tryAgain":"Reintentar","drawTitle":"DEADLOCK","drawSub":"Ambos sistemas sobreviven. Igualmente decepcionante.","rematch":"Revancha","connectionLost":"CONEXIÓN PERDIDA","opponentLeft":"Tu oponente se desconectó antes de que su sistema pudiera ser borrado.","noGames":"Aún no hay partidas jugadas — ¡sé el primero!","lbUnavailable":"Tabla de clasificación no disponible.","searchingTarget":"Buscando un objetivo...","loadingAi":"Cargando partida contra la IA...","invalidCode":"Introduce un código de sala válido","opponentTyping":"El oponente está escribiendo...","submittedWaiting":"ENVIADO — esperando resultado...","memorizePattern":"MEMORIZA EL PATRÓN","reproducePattern":"REPRODUCE EL PATRÓN — HAZ CLIC PARA MARCAR CELDAS","submitted":"ENVIADO...","standbySignal":"EN ESPERA — ESPERA LA SEÑAL","clickNow":"⚡ HAZ CLIC AHORA!","incorrect":"✗ INCORRECTO","heldWaiting":"Mantenido {sec}s — esperando...","memorizeSequence":"MEMORIZA LA SECUENCIA","repeatSequence":"REPITE LA SECUENCIA — USA W/A/S/D","roundWon":"RONDA GANADA","roundWonSub":"Las defensas de tu oponente se están desmoronando.","roundDraw":"EMPATE","roundDrawSub":"Empatados. Lucha más duro.","roundLost":"RONDA PERDIDA","roundLostSub":"Tus vulnerabilidades del sistema están saliendo a la luz.","waitingOpponent":"Esperando a un oponente...","inQueue":"En cola — #{position} de {total}","codeCopied":"¡Código copiado!","linkCopied":"¡Enlace copiado!","clickedWaiting":"¡Clickeado! Esperando...","tooEarly":"¡Demasiado pronto! Enviando...","stoppedWaiting":"Detenido a los {sec}s — esperando...","collectingPanic":"Recopilando información de pánico... {pct}%","pctComplete":"{pct}% completado"},"pt-br":{"namePlaceholder":"seu apelido","quickPlay":"⚡ Partida Rápida","vsAi":"🤖 VS IA","createGame":"Criar Partida","joinGame":"Entrar na Partida","about":"← Sobre","leaderboard":"🏆 CLASSIFICAÇÃO","colPlayer":"Jogador","loading":"Carregando…","vsAiTitle":"VS IA","easy":"🟢 Fácil","medium":"🟡 Médio","hard":"🔴 Difícil","back":"← Voltar","findingOpponent":"LOCALIZANDO OPONENTE","cancel":"Cancelar","awaitingOpponent":"AGUARDANDO OPONENTE","roomCode":"CÓDIGO DA SALA","copyCode":"Copiar Código","copyLink":"Copiar Link","shareHint":"Compartilhe o código com seu oponente para começar","enterRoomCode":"DIGITE O CÓDIGO DA SALA","connect":"Conectar","battleInitiating":"BATALHA INICIANDO EM","you":"VOCÊ","mgTyping":"DIGITE O COMANDO EXATAMENTE — QUEM TERMINAR PRIMEIRO VENCE","typingStatus":"Aguardando...","typingPlaceholder":"comece a digitar...","mgClick":"CLIQUE NOS ALVOS PARA ESTOURAR O BUFFER — MAIS CLIQUES EM 12s VENCE","clicks":"CLIQUES:","mgMemory":"MEMORIZE O DUMP — REPRODUZA-O DE MEMÓRIA","submitAnswer":"ENVIAR RESPOSTA","mgReaction":"CLIQUE QUANDO O SINAL DISPARAR — CLIQUE ANTECIPADO PERDE A RODADA","reactionStandby":"EM ESPERA...","click":"CLIQUE","mgMath":"RESOLVA OS PROBLEMAS MATEMÁTICOS — PRIMEIRO A 5 CORRETAS VENCE","answerPlaceholder":"resposta","submit":"ENVIAR","mgOrder":"CLIQUE NOS NÚMEROS EM ORDEM — O PRIMEIRO A ORGANIZAR A PILHA VENCE","next":"PRÓXIMO:","mgScramble":"DESEMBARALHE O COMANDO — O PRIMEIRO A DIGITAR CORRETAMENTE VENCE","scramblePlaceholder":"digite a palavra desembaralhada...","mgWhack":"MATE OS PROCESSOS ANTES QUE FUGAM — MAIS ABATES EM 12s VENCE","kills":"ABATES:","mgBinary":"CONVERTA BINÁRIO PARA DECIMAL — PRIMEIRO A 5 CERTOS VENCE","binaryTip":"💡 Cada bit é uma potência de 2 da direita: 8·4·2·1 — ex: 1011 = 8+2+1 = 11","mgStroop":"COMBINE A COR — CLIQUE NA COR EM QUE O TEXTO ESTÁ <em>ESCRITO</em>, NÃO NO QUE A PALAVRA DIZ","stroopTip":"💡 Ignore a palavra — clique no botão correspondente à cor da tinta","mgHold":"SEGURE O BOTÃO EXATAMENTE PELO TEMPO ALVO — QUEM CHEGAR MAIS PERTO VENCE","target":"ALVO","hold":"SEGURAR","mgAim":"CLIQUE NO ALVO — MAIS ACERTOS EM 12s VENCE","hits":"ACERTOS:","mgSimon":"MEMORIZE A SEQUÊNCIA — REPRODUZA-A USANDO W/A/S/D — PRIMEIRO ACERTO VENCE","simonMemorizing":"MEMORIZANDO...","mgCountdown":"CLIQUE EM PARAR QUANDO O CRONÔMETRO ZERAR — QUEM CHEGAR MAIS PERTO VENCE","stop":"PARAR","mgPipes":"QUAL É A SAÍDA DESTE COMANDO? — PRIMEIRA RESPOSTA CORRETA VENCE","outputPlaceholder":"saída...","nextRound":"Próxima rodada carregando...","winTitle":"SISTEMA INIMIGO EXCLUÍDO","winSub":"Você sobreviveu. O outro sistema foi apagado.","winReal":"SEU SISTEMA: INTATO — GG.","playAgain":"Jogar Novamente","mainMenu":"Menu Principal","bsodTitle":"O seu PC encontrou um problema e precisa reiniciar.","bsodSub":"Estamos apenas coletando algumas informações de erro e depois excluiremos o System32 para você.","macTitle":"Seu Mac reiniciou devido a um problema.","macSub":"Para ver mais detalhes, abra o aplicativo Console e verifique o registro de pânico.","revealTitle":"você perdeu.","revealSub":"Jogando no navegador? Seu sistema está bem. <em>Desta vez.</em>","revealSub2":"Baixe o aplicativo para desktop para jogar de verdade.","tryAgain":"Tentar Novamente","drawTitle":"DEADLOCK","drawSub":"Ambos os sistemas sobrevivem. Igualmente sem graça.","rematch":"Revanche","connectionLost":"CONEXÃO PERDIDA","opponentLeft":"Seu oponente desconectou antes que o sistema dele pudesse ser deletado.","noGames":"Nenhuma partida jogada ainda — seja o primeiro!","lbUnavailable":"Placar indisponível.","searchingTarget":"Procurando um alvo...","loadingAi":"Carregando partida de IA...","invalidCode":"Insira um código de sala válido","opponentTyping":"Oponente está digitando...","submittedWaiting":"ENVIADO — aguardando resultado...","memorizePattern":"MEMORIZE O PADRÃO","reproducePattern":"REPRODUZA O PADRÃO — CLIQUE PARA MARCAR CÉLULAS","submitted":"ENVIADO...","standbySignal":"STANDBY — AGUARDE O SINAL","clickNow":"⚡ CLIQUE AGORA!","incorrect":"✗ INCORRETO","heldWaiting":"Mantido {sec}s — aguardando...","memorizeSequence":"MEMORIZE A SEQUÊNCIA","repeatSequence":"REPITA A SEQUÊNCIA — USE W/A/S/D","roundWon":"ROUND VENCIDO","roundWonSub":"As defesas do seu oponente estão desmoronando.","roundDraw":"EMPATE","roundDrawSub":"Emparelhados. Lute mais.","roundLost":"ROUND PERDIDO","roundLostSub":"Suas vulnerabilidades de sistema estão aparecendo.","waitingOpponent":"Aguardando oponente...","inQueue":"Na fila — #{position} de {total}","codeCopied":"Código copiado!","linkCopied":"Link copiado!","clickedWaiting":"Clicado! Aguardando...","tooEarly":"Muito cedo! Enviando...","stoppedWaiting":"Parou em {sec}s — aguardando...","collectingPanic":"Coletando dados de pânico... {pct}%","pctComplete":"{pct}% concluído"},"fr":{"namePlaceholder":"votre pseudo","quickPlay":"⚡ Partie rapide","vsAi":"🤖 VS IA","createGame":"Créer une partie","joinGame":"Rejoindre la partie","about":"← À propos","leaderboard":"🏆 CLASSEMENT","colPlayer":"Joueur","loading":"Chargement…","vsAiTitle":"VS IA","easy":"🟢 Facile","medium":"🟡 Moyen","hard":"🔴 Difficile","back":"← Retour","findingOpponent":"RECHERCHE D'ADVERSAIRE","cancel":"Annuler","awaitingOpponent":"EN ATTENTE DE L'ADVERSAIRE","roomCode":"CODE DE SALLE","copyCode":"Copier le code","copyLink":"Copier le lien","shareHint":"Partagez le code avec votre adversaire pour commencer","enterRoomCode":"ENTRER LE CODE DE SALLE","connect":"Connexion","battleInitiating":"DÉBUT DU COMBAT DANS","you":"VOUS","mgTyping":"TAPEZ LA COMMANDE EXACTEMENT — LE PREMIER À FINIR GAGNE","typingStatus":"En attente...","typingPlaceholder":"commencez à taper...","mgClick":"CLIQUEZ SUR LES CIBLES POUR DÉBORDER LE BUFFER — LE PLUS DE CLICS EN 12s GAGNE","clicks":"CLICS :","mgMemory":"MÉMORISEZ LE DUMP — REPRODUISEZ-LE DE MÉMOIRE","submitAnswer":"SOUMETTRE LA RÉPONSE","mgReaction":"CLIQUEZ QUAND LE SIGNAL SE DÉCLENCHE — UN CLIC TROP TÔT FAIT PERDRE LA MANCHE","reactionStandby":"EN ATTENTE...","click":"CLIQUEZ","mgMath":"RÉSOLVEZ LES PROBLÈMES MATHÉMATIQUES — PREMIER À 5 BONNES RÉPONSES GAGNE","answerPlaceholder":"réponse","submit":"VALIDER","mgOrder":"CLIQUEZ SUR LES CHIFFRES DANS L'ORDRE — LE PREMIER À TRIER LA PILE GAGNE","next":"SUIVANT :","mgScramble":"DÉCHIFFREZ LA COMMANDE — LE PREMIER À L'TAPER CORRECTEMENT GAGNE","scramblePlaceholder":"tapez le mot déchiffré...","mgWhack":"TUEZ LES PROCESSUS AVANT QU'ILS NE S'ÉCHAPPENT — LE PLUS DE KILLS EN 12s GAGNE","kills":"KILLS :","mgBinary":"CONVERTISSEZ LE BINAIRE EN DÉCIMAL — PREMIER À 5 BONNES RÉPONSES GAGNE","binaryTip":"💡 Chaque bit est une puissance de 2 en partant de la droite : 8·4·2·1 — ex. 1011 = 8+2+1 = 11","mgStroop":"ASSOCIEZ LA COULEUR — CLIQUEZ SUR LA COULEUR DANS LAQUELLE LE TEXTE EST <em>ÉCRIT</em>, PAS CE QUE DIT LE MOT","stroopTip":"💡 Ignorez le mot — cliquez sur le bouton correspondant à la couleur de l'encre","mgHold":"MAINTENEZ LE BOUTON PENDANT LA DURÉE EXACTE DE LA CIBLE — LE PLUS PROCHE GAGNE","target":"CIBLE","hold":"MAINTENIR","mgAim":"CLIQUEZ SUR LA CIBLE — LE PLUS DE COUPS EN 12s GAGNE","hits":"COUPS :","mgSimon":"MÉMORISEZ LA SÉQUENCE — REPRODUISEZ-LA AVEC W/A/S/D — PREMIER CORRECT GAGNE","simonMemorizing":"MÉMORISATION...","mgCountdown":"CLIQUEZ SUR ARRÊT QUAND LE CHRONO ARRIVE À ZÉRO — LE PLUS PROCHE GAGNE","stop":"ARRÊT","mgPipes":"QUE RETOURNE CETTE COMMANDE ? — PREMIÈRE BONNE RÉPONSE GAGNE","outputPlaceholder":"sortie...","nextRound":"Chargement du round suivant...","winTitle":"SYSTÈME ENNEMI SUPPRIMÉ","winSub":"Vous avez survécu. L'autre système a été effacé.","winReal":"VOTRE SYSTÈME : INTACT — GG.","playAgain":"Rejouer","mainMenu":"Menu Principal","bsodTitle":"Votre PC a rencontré un problème et doit redémarrer.","bsodSub":"Nous collectons simplement des informations d'erreur, puis nous supprimerons System32 pour vous.","macTitle":"Votre Mac a redémarré en raison d'un problème.","macSub":"Pour plus de détails, ouvrez l'application Console et consultez le journal de plantage.","revealTitle":"vous avez perdu.","revealSub":"Vous jouez dans le navigateur ? Votre système va bien. <em>Cette fois.</em>","revealSub2":"Téléchargez l'application de bureau pour jouer pour de vrai.","tryAgain":"Réessayer","drawTitle":"DEADLOCK","drawSub":"Les deux systèmes survivent. Également décevant.","rematch":"Revanche","connectionLost":"CONNEXION PERDUE","opponentLeft":"Votre adversaire s'est déconnecté avant que son système ne puisse être supprimé.","noGames":"Aucune partie jouée pour l'instant — soyez le premier !","lbUnavailable":"Classement indisponible.","searchingTarget":"Recherche d'une cible...","loadingAi":"Chargement du match IA...","invalidCode":"Entrez un code de salon valide","opponentTyping":"L'adversaire écrit...","submittedWaiting":"SOUMIS — en attente du résultat...","memorizePattern":"MÉMORISEZ LE MOTIF","reproducePattern":"REPRODUISEZ LE MOTIF — CLIQUEZ POUR MARQUER LES CELLULES","submitted":"SOUMIS...","standbySignal":"STANDBY — ATTENDEZ LE SIGNAL","clickNow":"⚡ CLIQUEZ MAINTENANT !","incorrect":"✗ INCORRECT","heldWaiting":"Maintenu {sec}s — en attente...","memorizeSequence":"MÉMORISEZ LA SÉQUENCE","repeatSequence":"RÉPÉTEZ LA SÉQUENCE — UTILISEZ W/A/S/D","roundWon":"MANCHE GAGNÉE","roundWonSub":"Les défenses de votre adversaire s'effondrent.","roundDraw":"ÉGALITÉ","roundDrawSub":"Match nul. Combattez plus dur.","roundLost":"MANCHE PERDUE","roundLostSub":"Vos vulnérabilités système apparaissent.","waitingOpponent":"En attente d'un adversaire...","inQueue":"Dans la file d'attente — #{position} sur {total}","codeCopied":"Code copié !","linkCopied":"Lien copié !","clickedWaiting":"Cliqué ! En attente...","tooEarly":"Trop tôt ! Envoi en cours...","stoppedWaiting":"Arrêté à {sec}s — en attente...","collectingPanic":"Collecte des infos de panique... {pct}%","pctComplete":"{pct}% terminé"},"de":{"namePlaceholder":"dein Nickname","quickPlay":"⚡ Schnelles Spiel","vsAi":"🤖 GEGNER KI","createGame":"Spiel erstellen","joinGame":"Spiel beitreten","about":"← Über uns","leaderboard":"🏆 RANGLISTE","colPlayer":"Spieler","loading":"Wird geladen…","vsAiTitle":"GEGNER KI","easy":"🟢 Leicht","medium":"🟡 Mittel","hard":"🔴 Schwer","back":"← Zurück","findingOpponent":"GEGNER WIRD GESUCHT","cancel":"Abbrechen","awaitingOpponent":"WARTE AUF GEGNER","roomCode":"RAUMCODE","copyCode":"Code kopieren","copyLink":"Link kopieren","shareHint":"Teile den Code mit deinem Gegner, um zu starten","enterRoomCode":"RAUMCODE EINGEBEN","connect":"Verbinden","battleInitiating":"KAMPF BEGINNT IN","you":"DU","mgTyping":"TIPE DEN BEFEHL GENAU EIN — WER ZUERST FERTIG IST, GEWINNT","typingStatus":"Warte...","typingPlaceholder":"Tippen beginnen...","mgClick":"ZIELE ANKLICKEN, UM DEN PUFFER ZU ÜBERLAUFEN — DIE MEISTEN KLICKS IN 12s GEWINNEN","clicks":"KLICKS:","mgMemory":"SPEICHERE DEN DUMP — REPRODUZIERE IHN AUS DEM GEDÄCHTNIS","submitAnswer":"ANTWORT ABSENDEN","mgReaction":"KLICKEN, WENN DAS SIGNAL ERKLINGT — FRÜHES KLICKEN VERLIERT DIE RUNDE","reactionStandby":"BEREITHALTEN...","click":"KLICKEN","mgMath":"LÖSE MATHEAUFGABEN — WER ZUERST 5 RICHTIGE HAT, GEWINNT","answerPlaceholder":"Antwort","submit":"SENDEN","mgOrder":"KLICKE DIE ZAHLEN DER REIHE NACH — WER DEN STACK ZUERST SORTIERT, GEWINNT","next":"NÄCHSTE:","mgScramble":"ENTZIFFERE DEN BEFEHL — WER IHN ALS ERSTER RICHTIG EINGIBT, GEWINNT","scramblePlaceholder":"tippe das entzifferte Wort...","mgWhack":"BEENDE PROZESSE, BEVOR SIE ENTKOMMEN — DIE MEISTEN KILLS IN 12s GEWINNT","kills":"KILLS:","mgBinary":"WANDLE BİNÄR IN DEZIMAL — WER ZUERST 5 RICHTIGE HAT, GEWINNT","binaryTip":"💡 Jedes Bit ist eine Zweierpotenz von rechts: 8·4·2·1 — z. B. 1011 = 8+2+1 = 11","mgStroop":"FARBVERGLEICH — KLICKE AUF DIE FARBE, IN DER DER TEXT <em>DARGESTELLT</em> WIRD, NICHT WAS DAS WORT SAGT","stroopTip":"💡 Ignoriere das Wort — klicke auf den Button, der der Tintenfarbe entspricht","mgHold":"HALTE DIE TASTE GENAU FÜR DIE ZIELDAUER — DER NÄCHSTE GEWINNT","target":"ZIEL","hold":"HALTEN","mgAim":"KLICKE AUF DAS ZIEL — DIE MEISTEN TREFFER IN 12s GEWINNEN","hits":"TREFFER:","mgSimon":"MERKE DIR DIE SEQUENZ — GIB SIE MIT W/A/S/D EIN — DER ERSTE RICHTIGE GEWINNT","simonMemorizing":"MERKE...","mgCountdown":"KLICKE AUF STOPP, WENN DER TIMER NULL ERREICHT — DER NÄCHSTE GEWINNT","stop":"STOPP","mgPipes":"WAS GIBT DIESER BEFEHL AUS? — DIE ERSTE RICHTIGE ANTWORT GEWINNT","outputPlaceholder":"ausgabe...","nextRound":"Nächste Runde lädt...","winTitle":"FEINDLICHES SYSTEM GELÖSCHT","winSub":"Du hast überlebt. Das andere System wurde gelöscht.","winReal":"DEIN SYSTEM: INTAKT — GG.","playAgain":"Nochmal spielen","mainMenu":"Hauptmenü","bsodTitle":"Auf deinem PC ist ein Problem aufgetreten und er muss neu gestartet werden.","bsodSub":"Wir sammeln nur einige Fehlerinformationen und löschen dann System32 für dich.","macTitle":"Dein Mac wurde aufgrund eines Problems neu gestartet.","macSub":"Weitere Details findest du in der Console-App im Panic-Log.","revealTitle":"du hast verloren.","revealSub":"Im Browser gespielt? Dein System ist in Ordnung. <em>Diesmal.</em>","revealSub2":"Lade die Desktop-App herunter, um richtig zu spielen.","tryAgain":"Nochmal versuchen","drawTitle":"DEADLOCK","drawSub":"Beide Systeme überleben. Gleichermaßen unbeeindruckend.","rematch":"Revanche","connectionLost":"VERBINDUNG UNTERBROCHEN","opponentLeft":"Dein Gegner hat die Verbindung getrennt, bevor sein System gelöscht werden konnte.","noGames":"Noch keine Spiele gespielt — sei der Erste!","lbUnavailable":"Bestenliste nicht verfügbar.","searchingTarget":"Suche nach einem Ziel...","loadingAi":"Lade KI-Match...","invalidCode":"Gib einen gültigen Raumcode ein","opponentTyping":"Gegner schreibt...","submittedWaiting":"GESENDET — warte auf Ergebnis...","memorizePattern":"MERKE DIR DAS MUSTER","reproducePattern":"MUSTER REPRODUZIEREN — ZELLEN ANKLICKEN","submitted":"GESENDET...","standbySignal":"STANDBY — AUF SIGNAL WARTEN","clickNow":"⚡ JETZT KLICKEN!","incorrect":"✗ FALSCH","heldWaiting":"{sec}s gehalten — warte...","memorizeSequence":"MERKE DIR DIE SEQUENZ","repeatSequence":"WIEDERHOLE DIE SEQUENZ — NUTZE W/A/S/D","roundWon":"RUNDE GEWONNEN","roundWonSub":"Die Verteidigungen deines Gegners bröckeln.","roundDraw":"UNENTSCHIEDEN","roundDrawSub":"Ausgeglichen. Kämpf härter.","roundLost":"RUNDE VERLOREN","roundLostSub":"Deine Systemschwachstellen zeigen sich.","waitingOpponent":"Warte auf Gegner...","inQueue":"In der Warteschlange — #{position} von {total}","codeCopied":"Code kopiert!","linkCopied":"Link kopiert!","clickedWaiting":"Geklickt! Warte...","tooEarly":"Zu früh! Wird eingereicht...","stoppedWaiting":"Gestoppt bei {sec}s — warte...","collectingPanic":"Sammle Panik-Infos... {pct}%","pctComplete":"{pct}% abgeschlossen"},"vi":{"namePlaceholder":"biệt danh của bạn","quickPlay":"⚡ Chơi Nhanh","vsAi":"🤖 Đấu AI","createGame":"Tạo Trận","joinGame":"Tham Gia Trận","about":"← Giới thiệu","leaderboard":"🏆 BẢNG XẾP HẠNG","colPlayer":"Người chơi","loading":"Đang tải…","vsAiTitle":"Đấu AI","easy":"🟢 Dễ","medium":"🟡 Trung bình","hard":"🔴 Khó","back":"← Quay lại","findingOpponent":"ĐANG TÌM ĐỐI THỦ","cancel":"Hủy","awaitingOpponent":"ĐANG CHỜ ĐỐI THỦ","roomCode":"MÃ PHÒNG","copyCode":"Sao chép mã","copyLink":"Sao chép liên kết","shareHint":"Chia sẻ mã này với đối thủ của bạn để bắt đầu","enterRoomCode":"NHẬP MÃ PHÒNG","connect":"Kết nối","battleInitiating":"TRẬN ĐẤU KHỞI ĐỘNG TRONG","you":"BẠN","mgTyping":"GÕ CHÍNH XÁC LỆNH — AI XONG TRƯỚC THẮNG","typingStatus":"Đang đợi...","typingPlaceholder":"bắt đầu gõ...","mgClick":"CLICK VÀO MỤC TIÊU ĐỂ TRÀN BỘ ĐỆM — NHIỀU CLICK NHẤT TRONG 12s THẮNG","clicks":"SỐ CLICK:","mgMemory":"GHI NHỚ KẾT DUMP — TÁI TẠO LẠI TỪ TRÍ NHỚ","submitAnswer":"GỬI CÂU TRẢ LỜI","mgReaction":"CLICK KHI TÍN HIỆU PHÁT SÁNG — CLICK SỚM SẼ THỬA HIỆU VÒNG ĐẤU","reactionStandby":"CHỜ...","click":"CLICK","mgMath":"GIẢI BÀI TẬP TOÁN — AI ĐẠT 5 CÂU ĐÚNG TRƯỚC THẮNG","answerPlaceholder":"câu trả lời","submit":"GỬI","mgOrder":"BẤM SỐ THEO THỨ TỰ — AI SẮP XẾP XONG NGĂN XẾP TRƯỚC SẼ THẮNG","next":"TIẾP THEO:","mgScramble":"GIẢI MÃ LỆNH — AI GÕ ĐÚNG TRƯỚC SẼ THẮNG","scramblePlaceholder":"nhập từ đã giải mã...","mgWhack":"TIÊU DIỆT TIẾN TRÌNH TRƯỚC KHI CHÚNG THOÁT — NHIỀU MẠNG NHẤT TRONG 12s SẼ THẮNG","kills":"SỐ MẠNG:","mgBinary":"CHUYỂN ĐỔI NHỊ PHÂN SANG THẬP PHÂN — AI ĐẠT 5 CÂU ĐÚNG TRƯỚC SẼ THẮNG","binaryTip":"💡 Mỗi bit là một lũy thừa của 2 tính từ phải: 8·4·2·1 — ví dụ 1011 = 8+2+1 = 11","mgStroop":"KHỚP MÀU — BẤM MÀU CỦA CHỮ ĐƯỢC <em>VẼ BẰNG</em>, KHÔNG PHẢI NỘI DUNG CHỮ","stroopTip":"💡 Bỏ qua từ — bấm nút trùng với màu mực","mgHold":"GIỮ NÚT ĐÚNG THỜI GIAN MỤC TIÊU — AI GẦN NHẤT SẼ THẮNG","target":"MỤC TIÊU","hold":"GIỮ","mgAim":"CLICK VÀO MỤC TIÊU — NHIỀU LẦN TRÚNG NHẤT TRONG 12s SẼ THẮNG","hits":"SỐ TRÚNG:","mgSimon":"GHI NHỚ TRÌNH TỰ — NHẬP LẠI BẰNG W/A/S/D — AI ĐÚNG TRƯỚC SẼ THẮNG","simonMemorizing":"ĐANG GHI NHỚ...","mgCountdown":"CLICK DỪNG KHI BỘ ĐẾM VỀ KHÔNG — AI GẦN NHẤT SẼ THẮNG","stop":"DỪNG","mgPipes":"LỆNH NÀY XUẤT RA KẾT QUẢ GÌ? — AI TRẢ LỜI ĐÚNG TRƯỚC SẼ THẮNG","outputPlaceholder":"kết quả...","nextRound":"Đang tải vòng tiếp theo...","winTitle":"HỆ THỐNG KẺ ĐỊCH ĐÃ BỊ XÓA","winSub":"Bạn đã sống sót. Hệ thống bên kia đã bay màu.","winReal":"HỆ THỐNG CỦA BẠN: NGUYÊN VẸN — GG.","playAgain":"Chơi Lại","mainMenu":"Menu Chính","bsodTitle":"PC của bạn đã gặp sự cố và cần khởi động lại.","bsodSub":"Chúng tôi đang thu thập một số thông tin lỗi, và sau đó chúng tôi sẽ xóa System32 hộ bạn.","macTitle":"Máy Mac của bạn đã khởi động lại vì xảy ra sự cố.","macSub":"Để xem thêm chi tiết, hãy mở ứng dụng Console và tìm nhật ký sự cố.","revealTitle":"bạn thua rồi.","revealSub":"Chơi trên trình duyệt á? Hệ thống của bạn vẫn ổn thôi. <em>Lần này thôi nhé.</em>","revealSub2":"Tải ứng dụng desktop để chơi thật tay nào.","tryAgain":"Thử Lại","drawTitle":"DEADLOCK","drawSub":"Cả hai hệ thống đều sống sót. Quá nhạt nhẽo.","rematch":"Đấu Lại","connectionLost":"MẤT KẾT NỐI","opponentLeft":"Đối thủ của bạn đã ngắt kết nối trước khi hệ thống của họ bị xóa.","noGames":"Chưa có trận đấu nào — hãy là người đầu tiên!","lbUnavailable":"Bảng xếp hạng không khả dụng.","searchingTarget":"Đang tìm kiếm mục tiêu...","loadingAi":"Đang tải trận đấu với AI...","invalidCode":"Nhập mã phòng hợp lệ","opponentTyping":"Đối thủ đang gõ...","submittedWaiting":"ĐÃ GỬI — đang chờ kết quả...","memorizePattern":"GHI NHỚ MẪU","reproducePattern":"TÁC LẠI MẪU — BẤM ĐỂ ĐÁNH DẤU Ô","submitted":"ĐÃ GỬI...","standbySignal":"ĐANG CHỜ — CHỜ TÍN HIỆU","clickNow":"⚡ NHẤN NGAY!","incorrect":"✗ KHÔNG CHÍNH XÁC","heldWaiting":"Đã giữ {sec}s — đang đợi...","memorizeSequence":"GHI NHỚ TRÌNH TỰ","repeatSequence":"LẶP LẠI TRÌNH TỰ — DÙNG W/A/S/D","roundWon":"THẮNG HIỆP","roundWonSub":"Hệ thống phòng thủ của đối thủ đang sụp đổ.","roundDraw":"HÒA","roundDrawSub":"Kẻ tám lạng người nửa cân. Đánh gắt hơn đi.","roundLost":"THUA HIỆP","roundLostSub":"Điểm yếu hệ thống của bạn đang lộ diện.","waitingOpponent":"Đang đợi đối thủ...","inQueue":"Trong hàng đợi — #{position} / {total}","codeCopied":"Đã sao chép mã!","linkCopied":"Đã sao chép liên kết!","clickedWaiting":"Đã bấm! Đang đợi...","tooEarly":"Quá sớm! Đang gửi...","stoppedWaiting":"Dừng ở {sec}s — đang đợi...","collectingPanic":"Đang thu thập thông tin sự cố... {pct}%","pctComplete":"Hoàn thành {pct}%"},"th":{"namePlaceholder":"ชื่อเล่นของคุณ","quickPlay":"⚡ เล่นด่วน","vsAi":"🤖 VS AI","createGame":"สร้างเกม","joinGame":"เข้าร่วมเกม","about":"← เกี่ยวกับ","leaderboard":"🏆 ตารางผู้นำ","colPlayer":"ผู้เล่น","loading":"กำลังโหลด…","vsAiTitle":"VS AI","easy":"🟢 ง่าย","medium":"🟡 ปานกลาง","hard":"🔴 ยาก","back":"← กลับ","findingOpponent":"กำลังหาคู่ต่อสู้","cancel":"ยกเลิก","awaitingOpponent":"กำลังรอคู่ต่อสู้","roomCode":"รหัสห้อง","copyCode":"คัดลอกรหัส","copyLink":"คัดลอกลิงก์","shareHint":"แชร์รหัสนี้ให้คู่ต่อสู้ของคุณเพื่อเริ่มเกม","enterRoomCode":"ใส่รหัสห้อง","connect":"เชื่อมต่อ","battleInitiating":"การต่อสู้จะเริ่มใน","you":"คุณ","mgTyping":"พิมพ์คำสั่งให้ถูกต้อง — ใครเสร็จก่อนชนะ","typingStatus":"กำลังรอ...","typingPlaceholder":"เริ่มพิมพ์...","mgClick":"คลิกเป้าหมายเพื่อล้นบัฟเฟอร์ — ใครคลิกมากที่สุดใน 12s ชนะ","clicks":"คลิก:","mgMemory":"จำดัมพ์ข้อมูล — เขียนขึ้นใหม่จากความทรงจำ","submitAnswer":"ส่งคำตอบ","mgReaction":"คลิกเมื่อสัญญาณทำงาน — คลิกก่อนเวลาจะถือว่าแพ้ในรอบนี้","reactionStandby":"สแตนด์บาย...","click":"คลิก","mgMath":"แก้โจทย์คณิตศาสตร์ — ใครถึง 5 ข้อก่อนชนะ","answerPlaceholder":"คำตอบ","submit":"ส่ง","mgOrder":"คลิกเรียงตัวเลขตามลำดับ — ใครจัดเรียงกองข้อมูลเสร็จก่อนชนะ","next":"ถัดไป:","mgScramble":"เรียงคำสั่งใหม่ — ใครพิมพ์ถูกก่อนชนะ","scramblePlaceholder":"พิมพ์คำที่เรียงแล้ว...","mgWhack":"ฆ่าโพรเซสก่อนพวกมันหนีรอด — ฆ่าได้มากที่สุดใน 12 วินาทีชนะ","kills":"ยอดฆ่า:","mgBinary":"แปลงเลขฐานสองเป็นฐานสิบ — ใครตอบถูก 5 ข้อก่อนชนะ","binaryTip":"💡 บิตแต่ละหลักคือเลขยกกำลัง 2 จากขวา: 8·4·2·1 — เช่น 1011 = 8+2+1 = 11","mgStroop":"จับคู่สี — คลิกเลือกสีที่ใช้ <em>วาด</em> ตัวอักษร ไม่ใช่ความหมายของคำ","stroopTip":"💡 เมินคำที่เห็น — คลิกปุ่มที่ตรงกับสีหมึก","mgHold":"กดปุ่มค้างไว้ให้ตรงกับเวลาเป๊ะๆ — ใครใกล้เคียงที่สุดชนะ","target":"เป้าหมาย","hold":"กดค้าง","mgAim":"คลิกที่เป้าหมาย — โดนมากที่สุดใน 12 วินาทีชนะ","hits":"จำนวนครั้ง:","mgSimon":"จำลำดับให้แม่น — กดตามด้วย W/A/S/D — ใครถูกคนแรกชนะ","simonMemorizing":"กำลังจำ...","mgCountdown":"คลิกหยุดเมื่อตัวจับเวลาถึงศูนย์ — ใครใกล้เคียงที่สุดชนะ","stop":"หยุด","mgPipes":"คำสั่งนี้ให้ผลลัพธ์ว่าอะไร? — ตอบถูกคนแรกชนะ","outputPlaceholder":"ผลลัพธ์...","nextRound":"กำลังโหลดรอบถัดไป...","winTitle":"ลบระบบของศัตรูสำเร็จ","winSub":"คุณรอดมาได้ ระบบอีกฝั่งถูกลบเกลี้ยง","winReal":"ระบบของคุณ: ปลอดภัยดี — GG","playAgain":"เล่นอีกครั้ง","mainMenu":"เมนูหลัก","bsodTitle":"PC ของคุณประสบปัญหาและจำเป็นต้องรีสตาร์ท","bsodSub":"เรากำลังรวบรวมข้อมูลข้อผิดพลาดเล็กน้อย จากนั้นเราจะลบ System32 ให้คุณ","macTitle":"Mac ของคุณรีสตาร์ทเนื่องจากเกิดปัญหา","macSub":"หากต้องการดูรายละเอียดเพิ่มเติม ให้เปิดแอป Console และดูที่บันทึก panic log","revealTitle":"คุณแพ้","revealSub":"เล่นในเบราว์เซอร์เหรอ? ระบบของคุณปลอดภัยดี <em>แต่ก็แค่ครั้งนี้</em>","revealSub2":"ดาวน์โหลดแอปเดสก์ท็อปเพื่อมาเล่นจริง ๆ ได้เลย","tryAgain":"ลองอีกครั้ง","drawTitle":"DEADLOCK","drawSub":"รอดพ้นทั้งคู่ ไร้ซึ่งความน่าประทับใจพอกัน","rematch":"รีแมตช์","connectionLost":"การเชื่อมต่อหลุด","opponentLeft":"คู่ต่อสู้ของคุณตัดการเชื่อมต่อก่อนที่ระบบจะถูกลบ","noGames":"ยังไม่มีการเล่นเกม — มาเป็นคนแรกกันเลย!","lbUnavailable":"ไม่สามารถใช้งานกระดานผู้นำได้ในขณะนี้","searchingTarget":"กำลังค้นหาเป้าหมาย...","loadingAi":"กำลังโหลดแมตช์ AI...","invalidCode":"กรุณากรอกรหัสห้องที่ถูกต้อง","opponentTyping":"คู่ต่อสู้กำลังพิมพ์...","submittedWaiting":"ส่งคำตอบแล้ว — กำลังรอผล...","memorizePattern":"จำแพตเทิร์นนี้ให้ได้","reproducePattern":"ทำซ้ำแพตเทิร์น — คลิกเพื่อเลือกเซลล์","submitted":"ส่งแล้ว...","standbySignal":"สแตนด์บาย — รอสัญญาณ","clickNow":"⚡ คลิกเลย!","incorrect":"✗ ไม่ถูกต้อง","heldWaiting":"กดค้าง {sec}s — กำลังรอ...","memorizeSequence":"จำชุดคำสั่งให้ขึ้นใจ","repeatSequence":"ทวนชุดคำสั่ง — ใช้ W/A/S/D","roundWon":"ชนะรอบนี้","roundWonSub":"ระบบป้องกันของคู่ต่อสู้กำลังพังทลาย","roundDraw":"เสมอ","roundDrawSub":"สูสีกันนี่ สู้ต่อให้หนักขึ้น","roundLost":"แพ้รอบนี้","roundLostSub":"ช่องโหว่ในระบบของคุณกำลังโผล่แล้ว","waitingOpponent":"กำลังรอคู่ต่อสู้...","inQueue":"อยู่ในคิว — #{position} จาก {total}","codeCopied":"คัดลอกโค้ดแล้ว!","linkCopied":"คัดลอกลิงก์แล้ว!","clickedWaiting":"คลิกแล้ว! กำลังรอ...","tooEarly":"เร็วเกินไป! กำลังส่งข้อมูล...","stoppedWaiting":"หยุดที่ {sec}s — กำลังรอ...","collectingPanic":"กำลังรวบรวมข้อมูลฉุกเฉิน... {pct}%","pctComplete":"เสร็จสิ้น {pct}%"}};
+    var lang = 'en';
+    try { lang = localStorage.getItem('hk_lang') || ''; } catch (e) {}
+    if (!DICT[lang]) {
+      var nav = (navigator.language || 'en').toLowerCase();
+      if (nav.indexOf('pt') === 0) lang = 'pt-br';
+      else { var two = nav.slice(0, 2); lang = DICT[two] ? two : 'en'; }
+    }
+    var STR = DICT[lang] || DICT.en;
+    window.__I18N__ = STR;
+    window.t = function (key, params) {
+      var s = (STR && STR[key] != null) ? STR[key] : (DICT.en[key] != null ? DICT.en[key] : key);
+      if (params) for (var k in params) s = s.split('{' + k + '}').join(params[k]);
+      return s;
+    };
+    try { document.documentElement.lang = lang; } catch (e) {}
+    function fill() {
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var v = window.t(el.getAttribute('data-i18n'));
+        if (v != null) { el.textContent = v; if (el.hasAttribute('data-text')) el.setAttribute('data-text', v); }
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+        var v = window.t(el.getAttribute('data-i18n-html')); if (v != null) el.innerHTML = v;
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+        var v = window.t(el.getAttribute('data-i18n-ph')); if (v != null) el.setAttribute('placeholder', v);
+      });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fill);
+    else fill();
+  })();
+  </script>
+  <!-- i18n:room:end -->
   <script src="name.js"></script>
   <script src="game.js"></script>
   <script>

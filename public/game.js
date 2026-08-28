@@ -1,6 +1,9 @@
 'use strict';
 const socket = io();
 
+// ── i18n: per-player runtime strings (dict + t() injected by game.html bootstrap) ──
+const T = (k, p) => (typeof window !== 'undefined' && window.t ? window.t(k, p) : k);
+
 let myId = null;
 let myRoomCode = null;
 let gs = { scores: {}, players: [], round: 0, totalRounds: 5 };
@@ -47,19 +50,19 @@ async function loadLeaderboard() {
     const res = await fetch('/api/leaderboard');
     const data = await res.json();
     const players = (data && data.players) || [];
-    if (!players.length) { body.innerHTML = '<tr><td colspan="5">No games played yet — be the first!</td></tr>'; return; }
+    if (!players.length) { body.innerHTML = `<tr><td colspan="5">${T('noGames')}</td></tr>`; return; }
     const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const me = window.PlayerName.get();
     body.innerHTML = players.map((p, i) =>
       `<tr class="${me && p.player === me ? 'lb-me' : ''}"><td>${i + 1}</td><td>${esc(p.player)}</td><td>${p.wins}</td><td>${p.losses}</td><td>${p.draws}</td></tr>`
     ).join('');
-  } catch { body.innerHTML = '<tr><td colspan="5">Leaderboard unavailable.</td></tr>'; }
+  } catch { body.innerHTML = `<tr><td colspan="5">${T('lbUnavailable')}</td></tr>`; }
 }
 
 // ── Queue ─────────────────────────────────────────────────
 function doQuickPlay() {
   showScreen('s-queue');
-  document.getElementById('queue-status-text').textContent = 'Searching for a target...';
+  document.getElementById('queue-status-text').textContent = T('searchingTarget');
   let elapsed = 0;
   clearInterval(queueTimerInterval);
   queueTimerInterval = setInterval(() => {
@@ -71,7 +74,7 @@ function doQuickPlay() {
 
 function doPlayAI(difficulty) {
   showScreen('s-queue');
-  document.getElementById('queue-status-text').textContent = 'Loading AI match...';
+  document.getElementById('queue-status-text').textContent = T('loadingAi');
   socket.emit('play-ai', { difficulty });
 }
 
@@ -84,8 +87,8 @@ function leaveQueue() {
 socket.on('queue-status', ({ position, total }) => {
   const el = document.getElementById('queue-status-text');
   if (el) el.textContent = position === 1
-    ? 'Waiting for an opponent...'
-    : `In queue — #${position} of ${total}`;
+    ? T('waitingOpponent')
+    : T('inQueue', { position, total });
 });
 
 // ── Room management ───────────────────────────────────────
@@ -103,7 +106,7 @@ function showJoin() {
 function doJoinRoom() {
   const code = document.getElementById('code-input').value.trim().toUpperCase();
   if (code.length < 4) {
-    document.getElementById('join-error').textContent = 'Enter a valid room code';
+    document.getElementById('join-error').textContent = T('invalidCode');
     return;
   }
   socket.emit('join-room', { code, name: currentName() });
@@ -111,17 +114,17 @@ function doJoinRoom() {
 
 function copyCode() {
   navigator.clipboard.writeText(myRoomCode).catch(() => {});
-  flashCopy('Code copied!');
+  flashCopy(T('codeCopied'));
 }
 function copyLink() {
   navigator.clipboard.writeText(`${location.origin}/play?join=${myRoomCode}`).catch(() => {});
-  flashCopy('Link copied!');
+  flashCopy(T('linkCopied'));
 }
 function flashCopy(msg) {
   const el = document.querySelector('.hint-text');
   if (!el) return;
   el.textContent = msg;
-  setTimeout(() => { el.textContent = 'Share the code with your opponent to start'; }, 2000);
+  setTimeout(() => { el.textContent = T('shareHint'); }, 2000);
 }
 
 // ── Socket events ─────────────────────────────────────────
@@ -243,7 +246,7 @@ function startTyping(cmd) {
   ovl.innerHTML = '';
   inp.value = '';
   inp.disabled = false;
-  sts.textContent = 'Opponent is typing...';
+  sts.textContent = T('opponentTyping');
 
   document.getElementById('mg-typing').classList.remove('hidden');
   setTimeout(() => inp.focus(), 80);
@@ -270,7 +273,7 @@ function startTyping(cmd) {
     if (typed === cmd) {
       typingDone = true;
       inp.disabled = true;
-      sts.textContent = 'SUBMITTED — waiting for result...';
+      sts.textContent = T('submittedWaiting');
       socket.emit('typing-done');
     }
   };
@@ -359,8 +362,8 @@ function startMemory(grid, showDuration) {
   gridEl.innerHTML = '';
   submitBtn.classList.add('hidden');
   submitBtn.disabled = false;
-  submitBtn.textContent = 'SUBMIT ANSWER';
-  label.textContent = 'MEMORIZE THE PATTERN';
+  submitBtn.textContent = T('submitAnswer');
+  label.textContent = T('memorizePattern');
 
   fill.style.transition = `width ${showDuration}ms linear`;
   fill.style.width = '100%';
@@ -382,7 +385,7 @@ function startMemory(grid, showDuration) {
 
   setTimeout(() => {
     memCells.forEach(c => c.classList.remove('lit'));
-    label.textContent = 'REPRODUCE THE PATTERN — CLICK TO MARK CELLS';
+    label.textContent = T('reproducePattern');
     submitBtn.classList.remove('hidden');
     memLocked = false;
   }, showDuration);
@@ -393,7 +396,7 @@ function submitMemory() {
   memLocked = true;
   const btn = document.getElementById('mem-submit');
   btn.disabled = true;
-  btn.textContent = 'SUBMITTED...';
+  btn.textContent = T('submitted');
   socket.emit('memory-submit', memSelected);
 }
 
@@ -411,7 +414,7 @@ function startReaction() {
 
   btn.className = 'reaction-btn reaction-wait';
   btn.disabled = false;
-  status.textContent = 'STANDBY — WAIT FOR THE SIGNAL';
+  status.textContent = T('standbySignal');
   result.textContent = '';
   document.getElementById('mg-reaction').classList.remove('hidden');
 }
@@ -422,7 +425,7 @@ socket.on('reaction-go', () => {
   const status = document.getElementById('reaction-status');
   if (btn) {
     btn.className = 'reaction-btn reaction-go';
-    status.textContent = '⚡ CLICK NOW!';
+    status.textContent = T('clickNow');
   }
 });
 
@@ -431,8 +434,8 @@ function doReactionClick() {
   reactionDone = true;
   document.getElementById('reaction-btn').disabled = true;
   document.getElementById('reaction-result').textContent = reactionSignalFired
-    ? 'Clicked! Waiting...'
-    : 'Too early! Submitting...';
+    ? T('clickedWaiting')
+    : T('tooEarly');
   socket.emit('reaction-click');
 }
 
@@ -521,7 +524,7 @@ function startScramble(scrambled) {
 
 socket.on('scramble-wrong', () => {
   const fb = document.getElementById('scramble-feedback');
-  fb.textContent = '✗ INCORRECT';
+  fb.textContent = T('incorrect');
   fb.className = 'quiz-feedback fb-err';
   const inp = document.getElementById('scramble-input');
   inp.value = '';
@@ -724,7 +727,7 @@ function holdEnd(e) {
   btn.disabled = true;
   btn.classList.remove('hold-active');
   document.getElementById('hold-elapsed').textContent = (elapsed / 1000).toFixed(2) + 's';
-  document.getElementById('hold-status').textContent = `Held ${(elapsed / 1000).toFixed(2)}s — waiting...`;
+  document.getElementById('hold-status').textContent = T('heldWaiting', { sec: (elapsed / 1000).toFixed(2) });
   socket.emit('hold-result', { elapsed });
 }
 
@@ -792,7 +795,7 @@ function startSimon(sequence) {
 
   const chips = document.getElementById('simon-chips');
   chips.innerHTML = sequence.map(k => `<span class="simon-chip">${k}</span>`).join('');
-  document.getElementById('simon-label').textContent = 'MEMORIZE THE SEQUENCE';
+  document.getElementById('simon-label').textContent = T('memorizeSequence');
 
   let i = 0;
   const allChips = chips.querySelectorAll('.simon-chip');
@@ -802,7 +805,7 @@ function startSimon(sequence) {
       clearInterval(iv);
       setTimeout(() => {
         allChips.forEach(c => { c.textContent = '?'; c.classList.remove('simon-chip-active'); });
-        document.getElementById('simon-label').textContent = 'REPEAT THE SEQUENCE — USE W/A/S/D';
+        document.getElementById('simon-label').textContent = T('repeatSequence');
         document.querySelectorAll('.simon-key').forEach(b => b.disabled = false);
         simonActive = true;
       }, 400);
@@ -897,7 +900,7 @@ function doCountdownStop() {
   document.getElementById('countdown-stop-btn').disabled = true;
   const timerEl = document.getElementById('countdown-race-timer');
   document.getElementById('countdown-stop-result').textContent =
-    `Stopped at ${timerEl.textContent}s — waiting...`;
+    T('stoppedWaiting', { sec: timerEl.textContent });
   socket.emit('countdown-stop');
 }
 
@@ -916,7 +919,7 @@ function startPipes(display) {
 
 socket.on('pipes-wrong', () => {
   const fb = document.getElementById('pipes-feedback');
-  fb.textContent = '✗ INCORRECT';
+  fb.textContent = T('incorrect');
   fb.className = 'quiz-feedback fb-err';
   const inp = document.getElementById('pipes-input');
   inp.value = '';
@@ -936,17 +939,17 @@ function showRoundResult(winner) {
   const tallyEl = document.getElementById('rr-tally');
 
   if (winner === myId) {
-    titleEl.textContent = 'ROUND WON';
+    titleEl.textContent = T('roundWon');
     titleEl.className = 'round-result-title rr-win';
-    subEl.textContent = "Your opponent's defenses are crumbling.";
+    subEl.textContent = T('roundWonSub');
   } else if (!winner) {
-    titleEl.textContent = 'DRAW';
+    titleEl.textContent = T('roundDraw');
     titleEl.className = 'round-result-title rr-draw';
-    subEl.textContent = 'Evenly matched. Fight harder.';
+    subEl.textContent = T('roundDrawSub');
   } else {
-    titleEl.textContent = 'ROUND LOST';
+    titleEl.textContent = T('roundLost');
     titleEl.className = 'round-result-title rr-lose';
-    subEl.textContent = 'Your system vulnerabilities are showing.';
+    subEl.textContent = T('roundLostSub');
   }
 
   tallyEl.innerHTML = `<span style="color:var(--green)">YOU ${myScore()}</span>&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:var(--red)">OPP ${oppScore()}</span>`;
@@ -1042,8 +1045,8 @@ function showBSOD() {
     }
     fill.style.width = p + '%';
     pct.textContent = isMac
-      ? `Collecting panic info... ${Math.floor(p)}%`
-      : `${Math.floor(p)}% complete`;
+      ? T('collectingPanic', { pct: Math.floor(p) })
+      : T('pctComplete', { pct: Math.floor(p) });
   }, 80);
 }
 

@@ -41,7 +41,7 @@ Input:
 ${JSON.stringify(strings)}`;
   for (let a = 1; a <= 6; a++) {
     const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, responseMimeType: 'application/json' } }) });
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, maxOutputTokens: 8192, responseMimeType: 'application/json' } }) });
     const data = await res.json().catch(() => ({}));
     const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (txt) { try { const arr = JSON.parse(txt); if (Array.isArray(arr) && arr.length === strings.length) return arr; } catch {} }
@@ -94,7 +94,7 @@ const strip = (h) => h
   .replace(/\s*<!-- i18n:hreflang:start -->[\s\S]*?<!-- i18n:hreflang:end -->/g, '')
   .replace(/\s*<!-- i18n:switcher:start -->[\s\S]*?<!-- i18n:switcher:end -->/g, '');
 const inject = (html, page, cur) => html
-  .replace('</head>', `${hreflangBlock(page)}\n</head>`)
+  .replace('</head>', `${hreflangBlock(page)}\n  <script>try{localStorage.setItem('hk_lang',${JSON.stringify(cur)})}catch(e){}</script>\n</head>`)
   .replace(/(<body[^>]*>)/, `$1${switcher(page, cur)}`);
 
 const tagCount = (h) => (h.match(/<[a-zA-Z!\/][^>]*>/g) || []).length;
@@ -113,7 +113,11 @@ for (const loc of LOCALES.filter((l) => l !== 'en')) {
     const src = bases[page.file];
     const map = new Map();
     const uniq = collect(src);
-    const tr = await translateBatch(uniq, LANGNAME[loc], loc);
+    const tr = [];
+    for (let i = 0; i < uniq.length; i += 12) {
+      const part = await translateBatch(uniq.slice(i, i + 12), LANGNAME[loc], loc);
+      tr.push(...part);
+    }
     uniq.forEach((v, i) => map.set(v, tr[i]));
     let out = apply(src, map);
     out = out.replace(/<html lang="en">/i, `<html lang="${loc}">`);
