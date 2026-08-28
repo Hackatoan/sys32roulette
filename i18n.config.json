@@ -3,9 +3,10 @@
   "locales": ["en", "es", "pt-br", "fr", "de", "vi", "th"],
   "rootFile": "landing.html",
   "pages": [
-    { "file": "landing.html", "urlPath": "/" }
+    { "file": "landing.html", "urlPath": "/" },
+    { "file": "macos.html", "urlPath": "/macos.html" }
   ],
-  "internalLinks": {},
-  "keepTerms": ["System 32 Roulette", "Sys32 Roulette", "Hackatoa", "GitHub", "macOS", "MACOS", "Windows", "Linux", "DMG", "AppImage", "W/A/S/D", "Blue Screen of Death", "Apple Silicon", "Intel", "Rosetta", "UAC", "M1", "M2", "M3", "M4"],
-  "todo": "game.html (/play) + macos.html (/macos) deferred — need locale server routes or per-player runtime (task 11)."
+  "internalLinks": { "/macos": "/macos.html" },
+  "keepTerms": ["System 32 Roulette", "Sys32 Roulette", "Hackatoa", "GitHub", "macOS", "MACOS", "Windows", "Linux", "DMG", "AppImage", "W/A/S/D", "Blue Screen of Death", "Apple Silicon", "Intel", "Rosetta", "UAC", "M1", "M2", "M3", "M4", "Gatekeeper", "Terminal", "Rosetta 2", "DMG"],
+  "note": "/play (game.html) is localized per-player at runtime via localStorage (not a locale route). The landing's /play link intentionally stays English-route; the room reads hk_lang."
 }

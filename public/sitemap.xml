@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://sys32.hackatoa.com/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://sys32.hackatoa.com/es/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -26,7 +26,7 @@
   </url>
   <url>
     <loc>https://sys32.hackatoa.com/pt-br/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://sys32.hackatoa.com/fr/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://sys32.hackatoa.com/de/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -62,7 +62,7 @@
   </url>
   <url>
     <loc>https://sys32.hackatoa.com/vi/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -74,7 +74,7 @@
   </url>
   <url>
     <loc>https://sys32.hackatoa.com/th/</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-28</lastmod>
     <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/"/>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/"/>
@@ -83,5 +83,89 @@
     <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/"/>
     <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/es/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/pt-br/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/fr/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/de/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/vi/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
+  </url>
+  <url>
+    <loc>https://sys32.hackatoa.com/th/macos.html</loc>
+    <lastmod>2026-08-28</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html"/>
   </url>
 </urlset>

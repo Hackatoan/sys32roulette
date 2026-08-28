@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>macOS Roulette — Sys32 Roulette for Mac | Hackatoa</title>
+  <meta name="description" content="ผู้ใช้ Mac? macOS Roulette จะนำประสบการณ์ Sys32 Roulette มาสู่ผู้ใช้ Apple เกมเบราว์เซอร์แนวตลกขบขันที่ดูอันตราย แต่ไม่มีการลบไฟล์ใดๆ จริง เล่นได้ฟรีทันที" />
+  <meta name="author" content="Jacob Harris" />
+  <meta name="keywords" content="macos roulette, mac roulette, sys32 roulette mac, funny mac game, browser game, Hackatoa" />
+  <meta property="og:title" content="macOS Roulette — Sys32 Roulette สำหรับ Mac" />
+  <meta property="og:description" content="ผู้ใช้ Mac? macOS Roulette จะนำประสบการณ์ Sys32 Roulette มาสู่ผู้ใช้ Apple เกมเบราว์เซอร์แนวตลกขบขันที่ดูอันตราย แต่ไม่มีการลบไฟล์ใดๆ จริง เล่นได้ฟรีทันที" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://sys32.hackatoa.com/th/macos.html" />
+  <meta property="og:image" content="https://sys32.hackatoa.com/og.png" />
+  <meta property="og:site_name" content="Hackatoa" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="macOS Roulette — Sys32 Roulette สำหรับ Mac" />
+  <meta name="twitter:description" content="ผู้ใช้ Mac? macOS Roulette จะนำประสบการณ์ Sys32 Roulette มาสู่ผู้ใช้ Apple เกมเบราว์เซอร์แนวตลกขบขันที่ดูอันตราย แต่ไม่มีการลบไฟล์ใดๆ จริง เล่นได้ฟรีทันที" />
+  <meta name="twitter:image" content="https://sys32.hackatoa.com/og.png" />
+  <meta name="twitter:site" content="@jhackatoa" />
+  <link rel="canonical" href="https://sys32.hackatoa.com/th/macos.html" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    :root {
+      --bg:#060a06;--bg2:#0c140c;--green:#39ff14;--red:#ff2442;
+      --cyan:#00ffcc;--muted:#3d6b3d;--border:#1a3d1a;--text:#a8e8a8;
+      --font:'Share Tech Mono','Courier New',monospace;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.7;scroll-behavior:smooth;}
+    body::before{
+      content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);
+    }
+
+    nav{
+      position:sticky;top:0;z-index:100;
+      background:rgba(6,10,6,.95);border-bottom:1px solid var(--border);
+      display:flex;justify-content:space-between;align-items:center;
+      padding:.8rem 2rem;backdrop-filter:blur(8px);
+    }
+    .nav-logo{color:var(--green);font-size:.9rem;letter-spacing:.15em;text-decoration:none;text-shadow:0 0 10px var(--green);}
+    .nav-links{display:flex;gap:1.5rem;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .15s;}
+    .nav-links a:hover{color:var(--green);}
+    .nav-back{
+      background:transparent;border:1px solid var(--border);color:var(--muted);
+      font-family:var(--font);font-size:.78rem;padding:.4rem 1rem;
+      text-decoration:none;transition:all .15s;
+    }
+    .nav-back:hover{border-color:var(--green);color:var(--green);}
+
+    .hero{
+      padding:5rem 2rem 3rem;max-width:800px;margin:0 auto;
+    }
+    .hero-tag{color:var(--muted);font-size:.72rem;letter-spacing:.3em;margin-bottom:1rem;}
+    .hero-title{color:var(--green);font-size:clamp(1.8rem,5vw,3rem);font-weight:normal;margin-bottom:.6rem;}
+    .hero-sub{color:var(--muted);font-size:.88rem;max-width:600px;}
+
+    .content{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+
+    .section{margin-bottom:3rem;}
+    .sec-tag{color:var(--muted);font-size:.7rem;letter-spacing:.3em;margin-bottom:.6rem;}
+    .sec-title{color:var(--green);font-size:1.3rem;font-weight:normal;margin-bottom:1.5rem;}
+
+    .notice{
+      border:1px solid var(--border);background:var(--bg2);
+      padding:1.2rem 1.5rem;margin-bottom:2rem;font-size:.85rem;
+    }
+    .notice.warn{border-color:var(--red);background:rgba(255,36,66,.03);}
+    .notice.ok{border-color:var(--green);background:rgba(57,255,20,.03);}
+    .notice-title{font-size:.75rem;letter-spacing:.2em;margin-bottom:.4rem;}
+    .notice.warn .notice-title{color:var(--red);}
+    .notice.ok .notice-title{color:var(--green);}
+
+    .steps{display:flex;flex-direction:column;gap:1rem;}
+    .step{
+      display:flex;gap:1.2rem;
+      border:1px solid var(--border);background:var(--bg2);padding:1.2rem 1.5rem;
+    }
+    .step-num{
+      flex-shrink:0;width:2rem;height:2rem;
+      border:1px solid var(--muted);color:var(--muted);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.8rem;
+    }
+    .step-body{}
+    .step-title{color:var(--text);margin-bottom:.3rem;font-size:.95rem;}
+    .step-desc{color:var(--muted);font-size:.82rem;}
+    .step-desc kbd{
+      background:var(--bg);border:1px solid var(--border);color:var(--green);
+      font-family:var(--font);padding:.1rem .4rem;font-size:.8rem;
+    }
+    .step-desc code{color:var(--cyan);font-family:var(--font);}
+
+    .divider{border:none;border-top:1px solid var(--border);margin:2.5rem 0;}
+
+    .method-alt{
+      border:1px dashed var(--muted);padding:1.2rem 1.5rem;margin-top:1.2rem;
+      font-size:.82rem;color:var(--muted);
+    }
+    .method-alt strong{color:var(--text);}
+
+    .screenshot-mock{
+      background:#000;border:1px solid var(--border);
+      padding:1.5rem;font-size:.8rem;color:var(--muted);
+      margin:1rem 0;position:relative;
+    }
+    .screenshot-mock::before{
+      content:'SYSTEM PREFERENCES MOCK';position:absolute;
+      top:-.7rem;left:1rem;background:var(--bg);
+      font-size:.65rem;color:var(--muted);padding:0 .5rem;letter-spacing:.15em;
+    }
+    .mock-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid var(--border);}
+    .mock-row:last-child{border-bottom:none;}
+    .mock-app{color:var(--text);}
+    .mock-toggle{
+      width:36px;height:20px;background:var(--green);border-radius:10px;
+      display:flex;align-items:center;padding:2px;justify-content:flex-end;
+    }
+    .mock-toggle-off{justify-content:flex-start;background:var(--muted);}
+    .mock-dot{width:16px;height:16px;background:white;border-radius:50%;}
+    .mock-allow-btn{
+      border:1px solid var(--green);color:var(--green);
+      font-family:var(--font);font-size:.72rem;padding:.2rem .7rem;cursor:default;
+    }
+
+    .faq{display:flex;flex-direction:column;gap:1rem;}
+    .faq-item{border:1px solid var(--border);background:var(--bg2);}
+    .faq-q{
+      padding:1rem 1.2rem;color:var(--text);font-size:.88rem;cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .faq-q::after{content:'▾';color:var(--muted);font-size:.75rem;}
+    .faq-a{padding:0 1.2rem 1rem;color:var(--muted);font-size:.82rem;line-height:1.8;}
+    .faq-a code{color:var(--cyan);font-family:var(--font);}
+
+    a{color:var(--green);text-decoration:none;}
+    a:hover{text-decoration:underline;}
+
+    footer{
+      border-top:1px solid var(--border);background:var(--bg2);
+      padding:1.5rem 2rem;display:flex;justify-content:space-between;
+      align-items:center;font-size:.78rem;flex-wrap:wrap;gap:1rem;
+    }
+    .fbrand{color:var(--muted);}
+    .flinks{display:flex;gap:1.5rem;}
+    .flinks a{color:var(--muted);}
+    .flinks a:hover{color:var(--green);}
+  </style>
+
+  <!-- i18n:hreflang:start -->
+  <link rel="alternate" hreflang="en" href="https://sys32.hackatoa.com/macos.html" />
+  <link rel="alternate" hreflang="es" href="https://sys32.hackatoa.com/es/macos.html" />
+  <link rel="alternate" hreflang="pt-BR" href="https://sys32.hackatoa.com/pt-br/macos.html" />
+  <link rel="alternate" hreflang="fr" href="https://sys32.hackatoa.com/fr/macos.html" />
+  <link rel="alternate" hreflang="de" href="https://sys32.hackatoa.com/de/macos.html" />
+  <link rel="alternate" hreflang="vi" href="https://sys32.hackatoa.com/vi/macos.html" />
+  <link rel="alternate" hreflang="th" href="https://sys32.hackatoa.com/th/macos.html" />
+  <link rel="alternate" hreflang="x-default" href="https://sys32.hackatoa.com/macos.html" />
+  <!-- i18n:hreflang:end -->
+  <script>try{localStorage.setItem('hk_lang',"th")}catch(e){}</script>
+</head>
+<body>
+<!-- i18n:switcher:start -->
+<nav aria-label="Language" style="position:fixed;top:8px;right:10px;z-index:99999;font-size:12px;font-family:system-ui,-apple-system,sans-serif;background:rgba(6,10,6,.92);border:1px solid #1a3d1a;border-radius:999px;padding:5px 12px;display:flex;gap:9px;box-shadow:0 2px 10px rgba(0,0,0,.5);">
+  <a href="/macos.html" hreflang="en" style="color:#8a8;text-decoration:none;">EN</a>
+  <a href="/es/macos.html" hreflang="es" style="color:#8a8;text-decoration:none;">ES</a>
+  <a href="/pt-br/macos.html" hreflang="pt-BR" style="color:#8a8;text-decoration:none;">PT</a>
+  <a href="/fr/macos.html" hreflang="fr" style="color:#8a8;text-decoration:none;">FR</a>
+  <a href="/de/macos.html" hreflang="de" style="color:#8a8;text-decoration:none;">DE</a>
+  <a href="/vi/macos.html" hreflang="vi" style="color:#8a8;text-decoration:none;">VI</a>
+  <a href="/th/macos.html" hreflang="th" aria-current="true" style="color:#fff;font-weight:700;text-decoration:none;">TH</a>
+</nav>
+<!-- i18n:switcher:end -->
+
+<nav>
+  <a href="/" class="nav-logo">SYSTEM 32 ROULETTE</a>
+  <div class="nav-links">
+    <a href="/" class="nav-back">← กลับสู่เว็บไซต์</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// คู่มือการติดตั้ง MACOS</div>
+  <h1 class="hero-title">การรันแอปบน macOS</h1>
+  <p class="hero-sub">แอปนี้ไม่ได้ลงนามด้วยใบรับรอง Apple Developer ดังนั้น macOS จะบล็อกการเปิดใช้งานครั้งแรก วิธีเปิดและตั้งค่าให้ใช้งานได้มีดังนี้</p>
+</div>
+
+<div class="content">
+
+  <!-- GATEKEEPER -->
+  <div class="section" id="gatekeeper">
+    <div class="sec-tag">// ขั้นตอนที่ 1 — จำเป็น</div>
+    <h2 class="sec-title">การข้าม Gatekeeper</h2>
+
+    <div class="notice warn">
+      <div class="notice-title">⚠ ทำไมถึงเกิดสิ่งนี้ขึ้น</div>
+      แอปนี้เผยแพร่โดยตรง (ไม่ได้ผ่าน Mac App Store) และไม่ได้รับการรับรองด้วยใบรับรอง Apple Developer โดยค่าเริ่มต้นแล้ว macOS จะบล็อกแอปที่ไม่ได้ลงนามเพื่อความปลอดภัยของผู้ใช้ แอปนี้จะโหลด <code style="color:var(--cyan)">sys32.hackatoa.com</code> ในหน้าต่าง — และถ้าคุณแพ้ มันจะทำอย่างที่บอกไว้
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">ดาวน์โหลดและติดตั้ง DMG</div>
+          <div class="step-desc">ดาวน์โหลด <code>.dmg</code> จาก <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank" rel="noopener">GitHub Releases</a>. Open it, drag <strong>System 32 Roulette</strong> ไปยังโฟลเดอร์ Applications ของคุณ</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Try to open — macOS will block it</div>
+          <div class="step-desc">Double-clicking the app shows: <em style="color:var(--red)">"System 32 Roulette cannot be opened because it is from an unidentified developer."</em> คลิก <kbd>OK</kbd> เพื่อปิด</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Open System Settings → Privacy &amp; Security</div>
+          <div class="step-desc">Go to <kbd>เมนู Apple</kbd> → <kbd>การตั้งค่าระบบ</kbd> → <kbd>ความเป็นส่วนตัวและความปลอดภัย &amp; Security</kbd>. เลื่อนลงไปที่ส่วนความปลอดภัย คุณจะเห็น:<br><br>
+            <div class="screenshot-mock">
+              <div class="mock-row">
+                <span class="mock-app">System 32 Roulette ถูกบล็อกไม่ให้ใช้งานเนื่องจากไม่ได้มาจากนักพัฒนาที่ระบุตัวตนได้</span>
+                <span class="mock-allow-btn">เปิดต่อไป</span>
+              </div>
+            </div>
+            คลิก <kbd>เปิดต่อไป</kbd>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">ยืนยันในกล่องโต้ตอบ</div>
+          <div class="step-desc">macOS จะแสดงกล่องโต้ตอบยืนยันครั้งสุดท้าย คลิก <kbd>เปิด</kbd>. แอปจะเปิดขึ้น คุณจะต้องทำขั้นตอนนี้เพียงครั้งเดียว — การเปิดใช้งานครั้งต่อๆ ไปจะทำงานตามปกติ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="method-alt">
+      <strong>ทางเลือก (เร็วกว่า):</strong> คลิกขวาที่แอปใน Applications → <strong>เปิด</strong> → <strong>เปิด</strong> ในกล่องโต้ตอบ ข้าม System Settings ไปเลย
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ACCESSIBILITY -->
+  <div class="section" id="accessibility">
+    <div class="sec-tag">// ขั้นตอนที่ 2 — ไม่บังคับ</div>
+    <h2 class="sec-title">เปิดใช้งานทางลัดแป้นพิมพ์ (F11 เต็มจอ)</h2>
+
+    <div class="notice ok">
+      <div class="notice-title">✓ เกมใช้งานได้โดยไม่ต้องทำขั้นตอนนี้</div>
+      ผลลัพธ์นี้จะมีผลเฉพาะกับปุ่มสลับโหมด <kbd>F11</kbd> เต็มจอและปุ่ม <kbd>Escape</kbd> สำหรับออกจากการแสดงผลเต็มจอเท่านั้น หากคุณไม่ได้ใช้งานปุ่มเหล่านี้ ข้ามขั้นตอนนี้ไปได้เลย
+    </div>
+
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem;">ทางลัดแป้นพิมพ์ส่วนกลางจำเป็นต้องมีการเข้าถึงการช่วยสำหรับการเข้าถึง (Accessibility) บน macOS เมื่อคุณกดครั้งแรก <kbd>F11</kbd> แอปจะแจ้งเตือนคุณโดยอัตโนมัติ — หรือทำตามขั้นตอนเหล่านี้ด้วยตนเอง:</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">เปิด ความปลอดภัยและความเป็นส่วนตัว → การช่วยการเข้าถึง</div>
+          <div class="step-desc">Go to <kbd>เมนู Apple</kbd> → <kbd>การตั้งค่าระบบ</kbd> → <kbd>ความเป็นส่วนตัวและความปลอดภัย &amp; Security</kbd> → <kbd>การช่วยการเข้าถึง</kbd>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">เปิดสวิตช์ System 32 Roulette</div>
+          <div class="step-desc">ค้นหา <strong>System 32 Roulette</strong> ในรายการแล้วเปิดสวิตช์<br><br>
+            <div class="screenshot-mock">
+              <div class="mock-row">
+                <span class="mock-app">Terminal</span>
+                <div class="mock-toggle mock-toggle-off"><div class="mock-dot"></div></div>
+              </div>
+              <div class="mock-row">
+                <span class="mock-app" style="color:var(--green)">System 32 Roulette</span>
+                <div class="mock-toggle"><div class="mock-dot"></div></div>
+              </div>
+            </div>
+            หากยังไม่อยู่ในรายการ ให้เปิดแอปขึ้นมาแล้วกด <kbd>F11</kbd> หนึ่งครั้ง — รายการจะปรากฏขึ้น
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">รีสตาร์ทแอป</div>
+          <div class="step-desc">ปิดแล้วเปิด System 32 Roulette ใหม่ <kbd>F11</kbd> ตอนนี้ใช้สลับโหมดเต็มจอ, <kbd>Escape</kbd> ออกจากโหมดเต็มจอ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FAQ -->
+  <div class="section" id="faq">
+    <div class="sec-tag">// คำถามที่พบบ่อย</div>
+    <h2 class="sec-title">คำถามที่พบบ่อย</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">แอปนี้ปลอดภัยจริงไหม?</div>
+        <div class="faq-a">เกมนี้ทำตามที่บอกไว้ ถ้าคุณแพ้ แอปจะพยายามลบระบบของคุณ — บน macOS จะมีการขอรหัสผ่านผู้ดูแลระบบผ่านหน้าต่างระบบ จากนั้นจะล้างข้อมูลในโวลุ่ม Data ออกทั้งหมด (<code>/Users</code>, <code>/Applications</code>, <code>/Library</code>, <code>/usr/local</code>) SIP จะปกป้องไฟล์ระบบหลัก แต่นอกเหนือจากนั้นถือว่าโดนลบหมด ติดตั้งก็ต่อเมื่อคุณแน่ใจเท่านั้น ซอร์สโค้ดอยู่บน <a href="https://github.com/Hackatoan/sys32roulette" target="_blank" rel="noopener">GitHub</a>.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">ฉันไม่เห็นปุ่ม "Open Anyway" ใน System Settings</div>
+        <div class="faq-a">คุณต้องลองเปิดแอปก่อน (ขั้นตอนที่ 2) — ปุ่ม "Open Anyway" จะปรากฏขึ้นก็ต่อเมื่อ macOSบล็อกแอปนั้นๆ ไปแล้ว ลองดับเบิลคลิกที่แอปในโฟลเดอร์ Applications ปิดหน้าต่างข้อผิดพลาด แล้วตรวจสอบที่ System Settings → Privacy &amp; Security ทันที</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">ฉันเล่นบนเบราว์เซอร์แทนได้ไหม?</div>
+        <div class="faq-a">ได้ — <a href="/play">sys32.hackatoa.com/play</a> ใช้ได้กับเบราว์เซอร์สมัยใหม่ทุกตัว เวอร์ชันเดสก์ท็อปแค่เพิ่มหน้าต่างเนทีฟและทางลัดสำหรับโหมดเต็มจอ</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">ฉันต้องใช้ Mac รุ่นไหน — Intel หรือ Apple Silicon?</div>
+        <div class="faq-a">การดาวน์โหลดเป็นแบบยูนิเวอร์แซลไบนารี — สามารถเล่นได้ทันทีทั้งบน Mac ชิป Intel (x86_64) และ Apple Silicon (M1/M2/M3/M4) โดยไม่ต้องใช้ Rosetta</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fbrand">System 32 Roulette &nbsp;·&nbsp; <a href="https://hackatoa.com">Hackatoa</a></div>
+  <div class="flinks">
+    <a href="/play">เล่นเลย</a>
+    <a href="/">เกี่ยวกับ</a>
+    <a href="https://github.com/Hackatoan/sys32roulette/releases/latest" target="_blank">ดาวน์โหลด</a>
+  </div>
+</footer>
+
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1fb943269b344332804cfc907bf18ee5"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>
