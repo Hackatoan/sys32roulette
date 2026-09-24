@@ -109,7 +109,7 @@
     <div class="panel">
       <h2 class="panel-title" data-i18n="enterRoomCode">ENTER ROOM CODE</h2>
       <input id="code-input" class="code-input" type="text" placeholder="XXXXXX" maxlength="6" autocomplete="off">
-      <div id="join-error" class="error-msg"></div>
+      <div id="join-error" class="error-msg" role="alert" aria-live="assertive"></div>
       <div class="row-btns">
         <button class="btn btn-primary" data-i18n="connect" onclick="doJoinRoom()">Connect</button>
         <button class="btn btn-ghost" data-i18n="back" onclick="showScreen('s-menu')">← Back</button>
