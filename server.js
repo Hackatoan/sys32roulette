@@ -627,6 +627,19 @@ function removeFromQueue(socketId) {
   if (idx !== -1) queue.splice(idx, 1);
 }
 
+// Client-reported tap/click counters (click, whack, aim) are advisory only —
+// a forged socket event could otherwise report an arbitrary score and win
+// the round outright. Only accept values that are consistent with a real
+// client incrementing its own counter by one per event.
+function applyClientScore(room, playerId, rawScore) {
+  const scores = room.gameData.scores;
+  if (!scores || !(playerId in scores)) return;
+  const prev = scores[playerId] || 0;
+  const n = Number(rawScore);
+  if (!Number.isInteger(n) || n < 0 || n > prev + 1) return;
+  scores[playerId] = n;
+}
+
 io.on('connection', socket => {
   socket.on('queue-join', (payload) => {
     socket.playerName = db.cleanName(payload && payload.name);
@@ -699,7 +712,7 @@ io.on('connection', socket => {
   socket.on('click-score', score => {
     const room = rooms.get(socket.roomCode);
     if (!room || room.gameData.type !== 'click' || room.gameData.finished) return;
-    room.gameData.scores[socket.id] = score;
+    applyClientScore(room, socket.id, score);
   });
 
   socket.on('memory-submit', answer => {
@@ -784,7 +797,7 @@ io.on('connection', socket => {
   socket.on('whack-score', score => {
     const room = rooms.get(socket.roomCode);
     if (!room || room.gameData.type !== 'whack' || room.gameData.finished) return;
-    room.gameData.scores[socket.id] = score;
+    applyClientScore(room, socket.id, score);
   });
 
   socket.on('binary-answer', ({ choice }) => {
@@ -855,7 +868,7 @@ io.on('connection', socket => {
   socket.on('aim-score', score => {
     const room = rooms.get(socket.roomCode);
     if (!room || room.gameData.type !== 'aim' || room.gameData.finished) return;
-    room.gameData.scores[socket.id] = score;
+    applyClientScore(room, socket.id, score);
   });
 
   socket.on('simon-done', () => {
