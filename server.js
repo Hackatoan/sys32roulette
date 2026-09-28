@@ -14,24 +14,30 @@ const PORT = process.env.PORT || 3028;
 // ── Wipe counter ──────────────────────────────────────────
 const STATS_FILE = process.env.STATS_FILE || '/data/stats.json';
 
-function readStats() {
+function loadStatsFromDisk() {
   try { return JSON.parse(fs.readFileSync(STATS_FILE, 'utf8')); } catch { return { wipes: 0 }; }
 }
-function writeStats(s) {
-  try {
-    fs.mkdirSync(path.dirname(STATS_FILE), { recursive: true });
-    fs.writeFileSync(STATS_FILE, JSON.stringify(s));
-  } catch {}
+
+// GET /stats is fetched by every landing-page view (all locales), so keep it
+// in memory instead of doing a synchronous disk read per request — a sync
+// read blocks the single event loop that also handles live socket.io game
+// traffic. Loaded once at boot; single-container deploy (see
+// docker-compose.yml) so no cross-instance consistency concern.
+let stats = loadStatsFromDisk();
+
+function persistStats() {
+  fs.mkdir(path.dirname(STATS_FILE), { recursive: true }, () => {
+    fs.writeFile(STATS_FILE, JSON.stringify(stats), () => {});
+  });
 }
 
 app.post('/wipe', (_req, res) => {
-  const s = readStats();
-  s.wipes = (s.wipes || 0) + 1;
-  writeStats(s);
-  res.json(s);
+  stats.wipes = (stats.wipes || 0) + 1;
+  persistStats();
+  res.json(stats);
 });
 
-app.get('/stats', (_req, res) => res.json(readStats()));
+app.get('/stats', (_req, res) => res.json(stats));
 
 // Nickname-based leaderboard.
 app.get('/api/leaderboard', async (_req, res) => {
