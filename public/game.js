@@ -121,7 +121,7 @@ function copyLink() {
   flashCopy(T('linkCopied'));
 }
 function flashCopy(msg) {
-  const el = document.querySelector('.hint-text');
+  const el = document.getElementById('share-hint');
   if (!el) return;
   el.textContent = msg;
   setTimeout(() => { el.textContent = T('shareHint'); }, 2000);
