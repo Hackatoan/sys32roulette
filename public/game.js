@@ -731,6 +731,24 @@ function holdEnd(e) {
   socket.emit('hold-result', { elapsed });
 }
 
+// Keyboard support: the hold button only wired up mouse/touch press-and-hold,
+// so a keyboard-only player had no way to play this minigame at all. Space
+// or Enter now presses/releases it the same way, while focused, mirroring
+// the mousedown/mouseup pair above.
+document.addEventListener('keydown', e => {
+  if (e.repeat) return;
+  if (e.key !== ' ' && e.key !== 'Enter') return;
+  if (document.activeElement !== document.getElementById('hold-btn')) return;
+  e.preventDefault();
+  holdStart(e);
+});
+document.addEventListener('keyup', e => {
+  if (e.key !== ' ' && e.key !== 'Enter') return;
+  if (document.activeElement !== document.getElementById('hold-btn')) return;
+  e.preventDefault();
+  holdEnd(e);
+});
+
 // ── AIM GAME ──────────────────────────────────────────────
 let aimActive = false;
 let aimCount = 0;
