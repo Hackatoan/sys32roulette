@@ -49,7 +49,18 @@ app.get('/api/leaderboard', async (_req, res) => {
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
 app.get('/play', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'game.html')));
 app.get('/macos', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'macos.html')));
-app.use(express.static(path.join(__dirname, 'public')));
+// Static assets (game.js, style.css, i18n/*.json, images) were served with no
+// Cache-Control at all, so every repeat visit — and every non-English
+// /play load, which fetches its locale's i18n JSON fresh every time — forced
+// a full network round trip plus a disk read even when nothing changed.
+// HTML entry points stay no-cache so deploys show up immediately; everything
+// else gets a short browser-cache window.
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: '1h',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache');
+  },
+}));
 
 const rooms = new Map();
 const queue = [];
