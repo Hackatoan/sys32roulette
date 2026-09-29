@@ -274,7 +274,7 @@ function startTyping(cmd) {
       typingDone = true;
       inp.disabled = true;
       sts.textContent = T('submittedWaiting');
-      socket.emit('typing-done');
+      socket.emit('typing-done', { typed });
     }
   };
 }
