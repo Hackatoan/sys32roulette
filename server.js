@@ -718,9 +718,16 @@ io.on('connection', socket => {
   });
 
   // ── Existing game handlers ────────────────────────────────
-  socket.on('typing-done', () => {
+  // 'typing-done' used to be trusted blindly (no server-side proof the
+  // submitted command actually matched), unlike every other answer-checking
+  // minigame (scramble/pipes/math/binary/stroop). That let a forged socket
+  // event win the round instantly with zero input. Validate against the
+  // command the server generated for this round before accepting it.
+  socket.on('typing-done', (payload) => {
     const room = rooms.get(socket.roomCode);
     if (!room || room.gameData.type !== 'typing' || room.gameData.finished || room.gameData.firstDone) return;
+    const typed = payload && payload.typed;
+    if (typed !== room.gameData.cmd) return;
     room.gameData.firstDone = socket.id;
     room.gameData.finished = true;
     endMinigame(room, socket.id);
