@@ -425,6 +425,9 @@ function startMinigame(room) {
     const nums = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     payload.nums = nums;
     room.gameData.startTime = Date.now();
+    // Correct completion order is just the values sorted ascending —
+    // stored server-side so 'order-done' can be checked against it below.
+    room.gameData.correctOrder = [...nums].sort((a, b) => a - b);
     clearTimeout(room.timer);
     room.timer = setTimeout(() => {
       if (room.gameData.finished) return;
@@ -798,9 +801,20 @@ io.on('connection', socket => {
     });
   });
 
-  socket.on('order-done', () => {
+  // 'order-done' used to be trusted blindly (no server-side proof the
+  // player actually clicked the numbers in ascending order), unlike the
+  // answer-checking minigames. Require the client to submit the sequence
+  // it clicked and validate it against the server-computed correct order
+  // before accepting the win — same trust model as 'typing-done'.
+  socket.on('order-done', (payload) => {
     const room = rooms.get(socket.roomCode);
     if (!room || room.gameData.type !== 'order' || room.gameData.finished) return;
+    const submitted = payload && payload.sequence;
+    const expected = room.gameData.correctOrder;
+    if (!Array.isArray(submitted) || !expected || submitted.length !== expected.length) return;
+    for (let i = 0; i < expected.length; i++) {
+      if (Number(submitted[i]) !== expected[i]) return;
+    }
     room.gameData.finished = true;
     clearTimeout(room.timer);
     endMinigame(room, socket.id);
@@ -895,9 +909,20 @@ io.on('connection', socket => {
     applyClientScore(room, socket.id, score);
   });
 
-  socket.on('simon-done', () => {
+  // 'simon-done' used to be trusted blindly (no server-side proof the
+  // player actually repeated the sequence correctly), unlike the
+  // answer-checking minigames. Require the client to submit the key
+  // sequence it entered and validate it against the server-generated
+  // sequence before accepting the win — same trust model as 'typing-done'.
+  socket.on('simon-done', (payload) => {
     const room = rooms.get(socket.roomCode);
     if (!room || room.gameData.type !== 'simon' || room.gameData.finished) return;
+    const submitted = payload && payload.sequence;
+    const expected = room.gameData.sequence;
+    if (!Array.isArray(submitted) || !expected || submitted.length !== expected.length) return;
+    for (let i = 0; i < expected.length; i++) {
+      if (submitted[i] !== expected[i]) return;
+    }
     room.gameData.finished = true;
     clearTimeout(room.timer);
     endMinigame(room, socket.id);
