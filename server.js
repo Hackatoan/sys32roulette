@@ -64,6 +64,8 @@ app.post('/api/claim', async (req, res) => {
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
 app.get('/play', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'game.html')));
 app.get('/macos', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'macos.html')));
+app.get('/privacy', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'privacy.html')));
+app.get('/terms', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'terms.html')));
 // Static assets (game.js, style.css, i18n/*.json, images) were served with no
 // Cache-Control at all, so every repeat visit — and every non-English
 // /play load, which fetches its locale's i18n JSON fresh every time — forced
