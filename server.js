@@ -5,11 +5,14 @@ const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs');
 const db = require('./db');
+const { verifyFirebaseToken } = require('./verifyFirebaseToken');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3028;
+
+app.use(express.json());
 
 // ── Wipe counter ──────────────────────────────────────────
 const STATS_FILE = process.env.STATS_FILE || '/data/stats.json';
@@ -43,6 +46,18 @@ app.get('/stats', (_req, res) => res.json(stats));
 app.get('/api/leaderboard', async (_req, res) => {
   const players = await db.getLeaderboard(20);
   res.json({ game: db.GAME, players });
+});
+
+// Merge a previously-played anonymous nickname's stats into the signed-in
+// account making this request. Rate-limited implicitly by requiring a fresh
+// verified ID token per call (an attacker can't cheaply mint those).
+app.post('/api/claim', async (req, res) => {
+  const decoded = await verifyFirebaseToken(req.body && req.body.idToken);
+  if (!decoded) return res.status(401).json({ error: 'sign in required' });
+  const nickname = db.cleanName(req.body && req.body.nickname);
+  if (!nickname) return res.status(400).json({ error: 'nickname required' });
+  const result = await db.claimNickname(nickname, decoded.uid, decoded.name);
+  res.status(result.ok ? 200 : 409).json(result);
 });
 // ─────────────────────────────────────────────────────────
 
@@ -609,7 +624,8 @@ function endMinigame(room, winnerId, extra = {}) {
       // Record human-vs-human matches to the leaderboard (skip AI games).
       if (!room.isAiRoom && room.names) {
         const winnerName = winner ? room.names[winner] : null;
-        db.recordMatch(room.names[a], room.names[b], winnerName);
+        const uids = room.uids || {};
+        db.recordMatch(room.names[a], room.names[b], winnerName, uids[a], uids[b]);
       }
       setTimeout(() => rooms.delete(room.id), 60000);
     } else {
@@ -627,6 +643,7 @@ function startRoom(pidA, pidB) {
     id: code, players: [pidA, pidB],
     scores: { [pidA]: 0, [pidB]: 0 },
     names: { [pidA]: (sockA && sockA.playerName) || '', [pidB]: (sockB && sockB.playerName) || '' },
+    uids: { [pidA]: (sockA && sockA.uid) || null, [pidB]: (sockB && sockB.uid) || null },
     currentGame: 0,
     gameOrder: shuffle([...GAME_TYPES]).slice(0, ROUNDS_PER_MATCH),
     state: 'playing', gameData: {}, timer: null,
@@ -660,9 +677,29 @@ function applyClientScore(room, playerId, rawScore) {
   scores[playerId] = n;
 }
 
+// Verifies an optional Firebase ID token supplied at queue/create/join time
+// and attaches the resulting uid to the socket and (once one exists) its
+// room. Deliberately not awaited by callers — verification is a network
+// round trip (JWKS fetch, cached after the first call) and must never delay
+// matchmaking or room join; a match runs for multiple rounds so there's
+// plenty of time for this to land before endMinigame's recordMatch call.
+// Covers both orderings: if the room already exists by the time this
+// resolves, patch it directly; if it's created afterward, startRoom/
+// create-room/join-room read socket.uid, which is already set by then.
+function verifyAndAttachUid(socket, idToken) {
+  if (!idToken) return;
+  verifyFirebaseToken(idToken).then((decoded) => {
+    if (!decoded) return;
+    socket.uid = decoded.uid;
+    const room = rooms.get(socket.roomCode);
+    if (room && room.uids) room.uids[socket.id] = decoded.uid;
+  });
+}
+
 io.on('connection', socket => {
   socket.on('queue-join', (payload) => {
     socket.playerName = db.cleanName(payload && payload.name);
+    verifyAndAttachUid(socket, payload && payload.idToken);
     if (queue.includes(socket.id)) return;
     queue.push(socket.id);
     socket.emit('queue-status', { position: queue.length, total: queue.length });
@@ -684,12 +721,14 @@ io.on('connection', socket => {
 
   socket.on('create-room', (payload) => {
     socket.playerName = db.cleanName(payload && payload.name);
+    verifyAndAttachUid(socket, payload && payload.idToken);
     let code;
     do { code = rndCode(); } while (rooms.has(code));
     const room = {
       id: code, players: [socket.id],
       scores: { [socket.id]: 0 },
       names: { [socket.id]: socket.playerName },
+      uids: { [socket.id]: socket.uid || null },
       currentGame: 0,
       gameOrder: shuffle([...GAME_TYPES]).slice(0, ROUNDS_PER_MATCH),
       state: 'waiting', gameData: {}, timer: null,
@@ -704,6 +743,7 @@ io.on('connection', socket => {
     // Backward compatible: raw may be a code string or { code, name }.
     const codeRaw = typeof raw === 'string' ? raw : (raw && raw.code);
     socket.playerName = db.cleanName(typeof raw === 'object' ? raw && raw.name : '');
+    verifyAndAttachUid(socket, typeof raw === 'object' ? raw && raw.idToken : null);
     const code = (codeRaw || '').trim().toUpperCase();
     const room = rooms.get(code);
     if (!room) return socket.emit('join-error', 'Room not found');
@@ -711,6 +751,7 @@ io.on('connection', socket => {
     room.players.push(socket.id);
     room.scores[socket.id] = 0;
     if (room.names) room.names[socket.id] = socket.playerName;
+    if (room.uids) room.uids[socket.id] = socket.uid || null;
     socket.roomCode = code;
     socket.join(code);
     room.state = 'playing';
