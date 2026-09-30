@@ -478,10 +478,12 @@ function submitMath() {
 // ── ORDER GAME ────────────────────────────────────────────
 let orderTarget = 1;
 let orderMax = 9;
+let orderClicked = [];
 
 function startOrder(nums) {
   orderTarget = 1;
   orderMax = nums.length;
+  orderClicked = [];
 
   document.getElementById('order-next-num').textContent = '1';
   const grid = document.getElementById('order-grid');
@@ -497,9 +499,10 @@ function startOrder(nums) {
       if (parseInt(cell.dataset.num) === orderTarget) {
         cell.classList.add('oc-done');
         cell.style.pointerEvents = 'none';
+        orderClicked.push(parseInt(cell.dataset.num));
         orderTarget++;
         document.getElementById('order-next-num').textContent = orderTarget <= orderMax ? orderTarget : '✓';
-        if (orderTarget > orderMax) socket.emit('order-done');
+        if (orderTarget > orderMax) socket.emit('order-done', { sequence: orderClicked });
       } else {
         cell.classList.add('oc-wrong');
         setTimeout(() => cell.classList.remove('oc-wrong'), 300);
@@ -871,7 +874,7 @@ function simonPress(key) {
   if (simonUserSeq.length >= simonSeq.length) {
     simonActive = false;
     document.querySelectorAll('.simon-key').forEach(b => b.disabled = true);
-    socket.emit('simon-done');
+    socket.emit('simon-done', { sequence: simonUserSeq });
   }
 }
 
