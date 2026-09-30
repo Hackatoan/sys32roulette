@@ -1,6 +1,26 @@
 'use strict';
 const socket = io();
 
+if (window.PlayerAccount) window.PlayerAccount.mountWidget('#hk-account');
+
+// Firebase's persisted-session check resolves quickly but isn't instant --
+// if the player clicks Quick Play / Create / Join before it lands, wait for
+// the first auth callback (bounded by a short timeout) so a returning
+// signed-in player's very first join carries their idToken instead of
+// joining anonymously and only linking on their *next* match.
+async function getIdToken() {
+  if (!window.PlayerAccount) return null;
+  return Promise.race([
+    new Promise((resolve) => {
+      const unsub = window.PlayerAccount.onAuthChange(async (user) => {
+        unsub();
+        resolve(user ? await window.PlayerAccount.getIdToken() : null);
+      });
+    }),
+    new Promise((resolve) => setTimeout(() => resolve(null), 1500)),
+  ]);
+}
+
 // ── i18n: per-player runtime strings (dict + t() injected by game.html bootstrap) ──
 const T = (k, p) => (typeof window !== 'undefined' && window.t ? window.t(k, p) : k);
 
@@ -60,7 +80,7 @@ async function loadLeaderboard() {
 }
 
 // ── Queue ─────────────────────────────────────────────────
-function doQuickPlay() {
+async function doQuickPlay() {
   showScreen('s-queue');
   document.getElementById('queue-status-text').textContent = T('searchingTarget');
   let elapsed = 0;
@@ -69,7 +89,8 @@ function doQuickPlay() {
     elapsed++;
     document.getElementById('queue-timer').textContent = elapsed + 's';
   }, 1000);
-  socket.emit('queue-join', { name: currentName() });
+  const idToken = await getIdToken();
+  socket.emit('queue-join', { name: currentName(), idToken });
 }
 
 function doPlayAI(difficulty) {
@@ -92,9 +113,10 @@ socket.on('queue-status', ({ position, total }) => {
 });
 
 // ── Room management ───────────────────────────────────────
-function doCreateRoom() {
+async function doCreateRoom() {
   showScreen('s-create');
-  socket.emit('create-room', { name: currentName() });
+  const idToken = await getIdToken();
+  socket.emit('create-room', { name: currentName(), idToken });
 }
 
 function showJoin() {
@@ -103,13 +125,14 @@ function showJoin() {
   showScreen('s-join');
 }
 
-function doJoinRoom() {
+async function doJoinRoom() {
   const code = document.getElementById('code-input').value.trim().toUpperCase();
   if (code.length < 4) {
     document.getElementById('join-error').textContent = T('invalidCode');
     return;
   }
-  socket.emit('join-room', { code, name: currentName() });
+  const idToken = await getIdToken();
+  socket.emit('join-room', { code, name: currentName(), idToken });
 }
 
 function copyCode() {
