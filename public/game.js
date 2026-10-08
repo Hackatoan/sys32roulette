@@ -157,6 +157,7 @@ socket.on('room-created', code => {
 });
 
 socket.on('join-error', msg => {
+  if (window.SFX) SFX.play('error');
   document.getElementById('join-error').textContent = msg;
 });
 
@@ -196,6 +197,7 @@ const GAME_BADGE_LABELS = {
 };
 
 socket.on('minigame-start', ({ type, round, of, command, grid, showDuration, duration, nums, scrambled, target, sequence, display }) => {
+  if (window.SFX) SFX.play('turn');
   gs.round = round;
   document.getElementById('round-num').textContent = round + 1;
   document.getElementById('round-total').textContent = of;
@@ -228,12 +230,12 @@ socket.on('minigame-result', ({ winner, scores }) => {
 
 socket.on('game-over', ({ winner, scores }) => {
   Object.assign(gs.scores, scores);
-  if (winner === null) showScreen('s-draw');
+  if (winner === null) { if (window.SFX) SFX.play('draw'); showScreen('s-draw'); }
   else if (winner === myId) showWin();
   else showLose();
 });
 
-socket.on('opponent-left', () => showScreen('s-left'));
+socket.on('opponent-left', () => { if (window.SFX) SFX.play('error'); showScreen('s-left'); });
 
 // ── Countdown ─────────────────────────────────────────────
 function runCountdown(from) {
@@ -242,6 +244,7 @@ function runCountdown(from) {
   const el = document.getElementById('countdown-num');
   function tick() {
     el.textContent = n;
+    if (window.SFX) SFX.play(n <= 0 ? 'pop' : 'tick');
     el.style.animation = 'none';
     void el.offsetWidth;
     el.style.animation = 'cdpulse 1s ease-out';
@@ -329,6 +332,7 @@ function startClick(duration) {
     cell.addEventListener('click', () => {
       if (!clickActive || !cell.classList.contains('lit')) return;
       cell.classList.remove('lit');
+      if (window.SFX) SFX.play('pop');
       clickCount++;
       document.getElementById('click-count').textContent = clickCount;
       socket.emit('click-score', clickCount);
@@ -399,6 +403,7 @@ function startMemory(grid, showDuration) {
     cell.className = 'mc' + (val ? ' lit' : '');
     cell.addEventListener('click', () => {
       if (memLocked) return;
+      if (window.SFX) SFX.play('click');
       cell.classList.toggle('sel');
       memSelected[i] = cell.classList.contains('sel') ? 1 : 0;
     });
@@ -549,6 +554,7 @@ function startScramble(scrambled) {
 }
 
 socket.on('scramble-wrong', () => {
+  if (window.SFX) SFX.play('error');
   const fb = document.getElementById('scramble-feedback');
   fb.textContent = T('incorrect');
   fb.className = 'quiz-feedback fb-err';
@@ -625,6 +631,7 @@ function spawnProcess(arena) {
     if (!whackActive) return;
     clearTimeout(timeout);
     el.remove();
+    if (window.SFX) SFX.play('pop');
     whackCount++;
     document.getElementById('whack-count').textContent = whackCount;
     socket.emit('whack-score', whackCount);
@@ -792,6 +799,7 @@ function startAim(duration) {
   moveAimTarget(arena, target);
 
   target.onclick = () => {
+    if (window.SFX && aimActive) SFX.play('pop');
     if (!aimActive) return;
     aimCount++;
     document.getElementById('aim-count').textContent = aimCount;
@@ -862,6 +870,7 @@ function startSimon(sequence) {
 
 function simonPress(key) {
   if (!simonActive) return;
+  if (window.SFX) SFX.play('click');
   simonUserSeq.push(key);
   const idx = simonUserSeq.length - 1;
   const allChips = document.getElementById('simon-chips').querySelectorAll('.simon-chip');
@@ -962,6 +971,7 @@ function startPipes(display) {
 }
 
 socket.on('pipes-wrong', () => {
+  if (window.SFX) SFX.play('error');
   const fb = document.getElementById('pipes-feedback');
   fb.textContent = T('incorrect');
   fb.className = 'quiz-feedback fb-err';
@@ -978,6 +988,7 @@ function submitPipes() {
 
 // ── Round result ──────────────────────────────────────────
 function showRoundResult(winner) {
+  if (window.SFX) SFX.play(winner === myId ? 'win' : !winner ? 'draw' : 'lose');
   const titleEl = document.getElementById('rr-title');
   const subEl = document.getElementById('rr-sub');
   const tallyEl = document.getElementById('rr-tally');
@@ -1002,6 +1013,7 @@ function showRoundResult(winner) {
 
 // ── Win screen ────────────────────────────────────────────
 function showWin() {
+  if (window.SFX) SFX.play('win');
   showScreen('s-win');
   const term = document.getElementById('win-terminal');
   term.innerHTML = '';
@@ -1018,6 +1030,7 @@ function showWin() {
 
 // ── Lose screen ───────────────────────────────────────────
 function showLose() {
+  if (window.SFX) SFX.play('boom');
   showScreen('s-lose');
   document.getElementById('lose-phase1').style.display = 'flex';
   document.getElementById('lose-phase2').classList.add('hidden');
