@@ -156,11 +156,12 @@ function makeMathQ() {
 
 function makeBinaryQ() {
   const bits = 4 + Math.floor(Math.random() * 5);
-  const value = Math.floor(Math.random() * Math.pow(2, bits));
+  const max = 1 << bits;
+  const value = Math.floor(Math.random() * max);
   const binary = value.toString(2).padStart(bits, '0');
   const wrong = new Set();
   while (wrong.size < 3) {
-    const w = Math.floor(Math.random() * Math.pow(2, bits));
+    const w = Math.floor(Math.random() * max);
     if (w !== value) wrong.add(w);
   }
   const choices = shuffle([value, ...wrong]);
