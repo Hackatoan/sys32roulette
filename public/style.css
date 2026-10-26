@@ -126,13 +126,25 @@ html, body {
   background: var(--green); color: var(--bg);
   box-shadow: 0 0 20px rgba(57,255,20,.5);
 }
+.btn:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
 .btn:active { transform: scale(0.97); }
 
 .btn-secondary { border-color: var(--cyan); color: var(--cyan); }
 .btn-secondary:hover { background: var(--cyan); color: var(--bg); box-shadow: 0 0 20px rgba(0,255,204,.4); }
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
 
 .btn-ghost { border-color: var(--muted); color: var(--muted); min-width: 160px; }
 .btn-ghost:hover { background: var(--muted); color: var(--bg); box-shadow: none; }
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--muted);
+  outline-offset: 2px;
+}
 
 /* ── Panel ───────────────────────────────────────────── */
 .panel {
@@ -157,6 +169,10 @@ html, body {
   font-family: var(--font); font-size: 0.75rem; padding: 0.35rem 0.9rem; cursor: pointer;
 }
 .btn-copy:hover { border-color: var(--green); color: var(--green); }
+.btn-copy:focus-visible {
+  outline: 2px solid var(--muted);
+  outline-offset: 2px;
+}
 
 .hint-text { color: var(--muted); font-size: 0.78rem; text-align: center; }
 
@@ -176,6 +192,9 @@ html, body {
   border: none; border-bottom: 2px solid var(--green); outline: none;
 }
 .code-input:focus { border-bottom-color: var(--cyan); }
+.code-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--green);
+}
 .error-msg { color: var(--red); font-size: 0.85rem; min-height: 1.2rem; text-align: center; }
 .row-btns { display: flex; gap: 1rem; justify-content: center; }
 
@@ -254,6 +273,9 @@ html, body {
   letter-spacing: 0.04em; word-break: break-all;
 }
 .typing-input:focus { border-bottom-color: var(--cyan); }
+.typing-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--green);
+}
 .typing-input:disabled { opacity: 0.5; }
 .typing-status { color: var(--muted); font-size: 0.8rem; min-height: 1.3rem; }
 
