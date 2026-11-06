@@ -12,7 +12,8 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3028;
 
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
+server.setTimeout(30000);
 
 // ── Wipe counter ──────────────────────────────────────────
 const STATS_FILE = process.env.STATS_FILE || '/data/stats.json';
