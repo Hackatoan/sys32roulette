@@ -14,6 +14,7 @@ A tongue-in-cheek minigame battler where two players face off across quick round
 - Landing, `/macos`, and `/play` room
 - Per-player localization inside shared rooms
 - Global leaderboard
+- One-click "Copy Result" on the end screen to share your final score
 
 ## Tech Stack
 

@@ -82,7 +82,8 @@
     "drawSub": "Ambos os sistemas sobrevivem. Igualmente sem graça.",
     "rematch": "Revanche",
     "connectionLost": "CONEXÃO PERDIDA",
-    "opponentLeft": "Seu oponente desconectou antes que o sistema dele pudesse ser deletado."
+    "opponentLeft": "Seu oponente desconectou antes que o sistema dele pudesse ser deletado.",
+    "copyResult": "📋 Copiar resultado"
   },
   "runtime": {
     "noGames": "Nenhuma partida jogada ainda — seja o primeiro!",
@@ -117,6 +118,10 @@
     "tooEarly": "Muito cedo! Enviando...",
     "stoppedWaiting": "Parou em {sec}s — aguardando...",
     "collectingPanic": "Coletando dados de pânico... {pct}%",
-    "pctComplete": "{pct}% concluído"
+    "pctComplete": "{pct}% concluído",
+    "resultCopied": "Resultado copiado!",
+    "shareWin": "Apaguei o System32 do meu oponente {score} no Sys32 Roulette ✅",
+    "shareLose": "Meu System32 foi apagado {score} no Sys32 Roulette 💀",
+    "shareDraw": "DEADLOCK {score} no Sys32 Roulette 🤝"
   }
 }

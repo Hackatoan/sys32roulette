@@ -143,6 +143,21 @@ function copyLink() {
   navigator.clipboard.writeText(`${location.origin}/play?join=${myRoomCode}`).catch(() => {});
   flashCopy(T('linkCopied'));
 }
+// ── Copy match result ─────────────────────────────────────
+// Builds a one-line, shareable summary of the finished match (outcome + final
+// score + play link) and copies it to the clipboard. Purely client-side.
+function resultText() {
+  const me = myScore(), opp = oppScore();
+  const key = me > opp ? 'shareWin' : me < opp ? 'shareLose' : 'shareDraw';
+  return `${T(key, { score: `${me}–${opp}` })} ${location.origin}/play`;
+}
+function copyResult(btn) {
+  navigator.clipboard.writeText(resultText()).catch(() => {});
+  if (!btn) return;
+  btn.textContent = T('resultCopied');
+  clearTimeout(btn._copyT);
+  btn._copyT = setTimeout(() => { btn.textContent = T('copyResult'); }, 2000);
+}
 function flashCopy(msg) {
   const el = document.getElementById('share-hint');
   if (!el) return;
