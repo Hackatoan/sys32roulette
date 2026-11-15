@@ -64,12 +64,14 @@
     .nav-links{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;}
     .nav-links a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .15s;}
     .nav-links a:hover{color:var(--green);}
+    .nav-links a:focus-visible{outline:2px solid var(--green);outline-offset:3px;}
     .nav-play{
       background:var(--green);color:var(--bg);border:none;
       font-family:var(--font);font-size:.8rem;padding:.5rem 1.4rem;
       cursor:pointer;text-transform:uppercase;letter-spacing:.12em;text-decoration:none;font-weight:bold;
     }
     .nav-play:hover{box-shadow:0 0 15px rgba(57,255,20,.5);}
+    .nav-play:focus-visible{outline:2px solid var(--bg);outline-offset:2px;}
 
     /* HERO */
     .hero{
@@ -109,6 +111,7 @@
       letter-spacing:.15em;transition:all .2s;
     }
     .hero-cta:hover{box-shadow:0 0 40px rgba(57,255,20,.5);transform:scale(1.03);}
+    .hero-cta:focus-visible{outline:2px solid var(--bg);outline-offset:3px;}
     .hero-scroll{margin-top:4rem;color:var(--muted);font-size:.75rem;letter-spacing:.2em;}
 
     /* SECTIONS */
@@ -166,6 +169,7 @@
       text-decoration:none;text-align:center;letter-spacing:.08em;transition:all .15s;
     }
     .dl-btn:hover{border-color:var(--green);color:var(--green);background:rgba(57,255,20,.04);}
+    .dl-btn:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
     .dl-btn.primary{border-color:var(--green);color:var(--bg);background:var(--green);font-weight:bold;}
     .dl-btn.primary:hover{box-shadow:0 0 20px rgba(57,255,20,.4);}
     .dl-note{color:var(--muted);font-size:.75rem;text-align:center;letter-spacing:.08em;}
@@ -185,6 +189,7 @@
       text-decoration:none;text-transform:uppercase;letter-spacing:.15em;transition:all .2s;
     }
     .fcta-btn:hover{background:var(--green);color:var(--bg);box-shadow:0 0 30px rgba(57,255,20,.4);}
+    .fcta-btn:focus-visible{outline:2px solid var(--green);outline-offset:3px;}
 
     /* FOOTER */
     footer{
@@ -197,6 +202,7 @@
     .flinks{display:flex;gap:1.5rem;flex-wrap:wrap;}
     .flinks a{color:var(--muted);text-decoration:none;transition:color .15s;}
     .flinks a:hover{color:var(--green);}
+    .flinks a:focus-visible{outline:2px solid var(--green);outline-offset:2px;}
   </style>
 
   <!-- i18n:hreflang:start -->
