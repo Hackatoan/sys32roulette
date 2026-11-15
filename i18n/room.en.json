@@ -81,7 +81,8 @@
     "drawSub": "Both systems survive. Equally unimpressive.",
     "rematch": "Rematch",
     "connectionLost": "CONNECTION LOST",
-    "opponentLeft": "Your opponent disconnected before their system could be deleted."
+    "opponentLeft": "Your opponent disconnected before their system could be deleted.",
+    "copyResult": "📋 Copy Result"
   },
   "runtime": {
     "noGames": "No games played yet — be the first!",
@@ -116,6 +117,10 @@
     "tooEarly": "Too early! Submitting...",
     "stoppedWaiting": "Stopped at {sec}s — waiting...",
     "collectingPanic": "Collecting panic info... {pct}%",
-    "pctComplete": "{pct}% complete"
+    "pctComplete": "{pct}% complete",
+    "resultCopied": "Result copied!",
+    "shareWin": "I wiped my opponent's System32 {score} in Sys32 Roulette ✅",
+    "shareLose": "My System32 got wiped {score} in Sys32 Roulette 💀",
+    "shareDraw": "DEADLOCK {score} in Sys32 Roulette 🤝"
   }
 }

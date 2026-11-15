@@ -82,7 +82,8 @@
     "drawSub": "รอดพ้นทั้งคู่ ไร้ซึ่งความน่าประทับใจพอกัน",
     "rematch": "รีแมตช์",
     "connectionLost": "การเชื่อมต่อหลุด",
-    "opponentLeft": "คู่ต่อสู้ของคุณตัดการเชื่อมต่อก่อนที่ระบบจะถูกลบ"
+    "opponentLeft": "คู่ต่อสู้ของคุณตัดการเชื่อมต่อก่อนที่ระบบจะถูกลบ",
+    "copyResult": "📋 คัดลอกผลลัพธ์"
   },
   "runtime": {
     "noGames": "ยังไม่มีการเล่นเกม — มาเป็นคนแรกกันเลย!",
@@ -117,6 +118,10 @@
     "tooEarly": "เร็วเกินไป! กำลังส่งข้อมูล...",
     "stoppedWaiting": "หยุดที่ {sec}s — กำลังรอ...",
     "collectingPanic": "กำลังรวบรวมข้อมูลฉุกเฉิน... {pct}%",
-    "pctComplete": "เสร็จสิ้น {pct}%"
+    "pctComplete": "เสร็จสิ้น {pct}%",
+    "resultCopied": "คัดลอกผลลัพธ์แล้ว!",
+    "shareWin": "ฉันลบ System32 ของคู่ต่อสู้ {score} ใน Sys32 Roulette ✅",
+    "shareLose": "System32 ของฉันถูกลบ {score} ใน Sys32 Roulette 💀",
+    "shareDraw": "DEADLOCK {score} ใน Sys32 Roulette 🤝"
   }
 }

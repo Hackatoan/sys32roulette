@@ -82,7 +82,8 @@
     "drawSub": "Cả hai hệ thống đều sống sót. Quá nhạt nhẽo.",
     "rematch": "Đấu Lại",
     "connectionLost": "MẤT KẾT NỐI",
-    "opponentLeft": "Đối thủ của bạn đã ngắt kết nối trước khi hệ thống của họ bị xóa."
+    "opponentLeft": "Đối thủ của bạn đã ngắt kết nối trước khi hệ thống của họ bị xóa.",
+    "copyResult": "📋 Sao chép kết quả"
   },
   "runtime": {
     "noGames": "Chưa có trận đấu nào — hãy là người đầu tiên!",
@@ -117,6 +118,10 @@
     "tooEarly": "Quá sớm! Đang gửi...",
     "stoppedWaiting": "Dừng ở {sec}s — đang đợi...",
     "collectingPanic": "Đang thu thập thông tin sự cố... {pct}%",
-    "pctComplete": "Hoàn thành {pct}%"
+    "pctComplete": "Hoàn thành {pct}%",
+    "resultCopied": "Đã sao chép kết quả!",
+    "shareWin": "Tôi đã xóa System32 của đối thủ {score} trong Sys32 Roulette ✅",
+    "shareLose": "System32 của tôi đã bị xóa {score} trong Sys32 Roulette 💀",
+    "shareDraw": "DEADLOCK {score} trong Sys32 Roulette 🤝"
   }
 }
