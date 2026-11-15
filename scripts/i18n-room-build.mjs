@@ -91,11 +91,26 @@ const boot = `
   <!-- i18n:room:end -->
 `;
 
-let html = readFileSync(join(ROOT, 'public/game.html'), 'utf8');
-html = html.replace(/\n?\s*<!-- i18n:room:start[\s\S]*?<!-- i18n:room:end -->\n?/g, '\n');
-// Inject the bootstrap immediately before name.js so window.t exists for game.js.
-html = html.replace('  <script src="name.js"></script>', `${boot}  <script src="name.js"></script>`);
-writeFileSync(join(ROOT, 'public/game.html'), html);
+// Rewrite the existing block IN PLACE so the surrounding <script> order is never
+// touched (the old strip-then-insert-before-name.js approach dragged any tag
+// sitting between the block and name.js, e.g. sfx.js, above it on every run).
+// First-time insert (no markers yet) goes before the first local script that
+// may call window.t. Function replacers so `$` in strings is never special.
+const GAME = join(ROOT, 'public/game.html');
+let html = readFileSync(GAME, 'utf8');
+const BLOCK = /\n[ \t]*<!-- i18n:room:start[\s\S]*?<!-- i18n:room:end -->\n/;
+const ANCHORS = ['  <script src="sfx.js"></script>', '  <script src="name.js"></script>'];
+if (BLOCK.test(html)) {
+  html = html.replace(BLOCK, () => boot);
+} else {
+  const anchor = ANCHORS.find((a) => html.includes(a));
+  if (!anchor) throw new Error('public/game.html: no i18n markers and no anchor script tag to insert before');
+  html = html.replace(anchor, () => `${boot}${anchor}`);
+}
+const at = (s) => html.indexOf(s);
+if ((html.match(/<!-- i18n:room:start/g) || []).length !== 1 || at('<!-- i18n:room:end -->') > at('<script src="name.js">') || at('<!-- i18n:room:end -->') > at('<script src="game.js">'))
+  throw new Error('public/game.html: i18n bootstrap must appear exactly once, before name.js and game.js');
+writeFileSync(GAME, html);
 
 const n = Object.keys(dict.en).length;
 console.log(`room dict: en (${n} strings) embedded inline; ${LOCALES.length - 1} other locales written to public/i18n/*.json for on-demand fetch`);
