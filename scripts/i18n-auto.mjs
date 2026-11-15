@@ -5,7 +5,7 @@
 // Injects hreflang + a language switcher, fixes relative asset paths for
 // /<locale>/ subdirs, and writes a hreflang sitemap. Config: i18n.config.json.
 //   Usage: GEMINI_API_KEY=... node scripts/i18n-auto.mjs
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -26,6 +26,8 @@ const hasLetter = (s) => /[A-Za-z]/.test(s);
 const protect = (html) => { const blocks = []; const out = html.replace(PROTECT, (m) => `%%${blocks.push(m) - 1}%%`); return { out, blocks }; };
 const restore = (html, blocks) => html.replace(/%%(\d+)%%/g, (m, i) => blocks[+i]);
 
+const markers = (str) => (str.match(/%%\d+%%/g) || []).sort().join(',');
+
 async function translateBatch(strings, langName, code) {
   if (!strings.length) return [];
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`;
@@ -44,8 +46,18 @@ ${JSON.stringify(strings)}`;
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2, maxOutputTokens: 8192, responseMimeType: 'application/json' } }) });
     const data = await res.json().catch(() => ({}));
     const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (txt) { try { const arr = JSON.parse(txt); if (Array.isArray(arr) && arr.length === strings.length) return arr; } catch {} }
-    const s = data?.error?.status || res.status;
+    let s = data?.error?.status || res.status;
+    if (txt) {
+      try {
+        const arr = JSON.parse(txt);
+        if (Array.isArray(arr) && arr.length === strings.length) {
+          // %%N%% stands in for a whole <script>/<style>/<code>/<pre> block —
+          // a reply that drops or alters one would delete that block.
+          if (arr.every((t, i) => typeof t === 'string' && markers(t) === markers(strings[i]))) return arr;
+          s = 'token mismatch';
+        }
+      } catch {}
+    }
     console.warn(`    batch retry ${a} (${s})`);
     await sleep(s === 'RESOURCE_EXHAUSTED' ? 20000 : 2000 * a);
   }
@@ -68,12 +80,15 @@ function collect(html) {
 function apply(html, map) {
   const { out, blocks } = protect(html);
   const tr = (v) => (map.has(v) && map.get(v) != null ? map.get(v) : v);
+  // Attribute values are double-quoted: a translation that introduces a bare "
+  // (e.g. 'dangerous' -> "peligroso") would end the attribute early.
+  const trAttr = (v) => tr(v).replace(/"/g, '&quot;');
   let s = out
     .replace(/>([^<>]+)</g, (m, t) => (hasLetter(t) ? `>${tr(t)}<` : m))
     .replace(/<title>([^<]+)<\/title>/i, (m, t) => (hasLetter(t) ? `<title>${tr(t)}</title>` : m))
-    .replace(/(<meta\s+name="(?:description|keywords|twitter:title|twitter:description)"\s+content=")([^"]*)(")/gi, (m, p, c, q) => `${p}${tr(c)}${q}`)
-    .replace(/(<meta\s+property="(?:og:title|og:description)"\s+content=")([^"]*)(")/gi, (m, p, c, q) => `${p}${tr(c)}${q}`)
-    .replace(/((?:placeholder|alt|aria-label)=")([^"]*)(")/gi, (m, p, v, q) => (hasLetter(v) ? `${p}${tr(v)}${q}` : m));
+    .replace(/(<meta\s+name="(?:description|keywords|twitter:title|twitter:description)"\s+content=")([^"]*)(")/gi, (m, p, c, q) => `${p}${trAttr(c)}${q}`)
+    .replace(/(<meta\s+property="(?:og:title|og:description)"\s+content=")([^"]*)(")/gi, (m, p, c, q) => `${p}${trAttr(c)}${q}`)
+    .replace(/((?:placeholder|alt|aria-label)=")([^"]*)(")/gi, (m, p, v, q) => (hasLetter(v) ? `${p}${trAttr(v)}${q}` : m));
   return restore(s, blocks);
 }
 
@@ -88,10 +103,14 @@ const switcher = (page, cur) => {
     const a = l === cur; const path = l === 'en' ? (page.urlPath || '/') : `/${l}${page.urlPath}`;
     return `<a href="${path}" hreflang="${HREFLANG[l]}"${a ? ' aria-current="true"' : ''} style="${a ? 'color:#fff;font-weight:700;' : 'color:#8a8;'}text-decoration:none;">${LABEL[l]}</a>`;
   });
-  return `\n<!-- i18n:switcher:start -->\n<div id="lang-switch" style="position:relative;display:flex;justify-content:flex-end;padding:6px 10px;z-index:99999;font-family:system-ui,-apple-system,sans-serif"><button id="lang-btn" type="button" aria-label="Language" aria-haspopup="true" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;background:rgba(6,10,6,.92);border:1px solid #1a3d1a;border-radius:999px;color:#8a8;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg></button><div id="lang-pop" role="menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;flex-direction:column;gap:8px;background:rgba(6,10,6,.95);border:1px solid #1a3d1a;border-radius:10px;padding:9px 12px;box-shadow:0 4px 16px rgba(0,0,0,.6);font-size:12px;white-space:nowrap">\n  ${items.join('\n  ')}\n</div></div>\n<script>(function(){var b=document.getElementById('lang-btn'),p=document.getElementById('lang-pop');if(!b||!p)return;var d=p.querySelector('a:not([aria-current])');if(d&&d.style&&d.style.color)b.style.color=d.style.color;b.addEventListener('click',function(e){e.stopPropagation();p.style.display=p.style.display==='flex'?'none':'flex';});p.addEventListener('click',function(e){e.stopPropagation();});document.addEventListener('click',function(){p.style.display='none';});})();</script>\n<!-- i18n:switcher:end -->`;
+  return `\n<!-- i18n:switcher:start -->\n<div id="lang-switch" style="position:relative;display:flex;justify-content:flex-end;padding:6px 10px;z-index:99999;font-family:system-ui,-apple-system,sans-serif"><button id="lang-btn" type="button" aria-label="Language" aria-haspopup="true" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;background:rgba(6,10,6,.92);border:1px solid #1a3d1a;border-radius:999px;color:#8a8;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><ellipse cx="12" cy="12" rx="4" ry="9"/></svg></button><div id="lang-pop" role="menu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;flex-direction:column;gap:8px;background:rgba(6,10,6,.95);border:1px solid #1a3d1a;border-radius:10px;padding:9px 12px;box-shadow:0 4px 16px rgba(0,0,0,.6);font-size:12px;white-space:nowrap">${items.join('\n  ')}</div></div>\n<script>(function(){var b=document.getElementById('lang-btn'),p=document.getElementById('lang-pop');if(!b||!p)return;var d=p.querySelector('a:not([aria-current])');if(d&&d.style&&d.style.color)b.style.color=d.style.color;b.addEventListener('click',function(e){e.stopPropagation();p.style.display=p.style.display==='flex'?'none':'flex';});p.addEventListener('click',function(e){e.stopPropagation();});document.addEventListener('click',function(){p.style.display='none';});})();</script>\n<!-- i18n:switcher:end -->`;
 };
+// Strip everything inject() adds — including the hk_lang setter, which sits
+// outside the hreflang markers; leaving it behind made it pile up one copy per
+// run (and leak the English setter into every locale page).
 const strip = (h) => h
   .replace(/\s*<!-- i18n:hreflang:start -->[\s\S]*?<!-- i18n:hreflang:end -->/g, '')
+  .replace(/\s*<script>try\{localStorage\.setItem\('hk_lang',"[^"]*"\)\}catch\(e\)\{\}<\/script>/g, '')
   .replace(/\s*<!-- i18n:switcher:start -->[\s\S]*?<!-- i18n:switcher:end -->/g, '');
 const inject = (html, page, cur) => html
   .replace('</head>', `${hreflangBlock(page)}\n  <script>try{localStorage.setItem('hk_lang',${JSON.stringify(cur)})}catch(e){}</script>\n</head>`)
@@ -100,11 +119,20 @@ const inject = (html, page, cur) => html
 const tagCount = (h) => (h.match(/<[a-zA-Z!\/][^>]*>/g) || []).length;
 const idList = (h) => JSON.stringify([...h.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
 
+// Only write when content actually changed, and remember which URLs changed so
+// sitemap <lastmod> moves only for those (a no-op run must not churn it).
+const changedUrls = new Set();
+const writeIfChanged = (path, content, url) => {
+  if (existsSync(path) && readFileSync(path, 'utf8') === content) return;
+  writeFileSync(path, content);
+  changedUrls.add(url);
+};
+
 // ---- run ----
 const bases = {};
 for (const page of cfg.pages) bases[page.file] = strip(readFileSync(join(ROOT, 'public', page.file), 'utf8'));
 
-for (const page of cfg.pages) writeFileSync(join(ROOT, 'public', page.file), inject(bases[page.file], page, 'en'));
+for (const page of cfg.pages) writeIfChanged(join(ROOT, 'public', page.file), inject(bases[page.file], page, 'en'), pageUrl(page, 'en'));
 console.log('en    -> hreflang + switcher injected into source pages');
 
 let drift = 0;
@@ -134,17 +162,22 @@ for (const loc of LOCALES.filter((l) => l !== 'en')) {
     out = inject(out, page, loc);
     const outPath = page.file === cfg.rootFile ? join(ROOT, `public/${loc}/index.html`) : join(ROOT, `public/${loc}/${page.file}`);
     mkdirSync(dirname(outPath), { recursive: true });
-    writeFileSync(outPath, out);
+    writeIfChanged(outPath, out, pageUrl(page, loc));
   }
   console.log(`${loc.padEnd(5)} -> ${cfg.pages.length} page(s)`);
   await sleep(1200);
 }
 
 const today = new Date().toISOString().slice(0, 10);
+const sitemapPath = join(ROOT, 'public/sitemap.xml');
+const prevLastmod = new Map();
+if (existsSync(sitemapPath))
+  for (const m of readFileSync(sitemapPath, 'utf8').matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)) prevLastmod.set(m[1], m[2]);
+const lastmod = (url) => (!changedUrls.has(url) && prevLastmod.get(url)) || today;
 const urls = cfg.pages.flatMap((page) => LOCALES.map((l) => {
   const alts = LOCALES.map((x) => `    <xhtml:link rel="alternate" hreflang="${HREFLANG[x]}" href="${pageUrl(page, x)}"/>`).join('\n')
     + `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl(page, 'en')}"/>`;
-  return `  <url>\n    <loc>${pageUrl(page, l)}</loc>\n    <lastmod>${today}</lastmod>\n${alts}\n  </url>`;
+  return `  <url>\n    <loc>${pageUrl(page, l)}</loc>\n    <lastmod>${lastmod(pageUrl(page, l))}</lastmod>\n${alts}\n  </url>`;
 })).join('\n');
-writeFileSync(join(ROOT, 'public/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`);
+writeFileSync(sitemapPath, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls}\n</urlset>\n`);
 console.log(`sitemap -> public/sitemap.xml\n${drift ? drift + ' page(s) drifted — inspect!' : 'Done. No structure drift.'}`);

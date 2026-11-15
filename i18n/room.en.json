@@ -1,7 +1,7 @@
 {
   "_meta": {
     "site": "sys32roulette",
-    "note": "Source of truth for the per-player /play room. Gemini-generated locale files (room.<loc>.json) are consumed by scripts/i18n-room-build.mjs, which embeds an all-locale dict + bootstrap into public/game.html. The room is shared (no locale in URL); each player sees their own language via localStorage hk_lang. static = filled into [data-i18n] on load; runtime = used by public/game.js via t(). Do not hand-edit generated blocks."
+    "note": "Source of truth for the per-player /play room. Gemini-generated locale files (room.<loc>.json) are consumed by scripts/i18n-room-build.mjs, which embeds the English dict + a bootstrap into public/game.html and writes the other locales to public/i18n/room.<loc>.json (fetched on demand). The room is shared (no locale in URL); each player sees their own language via localStorage hk_lang. static = filled into [data-i18n] on load; runtime = used by public/game.js via t(). Do not hand-edit generated blocks."
   },
   "static": {
     "namePlaceholder": "your nickname",
