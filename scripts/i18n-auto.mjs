@@ -1,18 +1,36 @@
 #!/usr/bin/env node
 // Reusable auto-localizer for content-heavy static pages.
-// Translates visible text nodes + SEO meta/attrs IN PLACE via Gemini, protecting
+// Translates visible text nodes + SEO meta/attrs IN PLACE, protecting
 // <script>/<style>/<code>/<pre> and never touching tags, ids, classes or scripts.
 // Injects hreflang + a language switcher, fixes relative asset paths for
 // /<locale>/ subdirs, and writes a hreflang sitemap. Config: i18n.config.json.
-//   Usage: GEMINI_API_KEY=... node scripts/i18n-auto.mjs
+//
+// Translations live in a committed cache, i18n/pages/<locale>.json, keyed by the
+// exact English segment. Cached segments are reused verbatim; only segments
+// missing from the cache are sent to Gemini. The cache is the source of truth
+// for locale pages: to fix a translation, edit the cache (or hand-edit the
+// locale page and re-run --seed) — a later run will keep it.
+//   Usage:
+//     GEMINI_API_KEY=... node scripts/i18n-auto.mjs  translate cache misses, rebuild pages
+//     node scripts/i18n-auto.mjs --offline           rebuild purely from cache (default when
+//                                                    no key is set); fails on any miss
+//     node scripts/i18n-auto.mjs --seed              harvest the checked-in locale pages into
+//                                                    the cache (aligned against the CURRENT
+//                                                    English source — run before editing it)
+//     add --prune to drop cache entries no current English segment uses
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const cfg = JSON.parse(readFileSync(join(ROOT, 'i18n.config.json'), 'utf8'));
+const ARGS = new Set(process.argv.slice(2));
+const SEED = ARGS.has('--seed');
+const PRUNE = ARGS.has('--prune');
 const KEY = process.env.GEMINI_API_KEY;
-if (!KEY) { console.error('GEMINI_API_KEY not set'); process.exit(1); }
+const OFFLINE = SEED || ARGS.has('--offline') || !KEY;
+for (const a of ARGS) if (!['--seed', '--offline', '--prune'].includes(a)) { console.error(`unknown arg ${a}`); process.exit(2); }
+if (OFFLINE && !SEED) console.log(`offline mode${KEY ? '' : ' (GEMINI_API_KEY not set)'}: building from i18n/pages/*.json only`);
 const MODEL = process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
 const ORIGIN = cfg.origin;
 const LOCALES = cfg.locales;
@@ -128,25 +146,110 @@ const writeIfChanged = (path, content, url) => {
   changedUrls.add(url);
 };
 
+// ---- translation cache ----
+// i18n/pages/<loc>.json = { segments: { "<English>": "<translation>" },
+//                           pages: { "<file>": { "<English>": "<translation>" } } }
+// `pages` holds per-page overrides for the rare segment that is deliberately
+// translated differently on one page; it wins over `segments`.
+const CACHE_DIR = join(ROOT, 'i18n/pages');
+const cachePath = (loc) => join(CACHE_DIR, `${loc}.json`);
+const loadCache = (loc) => {
+  const c = existsSync(cachePath(loc)) ? JSON.parse(readFileSync(cachePath(loc), 'utf8')) : {};
+  return { segments: c.segments || {}, pages: c.pages || {} };
+};
+const sortObj = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]));
+const saveCache = (loc, c) => {
+  const pages = {};
+  for (const f of Object.keys(c.pages).sort()) if (Object.keys(c.pages[f]).length) pages[f] = sortObj(c.pages[f]);
+  const json = JSON.stringify({ segments: sortObj(c.segments), pages }, null, 2) + '\n';
+  mkdirSync(CACHE_DIR, { recursive: true });
+  if (!existsSync(cachePath(loc)) || readFileSync(cachePath(loc), 'utf8') !== json) writeFileSync(cachePath(loc), json);
+};
+const lookup = (c, file, v) => c.pages[file]?.[v] ?? c.segments[v];
+
+// Segment slots in the same order/shape apply() rewrites them. The <title> pass
+// is covered by the text-node pass. Attribute values are stored unescaped
+// (apply() re-escapes " to &quot;, so the round trip is exact).
+const SLOTS = [
+  ['text', />([^<>]+)</g],
+  ['attr', /<meta\s+name="(?:description|keywords|twitter:title|twitter:description)"\s+content="([^"]*)"/gi],
+  ['attr', /<meta\s+property="(?:og:title|og:description)"\s+content="([^"]*)"/gi],
+  ['attr', /(?:placeholder|alt|aria-label)="([^"]*)"/gi],
+];
+// Align a checked-in locale page with its English source, slot by slot.
+function harvest(src, locHtml, label) {
+  const a = protect(src).out, b = protect(strip(locHtml)).out;
+  const map = new Map();
+  for (const [kind, rx] of SLOTS) {
+    const en = [...a.matchAll(rx)].map((m) => m[1]), lo = [...b.matchAll(rx)].map((m) => m[1]);
+    if (en.length !== lo.length) throw new Error(`${label}: ${kind} slot count ${en.length} (en) vs ${lo.length} — page out of sync with English source; cannot seed`);
+    en.forEach((v, i) => {
+      if (!hasLetter(v)) return;
+      const t = kind === 'attr' ? lo[i].replace(/&quot;/g, '"') : lo[i];
+      if (markers(t) !== markers(v)) throw new Error(`${label}: protected-block markers differ for ${JSON.stringify(v)}`);
+      if (map.has(v) && map.get(v) !== t) throw new Error(`${label}: ${JSON.stringify(v)} translated two ways on one page (${JSON.stringify(map.get(v))} / ${JSON.stringify(t)}) — unify them first`);
+      map.set(v, t);
+    });
+  }
+  return map;
+}
+
+const outPathFor = (page, loc) => (page.file === cfg.rootFile ? join(ROOT, `public/${loc}/index.html`) : join(ROOT, `public/${loc}/${page.file}`));
+
 // ---- run ----
 const bases = {};
 for (const page of cfg.pages) bases[page.file] = strip(readFileSync(join(ROOT, 'public', page.file), 'utf8'));
+const NON_EN = LOCALES.filter((l) => l !== 'en');
 
-for (const page of cfg.pages) writeIfChanged(join(ROOT, 'public', page.file), inject(bases[page.file], page, 'en'), pageUrl(page, 'en'));
-console.log('en    -> hreflang + switcher injected into source pages');
+if (SEED) {
+  for (const loc of NON_EN) {
+    const cache = loadCache(loc);
+    const per = cfg.pages.filter((p) => existsSync(outPathFor(p, loc)))
+      .map((p) => [p.file, harvest(bases[p.file], readFileSync(outPathFor(p, loc), 'utf8'), `${loc}/${p.file}`)]);
+    const seen = new Set(per.flatMap(([, m]) => [...m.keys()]));
+    for (const k of seen) { delete cache.segments[k]; for (const f in cache.pages) delete cache.pages[f][k]; }
+    // first page (config order) sets the shared value; later pages that differ get an override
+    for (const [file, m] of per) for (const [k, t] of m) {
+      if (!(k in cache.segments)) cache.segments[k] = t;
+      else if (cache.segments[k] !== t) (cache.pages[file] ||= {})[k] = t;
+    }
+    saveCache(loc, cache);
+    const ov = Object.values(cache.pages).reduce((n, o) => n + Object.keys(o).length, 0);
+    console.log(`seed  ${loc.padEnd(5)} -> ${Object.keys(cache.segments).length} segment(s), ${ov} page override(s)`);
+  }
+}
+
+// Build everything in memory first; nothing is written if any segment is missing.
+const writes = [];
+for (const page of cfg.pages) writes.push([join(ROOT, 'public', page.file), inject(bases[page.file], page, 'en'), pageUrl(page, 'en')]);
 
 let drift = 0;
-for (const loc of LOCALES.filter((l) => l !== 'en')) {
+const missing = [];
+for (const loc of NON_EN) {
+  const cache = loadCache(loc);
+  const used = { segments: new Set(), pages: {} };
+  let fresh = 0;
   for (const page of cfg.pages) {
     const src = bases[page.file];
-    const map = new Map();
     const uniq = collect(src);
-    const tr = [];
-    for (let i = 0; i < uniq.length; i += 12) {
-      const part = await translateBatch(uniq.slice(i, i + 12), LANGNAME[loc], loc);
-      tr.push(...part);
+    for (const v of uniq) {
+      const t = lookup(cache, page.file, v);
+      if (t != null && (typeof t !== 'string' || markers(t) !== markers(v)))
+        throw new Error(`i18n/pages/${loc}.json: bad entry for ${JSON.stringify(v)} (protected-block markers must match the English)`);
     }
-    uniq.forEach((v, i) => map.set(v, tr[i]));
+    for (const v of uniq) {
+      if (cache.pages[page.file]?.[v] != null) (used.pages[page.file] ||= new Set()).add(v);
+      else used.segments.add(v);
+    }
+    const miss = uniq.filter((v) => lookup(cache, page.file, v) == null);
+    if (miss.length && OFFLINE) { for (const v of miss) missing.push(`${loc}/${page.file}: ${JSON.stringify(v)}`); continue; }
+    for (let i = 0; i < miss.length; i += 12) {
+      const part = await translateBatch(miss.slice(i, i + 12), LANGNAME[loc], loc);
+      part.forEach((t, j) => { cache.segments[miss[i + j]] = t; });
+      fresh += part.length;
+      saveCache(loc, cache); // persist as we go — a crash mid-run must not waste paid calls
+    }
+    const map = new Map(uniq.map((v) => [v, lookup(cache, page.file, v)]));
     let out = apply(src, map);
     out = out.replace(/<html lang="en">/i, `<html lang="${loc}">`);
     out = out.replace(/\b(href|src)="(?!https?:|\/|#|data:|mailto:)([^"]+)"/g, (m, a, p) => `${a}="/${p}"`);
@@ -159,14 +262,26 @@ for (const loc of LOCALES.filter((l) => l !== 'en')) {
     for (const [from, to] of Object.entries(cfg.internalLinks || {}))
       out = out.split(`href="${from}"`).join(`href="/${loc}${to}"`);
     if (tagCount(out) !== tagCount(src) || idList(out) !== idList(src)) { console.warn(`  ⚠ ${loc}/${page.file}: STRUCTURE DRIFT`); drift++; }
-    out = inject(out, page, loc);
-    const outPath = page.file === cfg.rootFile ? join(ROOT, `public/${loc}/index.html`) : join(ROOT, `public/${loc}/${page.file}`);
-    mkdirSync(dirname(outPath), { recursive: true });
-    writeIfChanged(outPath, out, pageUrl(page, loc));
+    writes.push([outPathFor(page, loc), inject(out, page, loc), locUrl]);
   }
-  console.log(`${loc.padEnd(5)} -> ${cfg.pages.length} page(s)`);
-  await sleep(1200);
+  const stale = Object.keys(cache.segments).filter((k) => !used.segments.has(k)).length
+    + Object.entries(cache.pages).reduce((n, [f, o]) => n + Object.keys(o).filter((k) => !used.pages[f]?.has(k)).length, 0);
+  if (PRUNE && !missing.length) {
+    for (const k of Object.keys(cache.segments)) if (!used.segments.has(k)) delete cache.segments[k];
+    for (const [f, o] of Object.entries(cache.pages)) for (const k of Object.keys(o)) if (!used.pages[f]?.has(k)) delete o[k];
+  }
+  if (!OFFLINE || PRUNE) saveCache(loc, cache);
+  console.log(`${loc.padEnd(5)} -> ${cfg.pages.length} page(s), ${fresh} newly translated${stale ? `, ${stale} unused cache entr${stale === 1 ? 'y' : 'ies'}${PRUNE ? ' pruned' : ' (--prune to drop)'}` : ''}`);
+  if (fresh) await sleep(1200);
 }
+
+if (missing.length) {
+  console.error(`\n✖ ${missing.length} segment(s) missing from i18n/pages/*.json — nothing written:\n  ${missing.join('\n  ')}`);
+  console.error('Run with GEMINI_API_KEY set (without --offline) to translate them, or add them to the cache by hand.');
+  process.exit(1);
+}
+for (const [path, content, url] of writes) { mkdirSync(dirname(path), { recursive: true }); writeIfChanged(path, content, url); }
+console.log('en    -> hreflang + switcher injected into source pages');
 
 const today = new Date().toISOString().slice(0, 10);
 const sitemapPath = join(ROOT, 'public/sitemap.xml');
