@@ -2,7 +2,7 @@
   "_meta": {
     "generatedFrom": "room.en.json",
     "locale": "vi",
-    "note": "Gemini-generated. Do not hand-edit; regenerate via scripts/i18n-room-translate.mjs."
+    "note": "Translation cache. Edit to fix a translation; scripts/i18n-room-translate.mjs keeps existing entries and only fills missing keys."
   },
   "static": {
     "namePlaceholder": "biệt danh của bạn",

@@ -3,13 +3,25 @@
 // locale via Gemini, writing i18n/room.<loc>.json. Preserves {placeholders},
 // HTML tags (e.g. <em>), emoji/symbols and brand/technical terms. Structure
 // never changes — keys stay identical; only values are translated.
-//   Usage: GEMINI_API_KEY=... node scripts/i18n-room-translate.mjs
+//   Usage:
+//     GEMINI_API_KEY=... node scripts/i18n-room-translate.mjs
+//         translate only keys missing from i18n/room.<loc>.json (or whose
+//         {placeholders}/tags no longer match English); existing translations,
+//         including hand fixes, are kept verbatim. Keys removed from
+//         room.en.json are dropped.
+//     node scripts/i18n-room-translate.mjs --offline
+//         (default when no key is set) check every locale has every key with
+//         matching placeholders; writes nothing, exits 1 on any miss.
+//     add --all to re-translate every key from scratch (the old behaviour).
+//
+// room.<loc>.json is the committed translation cache and the source of truth:
+// to fix a translation, edit it there and run i18n-room-build.mjs.
 //
 // Placeholders are protected generically: every {token} and HTML tag is swapped
 // for an opaque %%N%% marker before the string goes to the model and swapped
 // back afterwards. A reply is only accepted if every marker comes back exactly
 // once, so a new placeholder can never be silently translated or dropped.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -83,28 +95,52 @@ ${JSON.stringify(prot.map((p) => p.text))}`;
   throw new Error('translateBatch failed');
 }
 
+const tokenSig = (str) => protect(str).tokens.slice().sort().join('\u0000');
+
 async function main() {
-  if (!process.env.GEMINI_API_KEY) { console.error('GEMINI_API_KEY not set'); process.exit(1); }
+  const ARGS = new Set(process.argv.slice(2));
+  for (const a of ARGS) if (!['--offline', '--all'].includes(a)) { console.error(`unknown arg ${a}`); process.exit(2); }
+  const ALL = ARGS.has('--all');
+  const OFFLINE = ARGS.has('--offline') || !process.env.GEMINI_API_KEY;
+  if (OFFLINE && ALL) { console.error('--all needs GEMINI_API_KEY'); process.exit(1); }
+  if (OFFLINE) console.log(`offline mode${process.env.GEMINI_API_KEY ? '' : ' (GEMINI_API_KEY not set)'}: checking i18n/room.*.json only`);
   const src = JSON.parse(readFileSync(join(ROOT, 'i18n/room.en.json'), 'utf8'));
 
   const sections = ['static', 'runtime'];
+  let totalMiss = 0;
   for (const loc of LOCALES) {
-    const out = { _meta: { generatedFrom: 'room.en.json', locale: loc, note: 'Gemini-generated. Do not hand-edit; regenerate via scripts/i18n-room-translate.mjs.' } };
+    const file = join(ROOT, `i18n/room.${loc}.json`);
+    const prev = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {};
+    const out = { _meta: { generatedFrom: 'room.en.json', locale: loc, note: 'Translation cache. Edit to fix a translation; scripts/i18n-room-translate.mjs keeps existing entries and only fills missing keys.' } };
+    const misses = [];
     for (const sec of sections) {
-      const keys = Object.keys(src[sec]);
-      const vals = keys.map((k) => src[sec][k]);
-      const tr = [];
-      for (let i = 0; i < vals.length; i += 12) {
-        const part = await translateBatch(vals.slice(i, i + 12), LANGNAME[loc], loc);
-        tr.push(...part);
-      }
       out[sec] = {};
-      keys.forEach((k, i) => { out[sec][k] = tr[i]; });
+      for (const k of Object.keys(src[sec])) {
+        const have = prev[sec] && prev[sec][k];
+        if (!ALL && typeof have === 'string' && tokenSig(have) === tokenSig(src[sec][k])) out[sec][k] = have;
+        else misses.push([sec, k]);
+      }
     }
-    writeFileSync(join(ROOT, `i18n/room.${loc}.json`), JSON.stringify(out, null, 2) + '\n');
-    console.log(`${loc.padEnd(5)} -> i18n/room.${loc}.json`);
-    await sleep(1000);
+    totalMiss += misses.length;
+    if (OFFLINE) {
+      if (misses.length) console.log(`${loc.padEnd(5)} missing/stale: ${misses.map(([s, k]) => `${s}.${k}`).join(', ')}`);
+      else console.log(`${loc.padEnd(5)} ok`);
+      continue;
+    }
+    for (let i = 0; i < misses.length; i += 12) {
+      const part = misses.slice(i, i + 12);
+      const tr = await translateBatch(part.map(([s, k]) => src[s][k]), LANGNAME[loc], loc);
+      part.forEach(([s, k], n) => { out[s][k] = tr[n]; });
+    }
+    // Re-assemble in English key order so diffs stay minimal.
+    for (const sec of sections) out[sec] = Object.fromEntries(Object.keys(src[sec]).map((k) => [k, out[sec][k]]));
+    const next = JSON.stringify(out, null, 2) + '\n';
+    const before = existsSync(file) ? readFileSync(file, 'utf8') : '';
+    if (next !== before) writeFileSync(file, next);
+    console.log(`${loc.padEnd(5)} -> i18n/room.${loc}.json (${misses.length} translated${next === before ? ', unchanged' : ''})`);
+    if (misses.length) await sleep(1000);
   }
+  if (OFFLINE && totalMiss) { console.error(`${totalMiss} missing/stale room strings — add them to i18n/room.<loc>.json or run with GEMINI_API_KEY`); process.exit(1); }
   console.log('Done. Now run: node scripts/i18n-room-build.mjs');
 }
 
