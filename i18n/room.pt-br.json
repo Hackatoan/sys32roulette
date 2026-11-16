@@ -83,7 +83,8 @@
     "rematch": "Revanche",
     "connectionLost": "CONEXÃO PERDIDA",
     "opponentLeft": "Seu oponente desconectou antes que o sistema dele pudesse ser deletado.",
-    "copyResult": "📋 Copiar resultado"
+    "copyResult": "📋 Copiar resultado",
+    "matchRecap": "RESUMO DA PARTIDA"
   },
   "runtime": {
     "noGames": "Nenhuma partida jogada ainda — seja o primeiro!",

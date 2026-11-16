@@ -83,7 +83,8 @@
     "rematch": "Revanche",
     "connectionLost": "VERBINDUNG UNTERBROCHEN",
     "opponentLeft": "Dein Gegner hat die Verbindung getrennt, bevor sein System gelöscht werden konnte.",
-    "copyResult": "📋 Ergebnis kopieren"
+    "copyResult": "📋 Ergebnis kopieren",
+    "matchRecap": "MATCH-ÜBERSICHT"
   },
   "runtime": {
     "noGames": "Noch keine Spiele gespielt — sei der Erste!",

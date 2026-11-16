@@ -183,6 +183,8 @@ socket.on('game-init', ({ yourId, players, gameOrder, aiDifficulty }) => {
   gs.scores = Object.fromEntries(players.map(p => [p, 0]));
   gs.gameOrder = gameOrder;
   gs.totalRounds = gameOrder.length;
+  gs.history = [];
+  gs.currentType = null;
   document.getElementById('round-total').textContent = gs.totalRounds;
   const oppLabelEl = document.getElementById('opp-label');
   if (oppLabelEl) {
@@ -214,6 +216,7 @@ const GAME_BADGE_LABELS = {
 socket.on('minigame-start', ({ type, round, of, command, grid, showDuration, duration, nums, scrambled, target, sequence, display }) => {
   if (window.SFX) SFX.play('turn');
   gs.round = round;
+  gs.currentType = type;
   document.getElementById('round-num').textContent = round + 1;
   document.getElementById('round-total').textContent = of;
   document.getElementById('game-badge').textContent = GAME_BADGE_LABELS[type] || type.toUpperCase();
@@ -240,11 +243,13 @@ socket.on('minigame-start', ({ type, round, of, command, grid, showDuration, dur
 
 socket.on('minigame-result', ({ winner, scores }) => {
   Object.assign(gs.scores, scores);
+  if (gs.history) gs.history.push({ type: gs.currentType, result: winner === myId ? 'w' : !winner ? 'd' : 'l' });
   showRoundResult(winner);
 });
 
 socket.on('game-over', ({ winner, scores }) => {
   Object.assign(gs.scores, scores);
+  renderRecap();
   if (winner === null) { if (window.SFX) SFX.play('draw'); showScreen('s-draw'); }
   else if (winner === myId) showWin();
   else showLose();
@@ -1024,6 +1029,29 @@ function showRoundResult(winner) {
 
   tallyEl.innerHTML = `<span style="color:var(--green)">YOU ${myScore()}</span>&nbsp;&nbsp;·&nbsp;&nbsp;<span style="color:var(--red)">OPP ${oppScore()}</span>`;
   showScreen('s-round');
+}
+
+// ── Match recap ───────────────────────────────────────────
+// Round-by-round breakdown (minigame + outcome) shown on every end screen.
+// Built from the minigame-start/-result events this client already receives.
+function renderRecap() {
+  const rows = (gs.history || []).map((h, i) => {
+    const icon = h.result === 'w' ? '✓' : h.result === 'l' ? '✗' : '=';
+    const label = T(h.result === 'w' ? 'roundWon' : h.result === 'l' ? 'roundLost' : 'roundDraw');
+    const li = document.createElement('li');
+    li.className = 'recap-' + h.result;
+    li.setAttribute('aria-label', `${i + 1}. ${GAME_BADGE_LABELS[h.type] || h.type}: ${label}`);
+    li.innerHTML = '<span class="recap-n"></span><span class="recap-game"></span><span class="recap-res" aria-hidden="true"></span>';
+    li.children[0].textContent = i + 1;
+    li.children[1].textContent = GAME_BADGE_LABELS[h.type] || String(h.type || '').toUpperCase();
+    li.children[2].textContent = icon;
+    return li;
+  });
+  document.querySelectorAll('.match-recap').forEach(box => {
+    const list = box.querySelector('ol');
+    list.replaceChildren(...rows.map(r => r.cloneNode(true)));
+    box.hidden = rows.length === 0;
+  });
 }
 
 // ── Win screen ────────────────────────────────────────────
