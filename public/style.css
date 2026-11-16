@@ -722,3 +722,15 @@ table.leaderboard tr.lb-me { color: var(--green); text-shadow: 0 0 6px rgba(57,2
 }
 .footer-links a { color: var(--muted); text-decoration: none; }
 .footer-links a:hover { color: var(--green); }
+
+/* Match recap (end screens) */
+.match-recap { margin: 1rem auto 0; max-width: 360px; width: 100%; border: 1px solid var(--border); padding: .6rem .8rem; text-align: left; }
+.recap-title { color: var(--muted); font-size: .75rem; letter-spacing: .15em; margin-bottom: .4rem; text-align: center; }
+.match-recap ol { list-style: none; margin: 0; padding: 0; }
+.match-recap li { display: flex; gap: .6rem; align-items: center; font-size: .85rem; padding: .15rem 0; }
+.recap-n { color: var(--muted); min-width: 1.2em; }
+.recap-game { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.recap-res { font-weight: bold; }
+.recap-w .recap-res { color: var(--green); }
+.recap-l .recap-res { color: var(--red); }
+.recap-d .recap-res { color: var(--cyan); }

@@ -82,7 +82,8 @@
     "rematch": "Rematch",
     "connectionLost": "CONNECTION LOST",
     "opponentLeft": "Your opponent disconnected before their system could be deleted.",
-    "copyResult": "📋 Copy Result"
+    "copyResult": "📋 Copy Result",
+    "matchRecap": "MATCH RECAP"
   },
   "runtime": {
     "noGames": "No games played yet — be the first!",

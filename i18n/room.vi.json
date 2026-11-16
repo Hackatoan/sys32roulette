@@ -83,7 +83,8 @@
     "rematch": "Đấu Lại",
     "connectionLost": "MẤT KẾT NỐI",
     "opponentLeft": "Đối thủ của bạn đã ngắt kết nối trước khi hệ thống của họ bị xóa.",
-    "copyResult": "📋 Sao chép kết quả"
+    "copyResult": "📋 Sao chép kết quả",
+    "matchRecap": "TÓM TẮT TRẬN ĐẤU"
   },
   "runtime": {
     "noGames": "Chưa có trận đấu nào — hãy là người đầu tiên!",
