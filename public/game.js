@@ -855,6 +855,8 @@ function moveAimTarget(arena, target) {
 let simonSeq = [];
 let simonUserSeq = [];
 let simonActive = false;
+let simonKeyButtons = null;
+let simonChipElements = null;
 
 function startSimon(sequence) {
   simonSeq = sequence;
@@ -863,27 +865,28 @@ function startSimon(sequence) {
 
   document.getElementById('mg-simon').classList.remove('hidden');
   document.getElementById('simon-progress').textContent = '0 / ' + sequence.length;
-  document.querySelectorAll('.simon-key').forEach(b => b.disabled = true);
+  simonKeyButtons = document.querySelectorAll('.simon-key');
+  simonKeyButtons.forEach(b => b.disabled = true);
 
   const chips = document.getElementById('simon-chips');
   chips.innerHTML = sequence.map(k => `<span class="simon-chip">${k}</span>`).join('');
+  simonChipElements = chips.querySelectorAll('.simon-chip');
   document.getElementById('simon-label').textContent = T('memorizeSequence');
 
   let i = 0;
-  const allChips = chips.querySelectorAll('.simon-chip');
   const iv = setInterval(() => {
-    if (i > 0) allChips[i - 1].classList.remove('simon-chip-active');
+    if (i > 0) simonChipElements[i - 1].classList.remove('simon-chip-active');
     if (i >= sequence.length) {
       clearInterval(iv);
       setTimeout(() => {
-        allChips.forEach(c => { c.textContent = '?'; c.classList.remove('simon-chip-active'); });
+        simonChipElements.forEach(c => { c.textContent = '?'; c.classList.remove('simon-chip-active'); });
         document.getElementById('simon-label').textContent = T('repeatSequence');
-        document.querySelectorAll('.simon-key').forEach(b => b.disabled = false);
+        simonKeyButtons.forEach(b => b.disabled = false);
         simonActive = true;
       }, 400);
       return;
     }
-    allChips[i].classList.add('simon-chip-active');
+    simonChipElements[i].classList.add('simon-chip-active');
     i++;
   }, 700);
 }
@@ -893,7 +896,6 @@ function simonPress(key) {
   if (window.SFX) SFX.play('click');
   simonUserSeq.push(key);
   const idx = simonUserSeq.length - 1;
-  const allChips = document.getElementById('simon-chips').querySelectorAll('.simon-chip');
 
   const btn = document.getElementById('sk-' + key);
   if (btn) {
@@ -902,14 +904,14 @@ function simonPress(key) {
   }
 
   if (simonUserSeq[idx] !== simonSeq[idx]) {
-    if (allChips[idx]) {
-      allChips[idx].textContent = '✗';
-      allChips[idx].classList.add('simon-chip-wrong');
+    if (simonChipElements[idx]) {
+      simonChipElements[idx].textContent = '✗';
+      simonChipElements[idx].classList.add('simon-chip-wrong');
     }
     simonUserSeq = [];
     document.getElementById('simon-progress').textContent = '0 / ' + simonSeq.length;
     setTimeout(() => {
-      allChips.forEach(c => {
+      simonChipElements.forEach(c => {
         c.textContent = '?';
         c.classList.remove('simon-chip-wrong', 'simon-chip-ok');
       });
@@ -917,15 +919,15 @@ function simonPress(key) {
     return;
   }
 
-  if (allChips[idx]) {
-    allChips[idx].textContent = key;
-    allChips[idx].classList.add('simon-chip-ok');
+  if (simonChipElements[idx]) {
+    simonChipElements[idx].textContent = key;
+    simonChipElements[idx].classList.add('simon-chip-ok');
   }
   document.getElementById('simon-progress').textContent = simonUserSeq.length + ' / ' + simonSeq.length;
 
   if (simonUserSeq.length >= simonSeq.length) {
     simonActive = false;
-    document.querySelectorAll('.simon-key').forEach(b => b.disabled = true);
+    simonKeyButtons.forEach(b => b.disabled = true);
     socket.emit('simon-done', { sequence: simonUserSeq });
   }
 }
