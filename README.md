@@ -16,6 +16,7 @@ A tongue-in-cheek minigame battler where two players face off across quick round
 - Global leaderboard
 - One-click "Copy Result" on the end screen to share your final score
 - Round-by-round match recap (minigame + win/loss) on the end screens
+- One-click invite links: opening a "Copy Link" URL fills in the room code and joins automatically
 
 ## Tech Stack
 

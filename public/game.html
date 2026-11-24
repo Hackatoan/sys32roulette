@@ -464,10 +464,17 @@ Mac OS version: you lost</div>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       showScreen('s-menu');
-      const code = new URLSearchParams(location.search).get('join');
+      // Invite links (/play?join=CODE from "Copy Link") connect in one click:
+      // open the join screen with the code filled in and join straight away.
+      // The param is dropped from the URL so Play Again (a reload) doesn't
+      // try to rejoin the finished room.
+      const code = (new URLSearchParams(location.search).get('join') || '')
+        .replace(/[^a-z0-9]/gi, '').slice(0, 6).toUpperCase();
       if (code) {
-        document.getElementById('code-input').value = code;
         showJoin();
+        document.getElementById('code-input').value = code;
+        history.replaceState(null, '', location.pathname);
+        doJoinRoom();
       }
       document.getElementById('code-input').addEventListener('keydown', e => {
         if (e.key === 'Enter') doJoinRoom();
